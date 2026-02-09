@@ -12,7 +12,9 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new Main(), getDefaultConfiguration());
+        //return new Lwjgl3Application(new Main(), getDefaultConfiguration());
+    	//return new Lwjgl3Application(new InputTestGame(), getDefaultConfiguration());
+    	return new Lwjgl3Application(new AudioTestGame(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
@@ -42,7 +44,7 @@ public class Lwjgl3Launcher {
         //// are not intended for games that use GL30 (which is compatibility with OpenGL ES 3.0).
         //// Know that it might not work well in some cases.
 //        configuration.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES20, 0, 0);
-
+      
         return configuration;
     }
 }

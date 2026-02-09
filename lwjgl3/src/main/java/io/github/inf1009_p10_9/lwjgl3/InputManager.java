@@ -25,7 +25,7 @@ public class InputManager {
         return mouse;
     }
     
-    // ================= Listener management =================
+    //Listener management
 
     public void registerListener(InputListens listener) {
         if (listener != null && !listeners.contains(listener)) {

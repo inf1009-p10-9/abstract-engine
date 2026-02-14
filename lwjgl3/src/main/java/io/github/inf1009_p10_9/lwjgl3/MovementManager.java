@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class MovementManager implements iMovementRegisterable, iMovementCalculatable {
     private static MovementManager instance;
-    Map<Entity, iMovementStrategy> strategyMap = new HashMap<>();
     private Map<String, iMovementStrategy> roleToStrategyMap = new HashMap<>();
     private Map<Entity, String> entityToRoleMap = new HashMap<>();
 

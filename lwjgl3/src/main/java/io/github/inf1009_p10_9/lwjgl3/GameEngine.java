@@ -1,4 +1,5 @@
 package io.github.inf1009_p10_9.lwjgl3;
+import com.badlogic.gdx.Gdx;
 
 public final class GameEngine {
 	private static GameEngine instance;

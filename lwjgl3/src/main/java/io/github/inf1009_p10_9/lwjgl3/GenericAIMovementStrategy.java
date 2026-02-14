@@ -10,9 +10,9 @@ public class GenericAIMovementStrategy implements iMovementStrategy {
 
         if (actualDirection == null || actualDirection.isEmpty()) {
             Random random = new Random();
-            String[] directions = {"left", "right", "up", "down"};
+            String[] possibleDirections = {"left", "right", "up", "down"};
 
-            actualDirection = directions[random.nextInt(directions.length)];
+            actualDirection = possibleDirections[random.nextInt(possibleDirections.length)];
         }
 
         //TODO: get position bean of entity

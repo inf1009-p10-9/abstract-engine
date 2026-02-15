@@ -1,3 +1,3 @@
 libgdx.png
 music/Super Mario Bros. medley.mp3
-sounds/jump.mp3
+sound/jump.mp3

@@ -1,0 +1,80 @@
+package io.github.inf1009_p10_9.entities;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+
+import io.github.inf1009_p10_9.GameContext;
+import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.IRenderable;
+
+public class Player extends Entity implements IRenderable, ICollidable {
+
+    private Color color;
+
+    public Player(float x, float y) {
+        super(x, y);
+        this.bounds = new Rectangle(x, y, 32, 32);
+        this.zIndex = 10;
+        this.color = Color.BLUE;
+        
+        // Optionally load texture here
+        // this.texture = new Texture("player.png");
+    }
+
+    @Override
+    public void update() {
+        // Update bounds to match position
+        bounds.setPosition(position.x, position.y);
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        if (texture != null) {
+            // Draw texture if available
+            batch.draw(texture, position.x, position.y, 32, 32);
+        }
+        // If no texture, shape will be drawn in renderShapes() instead
+    }
+
+    @Override
+    public void renderShapes(ShapeRenderer shapeRenderer) {
+        if (texture == null) {
+            // Fallback: draw colored rectangle (equivalent to renderer.drawRectangle)
+            shapeRenderer.setColor(color);
+            shapeRenderer.rect(position.x, position.y, 32, 32);
+        }
+    }
+
+    @Override
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    @Override
+    public void onCollision(ICollidable other) {
+        System.out.println("Player collided with: " + other.getClass().getSimpleName());
+        GameContext.getOutputManager().getSFXManager().playSound("sound/jump.mp3");
+    }
+
+    @Override
+    public int getCollisionLayer() {
+        return 1; // Player collision layer
+    }
+    
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+    
+
+    public Color getColor() {
+        return color;
+    }
+}

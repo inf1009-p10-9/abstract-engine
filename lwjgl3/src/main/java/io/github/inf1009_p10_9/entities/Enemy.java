@@ -18,7 +18,7 @@ public class Enemy extends Entity implements IRenderable, ICollidable {
         this.bounds = new Rectangle(x, y, 32, 32);
         this.zIndex = 10;
         this.color = Color.RED; // Red enemy
-        
+
         // Optionally load texture here
         // this.texture = new Texture("enemy.png");
     }
@@ -80,12 +80,12 @@ public class Enemy extends Entity implements IRenderable, ICollidable {
     public int getCollisionLayer() {
         return 1; // Same layer as player so they can collide
     }
-    
+
 
     public void setColor(Color color) {
         this.color = color;
     }
-    
+
 
     public Color getColor() {
         return color;

@@ -16,11 +16,11 @@ public class OutputManager {
 
     private Array<IRenderable> renderables;
     private Array<UIElement> uiElements;
-    
+
     // LibGDX rendering tools - entities will use these directly
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
-    
+
     private BGManager bgManager;
     private SFXManager sfxManager;
 
@@ -86,30 +86,30 @@ public class OutputManager {
         sfxManager.playSound(soundFile);
     }
 
-    
+
     //coordinates rendering but delegates actual drawing to entities
     public void render() {
         if (batch == null || shapeRenderer == null) {
             return;
         }
-        
+
         com.badlogic.gdx.Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
         com.badlogic.gdx.Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
         // Combine all renderables (entities + UI) and sort by z-index
         Array<IRenderable> allRenderables = new Array<>();
         allRenderables.addAll(renderables);
         allRenderables.addAll(uiElements);
         allRenderables.sort((a, b) -> Integer.compare(a.getZIndex(), b.getZIndex()));
-        
-        
+
+
         // Render all shapes (walls, colored rectangles) with ShapeRenderer
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for (IRenderable renderable : allRenderables) {
             renderable.renderShapes(shapeRenderer);
         }
         shapeRenderer.end();
-        
+
         // Render all textures/text with SpriteBatch (draw ON TOP of shapes)
         batch.begin();
         for (IRenderable renderable : allRenderables) {
@@ -118,7 +118,7 @@ public class OutputManager {
         batch.end();
     }
 
- 
+
 
     public void clear() {
         renderables.clear();
@@ -134,10 +134,10 @@ public class OutputManager {
         if (shapeRenderer != null) {
             shapeRenderer.dispose();
         }
-        
+
         // Clean up audio
         bgManager.stopMusic();
-        
+
         // Clear collections
         renderables.clear();
         uiElements.clear();

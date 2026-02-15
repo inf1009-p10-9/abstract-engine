@@ -20,7 +20,6 @@ public class Wall extends Entity implements IRenderable, ICollidable {
         super(x, y, width, height);
         this.width = width;
         this.height = height;
-        this.bounds = new Rectangle(x, y, width, height);
         this.zIndex = 5; // Behind player
         this.currentColor = normalColor;
 
@@ -62,16 +61,6 @@ public class Wall extends Entity implements IRenderable, ICollidable {
     }
 
     @Override
-    public int getZIndex() {
-        return zIndex;
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return bounds;
-    }
-
-    @Override
     public void onCollision(ICollidable other) {
         // Ignore wall-to-wall collisions
         if (other.getClass().getSimpleName().equals("Wall")) {
@@ -91,7 +80,6 @@ public class Wall extends Entity implements IRenderable, ICollidable {
         return 1; // Same collision layer as Player
     }
 
-
     public void setNormalColor(Color color) {
         this.normalColor = color;
         if (collisionTimer <= 0) {
@@ -99,11 +87,9 @@ public class Wall extends Entity implements IRenderable, ICollidable {
         }
     }
 
-
     public void setCollisionColor(Color color) {
         this.collisionColor = color;
     }
-
 
     public Color getCurrentColor() {
         return currentColor;

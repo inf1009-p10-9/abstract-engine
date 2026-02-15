@@ -10,15 +10,12 @@ import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 
 public class Player extends Entity implements IRenderable, ICollidable {
-
     private Color color;
 
     public Player(float x, float y) {
-        super(x, y);
-        this.bounds = new Rectangle(x, y, 32, 32);
-        this.zIndex = 10;
+        super(x, y, 32, 32, 10);
         this.color = Color.BLUE;
-        
+
         // Optionally load texture here
         // this.texture = new Texture("player.png");
     }
@@ -48,11 +45,6 @@ public class Player extends Entity implements IRenderable, ICollidable {
     }
 
     @Override
-    public int getZIndex() {
-        return zIndex;
-    }
-
-    @Override
     public Rectangle getBounds() {
         return bounds;
     }
@@ -67,12 +59,10 @@ public class Player extends Entity implements IRenderable, ICollidable {
     public int getCollisionLayer() {
         return 1; // Player collision layer
     }
-    
 
     public void setColor(Color color) {
         this.color = color;
     }
-    
 
     public Color getColor() {
         return color;

@@ -2,6 +2,8 @@ package io.github.inf1009_p10_9;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import io.github.inf1009_p10_9.interfaces.IMovementStrategyRegisterable;
+import io.github.inf1009_p10_9.managers.MovementManager;
 import io.github.inf1009_p10_9.movement.*;
 import io.github.inf1009_p10_9.input.*;
 import io.github.inf1009_p10_9.scenes.*;
@@ -34,7 +36,8 @@ public class Lwjgl3Launcher {
             super.create();
 
             // Set up input handling
-            Keyboard keyboard = new Keyboard();
+            MovementManager movementManagerInstance = GameContext.getMovementManager();
+            Keyboard keyboard = new Keyboard(movementManagerInstance);
             GameContext.getInputManager().registerPeripheral(keyboard);
 
             // Set up collision detection
@@ -42,16 +45,17 @@ public class Lwjgl3Launcher {
             GameContext.getCollisionManager().setCollisionStrategy(collisionStrategy);
 
             // Register movement strategies that the game can use
+            IMovementStrategyRegisterable movementStrategyRegisterable = GameContext.getMovementManager(); //
             UserMovement userMovement = new UserMovement(250f);
-            GameContext.getMovementManager().registerMovementStrategy("Player", userMovement);
+            movementStrategyRegisterable.registerMovementStrategy("Player", userMovement);
 
             AIMovement enemyMovement = new AIMovement(200f, AIMovement.AIMovementPattern.FLEE); // Demo
-            GameContext.getMovementManager().registerMovementStrategy("Enemy", enemyMovement);
+            movementStrategyRegisterable.registerMovementStrategy("Enemy", enemyMovement);
 
 
             // Add all game scenes
             GameContext.getSceneManager().addScene(new StartScene());
-            GameContext.getSceneManager().addScene(new MidScene()); //gameplay scene
+            GameContext.getSceneManager().addScene(new MidScene(movementManagerInstance, movementManagerInstance)); //gameplay scene, pass in interfaces
             GameContext.getSceneManager().addScene(new EndScene());
 
             // Start with first scene

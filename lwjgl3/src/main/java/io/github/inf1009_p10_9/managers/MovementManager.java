@@ -1,11 +1,9 @@
 package io.github.inf1009_p10_9.managers;
 
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
-import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
-import io.github.inf1009_p10_9.interfaces.IPositionable;
+import io.github.inf1009_p10_9.interfaces.*;
 
-public class MovementManager {
+public class MovementManager implements IMovementCalculatable, IMovementStrategyReturnable, IMovementStrategyRegisterable {
     private static MovementManager instance;
 
     private ObjectMap<String, IMovementStrategy> movementStrategies;

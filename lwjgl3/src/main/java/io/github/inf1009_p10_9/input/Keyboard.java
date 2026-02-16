@@ -4,8 +4,15 @@ import com.badlogic.gdx.Input;
 import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
+import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
 
 public class Keyboard implements IInputListens {
+
+    private IMovementCalculatable movementCalculatable;
+
+    public Keyboard(IMovementCalculatable movementCalculatable) {
+        this.movementCalculatable = movementCalculatable;
+    }
 
     @Override
     public void onInput(io.github.inf1009_p10_9.input.Input input) {
@@ -28,29 +35,29 @@ public class Keyboard implements IInputListens {
 
                 // Move Up
                 if (GameContext.getInputManager().isKeyPressed(Input.Keys.W) || GameContext.getInputManager().isKeyPressed(Input.Keys.UP)) {
-                    GameContext.getMovementManager().move(entity, 0); // 0 = up
+                    movementCalculatable.move(entity, 0); // 0 = up
                     moved = true;
                 }
 
                 // Move Down
                 if (GameContext.getInputManager().isKeyPressed(Input.Keys.S) || GameContext.getInputManager().isKeyPressed(Input.Keys.DOWN)) {
-                    GameContext.getMovementManager().move(entity, 1); // 1 = down
+                    movementCalculatable.move(entity, 1); // 1 = down
                     moved = true;
                 }
 
                 // Move Left
                 if (GameContext.getInputManager().isKeyPressed(Input.Keys.A) || GameContext.getInputManager().isKeyPressed(Input.Keys.LEFT)) {
-                    GameContext.getMovementManager().move(entity, 2); // 2 = left
+                    movementCalculatable.move(entity, 2); // 2 = left
                     moved = true;
                 }
 
                 // Move Right
                 if (GameContext.getInputManager().isKeyPressed(Input.Keys.D) || GameContext.getInputManager().isKeyPressed(Input.Keys.RIGHT)) {
-                    GameContext.getMovementManager().move(entity, 3); // 3 = right
+                    movementCalculatable.move(entity, 3); // 3 = right
                     moved = true;
                 }
 
-                // Action keys (these still work on press)
+                // Action keys
                 //if (GameContext.getInputManager().isKeyPressed(Input.Keys.SPACE)) {
                     // Add action logic here
                 //}

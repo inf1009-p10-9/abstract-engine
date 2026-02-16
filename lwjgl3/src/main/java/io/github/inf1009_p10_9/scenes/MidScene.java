@@ -4,10 +4,12 @@ import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.entities.Enemy;
 import io.github.inf1009_p10_9.entities.Wall;
+import io.github.inf1009_p10_9.interfaces.IMovementStrategyReturnable;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 import io.github.inf1009_p10_9.movement.AIMovement;
+import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
@@ -20,12 +22,16 @@ public class MidScene extends Scene {
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
 
-
     private float aiUpdateTimer = 0;
     private static final float AI_UPDATE_INTERVAL = 0.2f;
 
-    public MidScene() {
+    private IMovementCalculatable movementCalculatable;
+    private IMovementStrategyReturnable movementStrategyReturnable;
+
+    public MidScene(IMovementCalculatable movementCalculatable, IMovementStrategyReturnable movementStrategyReturnable) {
         super("MidScene");
+        this.movementCalculatable = movementCalculatable;
+        this.movementStrategyReturnable = movementStrategyReturnable;
     }
 
     @Override
@@ -136,7 +142,7 @@ public class MidScene extends Scene {
                 for (Entity entity : entities) {
                     if (entity.getClass().getSimpleName().equals("Enemy")) {
                         // Get the Enemy's AI movement strategy
-                        IMovementStrategy strategy = GameContext.getMovementManager().getMovementStrategy("Enemy");
+                        IMovementStrategy strategy = movementStrategyReturnable.getMovementStrategy("Enemy");
 
                         if (strategy instanceof AIMovement) {
                             AIMovement aiMovement = (AIMovement) strategy;
@@ -144,8 +150,8 @@ public class MidScene extends Scene {
                             aiMovement.setTargetPosition(playerPos); // constantly set player's position as target to flee from
                         }
 
-                        // Move the enemy (will flee from target)
-                        GameContext.getMovementManager().move(entity, 0);
+                        //Move the enemy (will flee from target)
+                        movementCalculatable.move(entity, 0);
                     }
                 }
             }

@@ -7,11 +7,13 @@ import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.audio.BGManager;
 import io.github.inf1009_p10_9.audio.SFXManager;
 import io.github.inf1009_p10_9.audio.Speaker;
+import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
+import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.ui.UIElement;
 
 
-public class OutputManager {
+public class OutputManager implements IRenderRegisterable, IRenderUnregisterable {
     private static OutputManager instance;
 
     private Array<IRenderable> renderables;
@@ -54,12 +56,14 @@ public class OutputManager {
         }
     }
 
+    @Override
     public void registerRenderable(IRenderable obj) {
         if (!renderables.contains(obj, true)) {
             renderables.add(obj);
         }
     }
 
+    @Override
     public void unregisterRenderable(IRenderable obj) {
         renderables.removeValue(obj, true);
     }

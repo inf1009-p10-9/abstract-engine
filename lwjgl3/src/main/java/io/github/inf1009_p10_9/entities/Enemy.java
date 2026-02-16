@@ -8,19 +8,20 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
+import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
 public class Enemy extends Entity implements IRenderable, ICollidable {
 
     private Color color;
+    private ISFXPlayable sfxPlayable;
 
-    public Enemy(float x, float y) {
+    public Enemy(float x, float y, ISFXPlayable sfxPlayable) {
         super(x, y);
         this.bounds = new Rectangle(x, y, 32, 32);
         this.zIndex = 10;
         this.color = Color.RED; // Red enemy
 
-        // Optionally load texture here
-        // this.texture = new Texture("enemy.png");
+        this.sfxPlayable = sfxPlayable;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Enemy extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         System.out.println("ENEMY COLLIDED WITH: " + other.getClass().getSimpleName());
-        GameContext.getOutputManager().getSFXManager().playSound("sound/jump.mp3");
+        sfxPlayable.playSound("sound/jump.mp3");
         // Flash orange when hit
         color = Color.ORANGE;
 

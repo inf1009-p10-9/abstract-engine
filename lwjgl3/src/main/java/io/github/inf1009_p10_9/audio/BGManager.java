@@ -1,8 +1,9 @@
 package io.github.inf1009_p10_9.audio;
 
 import com.badlogic.gdx.audio.Music;
+import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 
-public class BGManager {
+public class BGManager implements IMusicPlayable {
     private String currentMusic;
     private float volume;
     private Speaker speaker;
@@ -45,26 +46,26 @@ public class BGManager {
         currentMusic = null;
     }
 
-    public void setVolume(float volume) {
-        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
-        if (musicInstance != null) {
-            musicInstance.setVolume(this.volume);
-        }
-    }
-
-    public String getCurrentMusic() {
-        return currentMusic;
-    }
-
-    public void pause() {
-        if (musicInstance != null && musicInstance.isPlaying()) {
-            musicInstance.pause();
-        }
-    }
-
-    public void resume() {
-        if (musicInstance != null && !musicInstance.isPlaying()) {
-            musicInstance.play();
-        }
-    }
+//    public void setVolume(float volume) {
+//        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
+//        if (musicInstance != null) {
+//            musicInstance.setVolume(this.volume);
+//        }
+//    }
+//
+//    public String getCurrentMusic() {
+//        return currentMusic;
+//    }
+//
+//    public void pause() {
+//        if (musicInstance != null && musicInstance.isPlaying()) {
+//            musicInstance.pause();
+//        }
+//    }
+//
+//    public void resume() {
+//        if (musicInstance != null && !musicInstance.isPlaying()) {
+//            musicInstance.play();
+//        }
+//    }
 }

@@ -4,12 +4,10 @@ import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.entities.Enemy;
 import io.github.inf1009_p10_9.entities.Wall;
-import io.github.inf1009_p10_9.interfaces.IMovementStrategyReturnable;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.entities.Entity;
-import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 import io.github.inf1009_p10_9.movement.AIMovement;
-import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
@@ -27,11 +25,27 @@ public class MidScene extends Scene {
 
     private IMovementCalculatable movementCalculatable;
     private IMovementStrategyReturnable movementStrategyReturnable;
+    private IInputKeyCheckable inputKeyCheckable;
+    private ICollidableRegisterable collidableRegisterable;
+    private ISFXPlayable sfxPlayable;
+    private IRenderRegisterable renderRegisterable;
 
-    public MidScene(IMovementCalculatable movementCalculatable, IMovementStrategyReturnable movementStrategyReturnable) {
-        super("MidScene");
+    public MidScene(IMovementCalculatable movementCalculatable,
+                    IMovementStrategyReturnable movementStrategyReturnable,
+                    IInputKeyCheckable inputKeyCheckable,
+                    ICollidableUnregisterable collidableUnregisterable,
+                    ICollidableRegisterable collidableRegisterable,
+                    ISFXPlayable sfxPlayable,
+                    IRenderUnregisterable renderUnregisterable,
+                    IRenderRegisterable renderRegisterable,
+                    IMusicPlayable musicPlayable) {
+        super("MidScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
         this.movementCalculatable = movementCalculatable;
         this.movementStrategyReturnable = movementStrategyReturnable;
+        this.inputKeyCheckable = inputKeyCheckable;
+        this.collidableRegisterable = collidableRegisterable;
+        this.sfxPlayable = sfxPlayable;
+        this.renderRegisterable = renderRegisterable;
     }
 
     @Override
@@ -47,58 +61,58 @@ public class MidScene extends Scene {
         addUI(instructionLabel);
 
         // Create player at center
-        Player player = new Player(400, 300);
+        Player player = new Player(400, 300, sfxPlayable);
         addEntity(player);
-        GameContext.getOutputManager().registerRenderable(player);
-        GameContext.getCollisionManager().registerCollidable(player);
+        renderRegisterable.registerRenderable(player);
+        collidableRegisterable.registerCollidable(player);
 
 
         // Enemy 1 - top right
-        Enemy enemy1 = new Enemy(500, 300);
+        Enemy enemy1 = new Enemy(500, 300, sfxPlayable);
         addEntity(enemy1);
-        GameContext.getOutputManager().registerRenderable(enemy1);
-        GameContext.getCollisionManager().registerCollidable(enemy1);
+        renderRegisterable.registerRenderable(enemy1);
+        collidableRegisterable.registerCollidable(enemy1);
 
         // Create walls around the edge of the screen
         // Top wall
         Wall topWall = new Wall(0, 568, 800, 32);
         addEntity(topWall);
-        GameContext.getOutputManager().registerRenderable(topWall);
-        GameContext.getCollisionManager().registerCollidable(topWall);
+        renderRegisterable.registerRenderable(topWall);
+        collidableRegisterable.registerCollidable(topWall);
 
         // Bottom wall
         Wall bottomWall = new Wall(0, 0, 800, 32);
         addEntity(bottomWall);
-        GameContext.getOutputManager().registerRenderable(bottomWall);
-        GameContext.getCollisionManager().registerCollidable(bottomWall);
+        renderRegisterable.registerRenderable(bottomWall);
+        collidableRegisterable.registerCollidable(bottomWall);
 
         // Left wall
         Wall leftWall = new Wall(0, 0, 32, 600);
         addEntity(leftWall);
-        GameContext.getOutputManager().registerRenderable(leftWall);
-        GameContext.getCollisionManager().registerCollidable(leftWall);
+        renderRegisterable.registerRenderable(leftWall);
+        collidableRegisterable.registerCollidable(leftWall);
 
         // Right wall
         Wall rightWall = new Wall(768, 0, 32, 600);
         addEntity(rightWall);
-        GameContext.getOutputManager().registerRenderable(rightWall);
-        GameContext.getCollisionManager().registerCollidable(rightWall);
+        renderRegisterable.registerRenderable(rightWall);
+        collidableRegisterable.registerCollidable(rightWall);
 
         // Create some obstacles in the middle
         Wall obstacle1 = new Wall(200, 200, 100, 32);
         addEntity(obstacle1);
-        GameContext.getOutputManager().registerRenderable(obstacle1);
-        GameContext.getCollisionManager().registerCollidable(obstacle1);
+        renderRegisterable.registerRenderable(obstacle1);
+        collidableRegisterable.registerCollidable(obstacle1);
 
         Wall obstacle2 = new Wall(500, 400, 64, 64);
         addEntity(obstacle2);
-        GameContext.getOutputManager().registerRenderable(obstacle2);
-        GameContext.getCollisionManager().registerCollidable(obstacle2);
+        renderRegisterable.registerRenderable(obstacle2);
+        collidableRegisterable.registerCollidable(obstacle2);
 
         Wall obstacle3 = new Wall(300, 450, 150, 32);
         addEntity(obstacle3);
-        GameContext.getOutputManager().registerRenderable(obstacle3);
-        GameContext.getCollisionManager().registerCollidable(obstacle3);
+        renderRegisterable.registerRenderable(obstacle3);
+        collidableRegisterable.registerCollidable(obstacle3);
 
         System.out.println("MidScene loaded - Player and Walls only");
     }
@@ -158,7 +172,7 @@ public class MidScene extends Scene {
         }
 
         // Press SPACE to go to end scene
-        if (GameContext.getInputManager().isKeyPressed(Keys.SPACE)) {
+        if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
             if (!spacePressed) {
                 spacePressed = true;
                 System.out.println("Going to EndScene...");

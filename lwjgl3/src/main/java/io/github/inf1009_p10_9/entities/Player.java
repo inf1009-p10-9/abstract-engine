@@ -5,19 +5,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
+import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
 public class Player extends Entity implements IRenderable, ICollidable {
     private Color color;
+    private ISFXPlayable sfxPlayable;
 
-    public Player(float x, float y) {
+    public Player(float x, float y, ISFXPlayable sfxPlayable) {
         super(x, y, 32, 32, 10);
         this.color = Color.BLUE;
-
-        // Optionally load texture here
-        // this.texture = new Texture("player.png");
+        this.sfxPlayable = sfxPlayable;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class Player extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         System.out.println("Player collided with: " + other.getClass().getSimpleName());
-        GameContext.getOutputManager().getSFXManager().playSound("sound/jump.mp3");
+        sfxPlayable.playSound("sound/jump.mp3");
     }
 
     @Override

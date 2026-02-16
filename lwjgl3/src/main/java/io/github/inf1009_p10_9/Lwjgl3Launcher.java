@@ -3,7 +3,10 @@ package io.github.inf1009_p10_9;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import io.github.inf1009_p10_9.interfaces.IMovementStrategyRegisterable;
+import io.github.inf1009_p10_9.managers.CollisionManager;
+import io.github.inf1009_p10_9.managers.InputManager;
 import io.github.inf1009_p10_9.managers.MovementManager;
+import io.github.inf1009_p10_9.managers.OutputManager;
 import io.github.inf1009_p10_9.movement.*;
 import io.github.inf1009_p10_9.input.*;
 import io.github.inf1009_p10_9.scenes.*;
@@ -35,9 +38,13 @@ public class Lwjgl3Launcher {
         public void create() {
             super.create();
 
+            MovementManager moveMgr = GameContext.getMovementManager();
+            InputManager inputMgr = GameContext.getInputManager();
+            CollisionManager collisionMgr = GameContext.getCollisionManager();
+            OutputManager outMgr = GameContext.getOutputManager();
+
             // Set up input handling
-            MovementManager movementManagerInstance = GameContext.getMovementManager();
-            Keyboard keyboard = new Keyboard(movementManagerInstance);
+            Keyboard keyboard = new Keyboard(moveMgr, inputMgr);
             GameContext.getInputManager().registerPeripheral(keyboard);
 
             // Set up collision detection
@@ -54,9 +61,10 @@ public class Lwjgl3Launcher {
 
 
             // Add all game scenes
-            GameContext.getSceneManager().addScene(new StartScene());
-            GameContext.getSceneManager().addScene(new MidScene(movementManagerInstance, movementManagerInstance)); //gameplay scene, pass in interfaces
-            GameContext.getSceneManager().addScene(new EndScene());
+            GameContext.getSceneManager().addScene(new StartScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
+            GameContext.getSceneManager().addScene(new MidScene(moveMgr, moveMgr, inputMgr, collisionMgr,
+                collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager())); //gameplay scene
+            GameContext.getSceneManager().addScene(new EndScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
 
             // Start with first scene
             GameContext.getSceneManager().switchScene("StartScene");

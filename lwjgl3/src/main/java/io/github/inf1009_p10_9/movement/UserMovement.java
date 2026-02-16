@@ -2,23 +2,17 @@ package io.github.inf1009_p10_9.movement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.IPositionable;
 import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 
 public class UserMovement implements IMovementStrategy {
     private float speed;
 
-    public UserMovement() {
-        this.speed = 200f; // pixels per second
-    }
-
     public UserMovement(float speed) {
         this.speed = speed;
     }
 
-
-    public void calculateMovement(IPositionable object, int moveCount) {
+    public void calculateMovement(IPositionable object, int moveDirection) {
         if (object == null) {
             return;
         }
@@ -27,30 +21,25 @@ public class UserMovement implements IMovementStrategy {
         Vector2 newPos = new Vector2(currentPos);
 
         float delta = Gdx.graphics.getDeltaTime();
-        float moveDistance = speed * delta;
+        float moveDistance = speed * delta; //calculate considering delta: consistent across all fps
 
-        // Calculate new position based on moveCount
-        // moveCount could represent direction: 0=up, 1=down, 2=left, 3=right
-        switch (moveCount) {
-            case 0: // Up
+        //Calculate new position based on direction
+        switch (moveDirection) {
+            case 0: //Up
                 newPos.y += moveDistance;
                 break;
-            case 1: // Down
+            case 1: //Down
                 newPos.y -= moveDistance;
                 break;
-            case 2: // Left
+            case 2: //Left
                 newPos.x -= moveDistance;
                 break;
-            case 3: // Right
+            case 3: //Right
                 newPos.x += moveDistance;
                 break;
         }
 
-        // Apply the movement through IPositionable
+        //Apply movement through IPositionable
         object.setPosition(newPos);
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
     }
 }

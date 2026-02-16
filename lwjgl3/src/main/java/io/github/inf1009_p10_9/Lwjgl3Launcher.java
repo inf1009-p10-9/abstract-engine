@@ -45,16 +45,16 @@ public class Lwjgl3Launcher {
             UserMovement userMovement = new UserMovement(250f);
             GameContext.getMovementManager().registerMovementStrategy("Player", userMovement);
 
-            AIMovement enemyMovement = new AIMovement(200f, AIMovement.MovementPattern.FLEE); // AI has 4 movement pattern to choose from RANDOM,PATROL,CHASE,FLEE
+            AIMovement enemyMovement = new AIMovement(200f, AIMovement.AIMovementPattern.FLEE); // Demo
             GameContext.getMovementManager().registerMovementStrategy("Enemy", enemyMovement);
 
 
             // Add all game scenes
             GameContext.getSceneManager().addScene(new StartScene());
-            GameContext.getSceneManager().addScene(new MidScene()); // Gameplay scene, edit MidScene with the entities needed to your preference
+            GameContext.getSceneManager().addScene(new MidScene()); //gameplay scene
             GameContext.getSceneManager().addScene(new EndScene());
 
-            // Start with the first scene
+            // Start with first scene
             GameContext.getSceneManager().switchScene("StartScene");
 
             System.out.println("Game Engine started successfully!");

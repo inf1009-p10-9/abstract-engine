@@ -3,7 +3,8 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.interfaces.*;
 
-public class MovementManager implements IMovementCalculatable, IMovementStrategyReturnable, IMovementStrategyRegisterable {
+public class MovementManager implements IMovementCalculatable,
+                                        IMovementStrategyRegisterable {
     private static MovementManager instance;
 
     private ObjectMap<String, IMovementStrategy> movementStrategies;
@@ -23,17 +24,14 @@ public class MovementManager implements IMovementCalculatable, IMovementStrategy
         movementStrategies.clear();
     }
 
-    @Override
     public void registerMovementStrategy(String objectType, IMovementStrategy strategy) {
         movementStrategies.put(objectType, strategy);
     }
 
-    @Override
     public IMovementStrategy getMovementStrategy(String objectType) {
         return movementStrategies.get(objectType);
     }
 
-    @Override
     public void move(IPositionable object, int moveDirection) {
         //Determine which strategy to use based on entity type
         String entityType = object.getClass().getSimpleName();

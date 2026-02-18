@@ -4,16 +4,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.Gdx;
 import io.github.inf1009_p10_9.audio.BGManager;
 import io.github.inf1009_p10_9.audio.SFXManager;
 import io.github.inf1009_p10_9.audio.Speaker;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
-import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.ui.UIElement;
 
-
-public class OutputManager implements IRenderRegisterable, IRenderUnregisterable {
+public class OutputManager implements IRenderRegisterable {
     private static OutputManager instance;
 
     private Array<IRenderable> renderables;
@@ -97,8 +96,8 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
             return;
         }
 
-        com.badlogic.gdx.Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
-        com.badlogic.gdx.Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Combine all renderables (entities + UI) and sort by z-index
         Array<IRenderable> allRenderables = new Array<>();

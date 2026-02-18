@@ -1,5 +1,8 @@
 package io.github.inf1009_p10_9;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import io.github.inf1009_p10_9.interfaces.IMovementStrategyRegisterable;
@@ -7,6 +10,7 @@ import io.github.inf1009_p10_9.managers.CollisionManager;
 import io.github.inf1009_p10_9.managers.InputManager;
 import io.github.inf1009_p10_9.managers.MovementManager;
 import io.github.inf1009_p10_9.managers.OutputManager;
+import io.github.inf1009_p10_9.managers.SceneManager;
 import io.github.inf1009_p10_9.movement.*;
 import io.github.inf1009_p10_9.input.*;
 import io.github.inf1009_p10_9.scenes.*;
@@ -42,32 +46,47 @@ public class Lwjgl3Launcher {
             InputManager inputMgr = GameContext.getInputManager();
             CollisionManager collisionMgr = GameContext.getCollisionManager();
             OutputManager outMgr = GameContext.getOutputManager();
+            SceneManager sceneManager = GameContext.getSceneManager();
 
             // Set up input handling
-            Keyboard keyboard = new Keyboard(moveMgr, inputMgr);
-            GameContext.getInputManager().registerPeripheral(keyboard);
+            inputMgr.registerPeripheral(new Keyboard(moveMgr, inputMgr));
 
             // Set up collision detection
-            AABBCollisionStrategy collisionStrategy = new AABBCollisionStrategy();
-            GameContext.getCollisionManager().setCollisionStrategy(collisionStrategy);
+            collisionMgr.setCollisionStrategy(new AABBCollisionStrategy());
 
             // Register movement strategies that the game can use
-            IMovementStrategyRegisterable movementStrategyRegisterable = GameContext.getMovementManager(); //
-            UserMovement userMovement = new UserMovement(250f);
-            movementStrategyRegisterable.registerMovementStrategy("Player", userMovement);
+            moveMgr.registerMovementStrategy("Player",
+                                             new UserMovement(250f));
 
-            AIMovement enemyMovement = new AIMovement(200f, AIMovement.AIMovementPattern.FLEE); // Demo
-            movementStrategyRegisterable.registerMovementStrategy("Enemy", enemyMovement);
-
+            moveMgr.registerMovementStrategy("Enemy",
+                                             // Demo
+                                             new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
 
             // Add all game scenes
-            GameContext.getSceneManager().addScene(new StartScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
-            GameContext.getSceneManager().addScene(new MidScene(moveMgr, moveMgr, inputMgr, collisionMgr,
-                collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager())); //gameplay scene
-            GameContext.getSceneManager().addScene(new EndScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
+            Scene[] scenes = {
+                new StartScene(inputMgr,
+                               collisionMgr,
+                               outMgr,
+                               outMgr.getBGManager()),
+                new MidScene(moveMgr,
+                             moveMgr,
+                             inputMgr,
+                             collisionMgr,
+                             outMgr.getSFXManager(),
+                             outMgr,
+                             outMgr.getBGManager()),
+                new EndScene(inputMgr,
+                             collisionMgr,
+                             outMgr,
+                             outMgr.getBGManager())
+            };
+
+            for (Scene scene : scenes) {
+                sceneManager.addScene(scene);
+            }
 
             // Start with first scene
-            GameContext.getSceneManager().switchScene("StartScene");
+            sceneManager.switchScene("StartScene");
 
             System.out.println("Game Engine started successfully!");
         }

@@ -3,10 +3,9 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
-import io.github.inf1009_p10_9.interfaces.ICollidableUnregisterable;
 import io.github.inf1009_p10_9.interfaces.ICollisionStrategy;
 
-public class CollisionManager implements ICollidableUnregisterable, ICollidableRegisterable {
+public class CollisionManager implements ICollidableRegisterable {
     private static CollisionManager instance;
 
     private Array<ICollidable> collidables;
@@ -27,14 +26,12 @@ public class CollisionManager implements ICollidableUnregisterable, ICollidableR
         collidables.clear();
     }
 
-    @Override
     public void registerCollidable(ICollidable obj) {
         if (!collidables.contains(obj, true)) {
             collidables.add(obj);
         }
     }
 
-    @Override
     public void unregisterCollidable(ICollidable obj) {
         collidables.removeValue(obj, true);
     }

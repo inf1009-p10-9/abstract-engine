@@ -1,14 +1,14 @@
 package io.github.inf1009_p10_9.scenes;
 
 import io.github.inf1009_p10_9.GameContext;
-import io.github.inf1009_p10_9.interfaces.ICollidableUnregisterable;
+import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
+import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-
 
 public class StartScene extends Scene {
     private TextLabel titleLabel;
@@ -18,10 +18,10 @@ public class StartScene extends Scene {
     private IInputKeyCheckable inputKeyCheckable;
 
     public StartScene(IInputKeyCheckable inputKeyCheckable,
-                      ICollidableUnregisterable collidableUnregisterable,
-                      IRenderUnregisterable renderUnregisterable,
+                      ICollidableRegisterable collidableRegisterable,
+                      IRenderRegisterable renderRegisterable,
                       IMusicPlayable musicPlayable) {
-        super("StartScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
+        super("StartScene", collidableRegisterable, renderRegisterable, musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
     }
 
@@ -48,15 +48,13 @@ public class StartScene extends Scene {
         System.out.println("Attempting to play music...");
         GameContext.getOutputManager().getBGManager().playMusic("music/Super Mario Bros. medley.mp3");
         System.out.println("Music command sent!");
-
-
     }
 
     @Override
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        sceneLoadTime += Gdx.graphics.getDeltaTime();
 
         // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {

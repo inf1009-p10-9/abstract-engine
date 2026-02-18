@@ -7,27 +7,26 @@ import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.UIElement;
 
-
 public abstract class Scene implements Screen {
-    protected String name;
-    protected Array<Entity> entities;
-    protected Array<UIElement> uiElements;
-    protected boolean loaded;
-    private ICollidableUnregisterable collidableUnregistrable;
-    private IRenderUnregisterable renderUnregistrable;
+    private String name;
+    private Array<Entity> entities;
+    private Array<UIElement> uiElements;
+    private boolean loaded;
+    protected ICollidableRegisterable collidableRegisterable;
+    protected IRenderRegisterable renderRegisterable;
     private IMusicPlayable musicPlayable;
 
     public Scene(String name,
-                 ICollidableUnregisterable collidableUnregistrable,
-                 IRenderUnregisterable renderUnregistrable,
+                 ICollidableRegisterable collidableRegisterable,
+                 IRenderRegisterable renderRegisterable,
                  IMusicPlayable musicPlayable) {
         this.name = name;
         this.entities = new Array<>();
         this.uiElements = new Array<>();
         this.loaded = false;
 
-        this.collidableUnregistrable = collidableUnregistrable;
-        this.renderUnregistrable = renderUnregistrable;
+        this.collidableRegisterable = collidableRegisterable;
+        this.renderRegisterable = renderRegisterable;
         this.musicPlayable = musicPlayable;
     }
 
@@ -61,13 +60,13 @@ public abstract class Scene implements Screen {
 
                 // If entity is renderable, unregister from OutputManager
                 if (entity instanceof IRenderable) {
-                    renderUnregistrable.unregisterRenderable(
-                        (io.github.inf1009_p10_9.interfaces.IRenderable) entity);
+                    renderRegisterable.unregisterRenderable(
+                        (IRenderable) entity);
                 }
 
                 // If entity is collidable, unregister from CollisionManager
                 if (entity instanceof ICollidable) {
-                    collidableUnregistrable.unregisterCollidable( (ICollidable) entity);
+                    collidableRegisterable.unregisterCollidable((ICollidable) entity);
                 }
             }
 
@@ -127,20 +126,17 @@ public abstract class Scene implements Screen {
     }
 
     @Override
+    public void resume() {}
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resize(int x, int y) {}
+
+    @Override
     public void render(float delta) {
         update();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
     }
 
     @Override

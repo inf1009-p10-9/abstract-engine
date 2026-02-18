@@ -1,12 +1,13 @@
 package io.github.inf1009_p10_9.scenes;
 
 import io.github.inf1009_p10_9.GameContext;
-import io.github.inf1009_p10_9.interfaces.ICollidableUnregisterable;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
+import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
+import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class EndScene extends Scene {
@@ -18,9 +19,10 @@ public class EndScene extends Scene {
     private IInputKeyCheckable inputKeyCheckable;
 
     public EndScene(IInputKeyCheckable inputKeyCheckable,
-                    ICollidableUnregisterable collidableUnregistrable,
-                    IRenderUnregisterable renderUnregisterable, IMusicPlayable musicPlayable) {
-        super("EndScene", collidableUnregistrable, renderUnregisterable, musicPlayable);
+                    ICollidableRegisterable collidableRegisterable,
+                    IRenderRegisterable renderRegisterable,
+                    IMusicPlayable musicPlayable) {
+        super("EndScene", collidableRegisterable, renderRegisterable, musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
     }
 
@@ -54,7 +56,7 @@ public class EndScene extends Scene {
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        sceneLoadTime += Gdx.graphics.getDeltaTime();
 
         // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {

@@ -1,24 +1,18 @@
 package io.github.inf1009_p10_9.managers;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.scenes.Scene;
 
-public class SceneManager {
-    private static SceneManager instance;
+public class SceneManager implements ISceneSwitchable {
     
     private ObjectMap<String, Scene> scenes;
     private Scene currentScene;
     
-    private SceneManager() {
+    public SceneManager() {
         scenes = new ObjectMap<>();
     }
     
-    public static SceneManager getInstance() {
-        if (instance == null) {
-            instance = new SceneManager();
-        }
-        return instance;
-    }
     
     public void initialize() {
         scenes.clear();
@@ -29,6 +23,7 @@ public class SceneManager {
         scenes.put(scene.getName(), scene);
     }
     
+    @Override
     public void switchScene(String sceneName) {
         Scene newScene = scenes.get(sceneName);
         

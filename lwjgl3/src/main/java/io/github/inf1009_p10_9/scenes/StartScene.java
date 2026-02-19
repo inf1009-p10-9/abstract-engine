@@ -1,13 +1,8 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.GameContext;
-import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
-import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
-import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class StartScene extends Scene {
@@ -15,13 +10,20 @@ public class StartScene extends Scene {
     private TextLabel instructionLabel;
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
-    private IInputKeyCheckable inputKeyCheckable;
+    
+    private final ISceneSwitchable sceneSwitchable;
+    private final IInputKeyCheckable inputKeyCheckable;
 
-    public StartScene(IInputKeyCheckable inputKeyCheckable,
+    public StartScene(ISceneSwitchable sceneSwitchable,
+                      IEntityRegisterable entityRegisterable,
+                      IUIDisplayable uiDisplayable,
+                      IInputKeyCheckable inputKeyCheckable,
                       ICollidableRegisterable collidableRegisterable,
                       IRenderRegisterable renderRegisterable,
                       IMusicPlayable musicPlayable) {
-        super("StartScene", collidableRegisterable, renderRegisterable, musicPlayable);
+        super("StartScene", entityRegisterable, uiDisplayable,
+              collidableRegisterable, renderRegisterable, musicPlayable);
+        this.sceneSwitchable = sceneSwitchable;
         this.inputKeyCheckable = inputKeyCheckable;
     }
 
@@ -40,13 +42,12 @@ public class StartScene extends Scene {
         System.out.println("StartScene loaded");
     }
 
-
     @Override
     public void load() {
         super.load();
         sceneLoadTime = 0;
         System.out.println("Attempting to play music...");
-        GameContext.getOutputManager().getBGManager().playMusic("music/Super Mario Bros. medley.mp3");
+        musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
         System.out.println("Music command sent!");
     }
 
@@ -54,7 +55,7 @@ public class StartScene extends Scene {
     public void update() {
         super.update();
 
-        sceneLoadTime += Gdx.graphics.getDeltaTime();
+        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
         // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {
@@ -66,7 +67,7 @@ public class StartScene extends Scene {
             if (!spacePressed) {
                 spacePressed = true;
                 System.out.println("Going to MidScene...");
-                GameContext.getSceneManager().switchScene("MidScene");
+                sceneSwitchable.switchScene("MidScene");
             }
         } else {
             spacePressed = false;

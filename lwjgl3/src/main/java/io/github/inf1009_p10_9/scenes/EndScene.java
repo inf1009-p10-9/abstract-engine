@@ -5,12 +5,17 @@ import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
+import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
+import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
+import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
+
 public class EndScene extends Scene {
+    private final ISceneSwitchable sceneSwitchable;
     private TextLabel titleLabel;
     private TextLabel instructionLabel1;
     private TextLabel instructionLabel2;
@@ -21,9 +26,13 @@ public class EndScene extends Scene {
     public EndScene(IInputKeyCheckable inputKeyCheckable,
                     ICollidableRegisterable collidableRegisterable,
                     IRenderRegisterable renderRegisterable,
-                    IMusicPlayable musicPlayable) {
-        super("EndScene", collidableRegisterable, renderRegisterable, musicPlayable);
+                    IMusicPlayable musicPlayable,
+                    IEntityRegisterable entityRegisterable,
+                    IUIDisplayable uiDisplayable,
+                    ISceneSwitchable sceneSwitchable) {
+        super("EndScene", entityRegisterable, uiDisplayable, collidableRegisterable, renderRegisterable, musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
+        this.sceneSwitchable = sceneSwitchable;
     }
 
     @Override
@@ -68,7 +77,7 @@ public class EndScene extends Scene {
             if (!spacePressed) {
                 spacePressed = true;
                 System.out.println("Restarting - Going to MidScene...");
-                GameContext.getSceneManager().switchScene("MidScene");
+                sceneSwitchable.switchScene("MidScene");
             }
         } else {
             spacePressed = false;
@@ -77,7 +86,7 @@ public class EndScene extends Scene {
         // Press ESC to go to start scene
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             System.out.println("Going back to StartScene...");
-            GameContext.getSceneManager().switchScene("StartScene");
+            sceneSwitchable.switchScene("StartScene");
         }
 
         // Make instruction text blink

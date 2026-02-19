@@ -6,26 +6,20 @@ import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.ICollisionStrategy;
 
 public class CollisionManager implements ICollidableRegisterable {
-    private static CollisionManager instance;
 
     private Array<ICollidable> collidables;
     private ICollisionStrategy collisionStrategy;
 
-    private CollisionManager() {
+    public CollisionManager() {
         collidables = new Array<>();
     }
 
-    public static CollisionManager getInstance() {
-        if (instance == null) {
-            instance = new CollisionManager();
-        }
-        return instance;
-    }
 
     public void initialize() {
         collidables.clear();
     }
 
+    @Override
     public void registerCollidable(ICollidable obj) {
         if (!collidables.contains(obj, true)) {
             collidables.add(obj);
@@ -33,6 +27,7 @@ public class CollisionManager implements ICollidableRegisterable {
     }
 
     public void unregisterCollidable(ICollidable obj) {
+    @Override
         collidables.removeValue(obj, true);
     }
 

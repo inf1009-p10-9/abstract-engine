@@ -10,10 +10,10 @@ import io.github.inf1009_p10_9.audio.SFXManager;
 import io.github.inf1009_p10_9.audio.Speaker;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
+import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.ui.UIElement;
 
-public class OutputManager implements IRenderRegisterable {
-    private static OutputManager instance;
+public class OutputManager implements IRenderRegisterable, IUIDisplayable {
 
     private Array<IRenderable> renderables;
     private Array<UIElement> uiElements;
@@ -25,7 +25,7 @@ public class OutputManager implements IRenderRegisterable {
     private BGManager bgManager;
     private SFXManager sfxManager;
 
-    private OutputManager() {
+    public OutputManager() {
         renderables = new Array<>();
         uiElements = new Array<>();
 
@@ -35,12 +35,6 @@ public class OutputManager implements IRenderRegisterable {
         sfxManager = new SFXManager(speaker);
     }
 
-    public static OutputManager getInstance() {
-        if (instance == null) {
-            instance = new OutputManager();
-        }
-        return instance;
-    }
 
     public void initialize() {
         renderables.clear();
@@ -63,15 +57,18 @@ public class OutputManager implements IRenderRegisterable {
     }
 
     @Override
+    @Override
     public void unregisterRenderable(IRenderable obj) {
         renderables.removeValue(obj, true);
     }
 
+    @Override
     public void displayUI(UIElement uiElement) {
         if (!uiElements.contains(uiElement, true)) {
             uiElements.add(uiElement);
         }
     }
+    @Override
 
     public void removeUI(UIElement uiElement) {
         uiElements.removeValue(uiElement, true);

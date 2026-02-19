@@ -4,56 +4,49 @@ import com.badlogic.gdx.ApplicationAdapter;
 import io.github.inf1009_p10_9.managers.*;
 
 public class GameMaster extends ApplicationAdapter {
-    private static GameMaster instance;
-
-    // Managers
-    private SceneManager sceneManager;
-    private EntityManager entityManager;
-    private CollisionManager collisionManager;
-    private MovementManager movementManager;
-    private InputManager inputManager;
-    private OutputManager outputManager;
-
+    
+    // Managers (injected via constructor)
+    private final SceneManager sceneManager;
+    private final EntityManager entityManager;
+    private final CollisionManager collisionManager;
+    private final MovementManager movementManager;
+    private final InputManager inputManager;
+    private final OutputManager outputManager;
+    
     // Game loop control
     private boolean running;
-
-    protected GameMaster() {
-        // Private constructor for singleton
+    
+    // Constructor Injection (Dependency Injection)
+    public GameMaster(SceneManager sceneManager,
+                      EntityManager entityManager,
+                      CollisionManager collisionManager,
+                      MovementManager movementManager,
+                      InputManager inputManager,
+                      OutputManager outputManager) {
+        this.sceneManager = sceneManager;
+        this.entityManager = entityManager;
+        this.collisionManager = collisionManager;
+        this.movementManager = movementManager;
+        this.inputManager = inputManager;
+        this.outputManager = outputManager;
     }
-
-    public static GameMaster getInstance() {
-        if (instance == null) {
-            instance = new GameMaster();
-        }
-        return instance;
-    }
-
+    
     @Override
     public void create() {
         initialize();
     }
-
+    
     public void initialize() {
-        // Initialize all managers
-        sceneManager = SceneManager.getInstance();
-        entityManager = EntityManager.getInstance();
-        collisionManager = CollisionManager.getInstance();
-        movementManager = MovementManager.getInstance();
-        inputManager = InputManager.getInstance();
-        outputManager = OutputManager.getInstance();
-
+        // Initialize all managers (they're already created)
         sceneManager.initialize();
         entityManager.initialize();
         collisionManager.initialize();
         movementManager.initialize();
         inputManager.initialize();
         outputManager.initialize();
-
-        // Register context
-        GameContext.setGameMaster(this);
-
+        
         running = true;
-
+        
         System.out.println("GameMaster initialized");
     }
 

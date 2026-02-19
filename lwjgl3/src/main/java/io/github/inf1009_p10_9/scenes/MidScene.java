@@ -1,6 +1,5 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.entities.Enemy;
 import io.github.inf1009_p10_9.entities.Wall;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Color;
 
 public class MidScene extends Scene {
+    private final ISceneSwitchable sceneSwitchable;
     private TextLabel titleLabel;
     private TextLabel instructionLabel;
     private boolean spacePressed = false;
@@ -28,19 +28,24 @@ public class MidScene extends Scene {
     private IMovementStrategyRegisterable movementStrategyRegisterable;
     private IInputKeyCheckable inputKeyCheckable;
     private ISFXPlayable sfxPlayable;
+    
 
-    public MidScene(IMovementCalculatable movementCalculatable,
-                    IMovementStrategyRegisterable movementStrategyRegisterable,
-                    IInputKeyCheckable inputKeyCheckable,
-                    ICollidableRegisterable collidableRegisterable,
-                    ISFXPlayable sfxPlayable,
-                    IRenderRegisterable renderRegisterable,
-                    IMusicPlayable musicPlayable) {
-        super("MidScene", collidableRegisterable, renderRegisterable, musicPlayable);
+    public MidScene(ISceneSwitchable sceneSwitchable,
+                IEntityRegisterable entityRegisterable,
+                IUIDisplayable uiDisplayable,
+                IMovementCalculatable movementCalculatable,
+                IMovementStrategyRegisterable movementStrategyRegisterable,
+                IInputKeyCheckable inputKeyCheckable,
+                ICollidableRegisterable collidableRegisterable,
+                ISFXPlayable sfxPlayable,
+                IRenderRegisterable renderRegisterable,
+                IMusicPlayable musicPlayable) {
+    super("MidScene", entityRegisterable, uiDisplayable, collidableRegisterable, renderRegisterable, musicPlayable);
         this.movementCalculatable = movementCalculatable;
         this.movementStrategyRegisterable = movementStrategyRegisterable;
         this.inputKeyCheckable = inputKeyCheckable;
         this.sfxPlayable = sfxPlayable;
+        this.sceneSwitchable = sceneSwitchable;
     }
 
     @Override
@@ -113,7 +118,7 @@ public class MidScene extends Scene {
         if (aiUpdateTimer >= AI_UPDATE_INTERVAL) {
             aiUpdateTimer = 0;
 
-            Array<Entity> entities = GameContext.getEntityManager().getEntities();
+            Array<Entity> entities = ((IEntityQueryable)entityRegisterable).getEntities()
 
             // FIND THE PLAYER FIRST
             Entity player = null;
@@ -150,7 +155,7 @@ public class MidScene extends Scene {
             if (!spacePressed) {
                 spacePressed = true;
                 System.out.println("Going to EndScene...");
-                GameContext.getSceneManager().switchScene("EndScene");
+                sceneSwitchable.switchScene("EndScene");
             }
         } else {
             spacePressed = false;

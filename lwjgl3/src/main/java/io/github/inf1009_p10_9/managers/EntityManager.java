@@ -4,26 +4,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import io.github.inf1009_p10_9.entities.Entity;
+import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
+import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
 
-public class EntityManager {
-    private static EntityManager instance;
+public class EntityManager implements IEntityQueryable, IEntityRegisterable {
 
     private Array<Entity> entities;
     private Queue<Entity> entitiesToAdd;
     private Queue<Entity> entitiesToRemove;
 
-    private EntityManager() {
+    public EntityManager() {
         entities = new Array<Entity>();
         entitiesToAdd = new Queue<Entity>();
         entitiesToRemove = new Queue<Entity>();
     }
 
-    public static EntityManager getInstance() {
-        if (instance == null) {
-            instance = new EntityManager();
-        }
-        return instance;
-    }
 
     public void initialize() {
         entities.clear();
@@ -31,14 +26,17 @@ public class EntityManager {
         entitiesToRemove.clear();
     }
 
+    @Override
     public void addEntity(Entity entity) {
         entitiesToAdd.addLast(entity);
     }
 
+    @Override
     public void removeEntity(Entity entity) {
         entitiesToRemove.addLast(entity);
     }
 
+    @Override
     public Array<Entity> getEntities() {
         return entities;
     }

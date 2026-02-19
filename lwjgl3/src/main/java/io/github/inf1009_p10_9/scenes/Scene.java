@@ -2,7 +2,6 @@ package io.github.inf1009_p10_9.scenes;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.UIElement;
@@ -12,11 +11,17 @@ public abstract class Scene implements Screen {
     private Array<Entity> entities;
     private Array<UIElement> uiElements;
     private boolean loaded;
-    protected ICollidableRegisterable collidableRegisterable;
-    protected IRenderRegisterable renderRegisterable;
-    private IMusicPlayable musicPlayable;
+    
+    // Interface dependencies (NOT concrete managers!)
+    protected final IEntityRegisterable entityRegisterable;
+    protected final IUIDisplayable uiDisplayable;
+    protected final ICollidableRegisterable collidableRegisterable;  // Has both register & unregister
+    protected final IRenderRegisterable renderRegisterable;          // Has both register & unregister
+    protected final IMusicPlayable musicPlayable;
 
     public Scene(String name,
+                 IEntityRegisterable entityRegisterable,
+                 IUIDisplayable uiDisplayable,
                  ICollidableRegisterable collidableRegisterable,
                  IRenderRegisterable renderRegisterable,
                  IMusicPlayable musicPlayable) {
@@ -25,6 +30,8 @@ public abstract class Scene implements Screen {
         this.uiElements = new Array<>();
         this.loaded = false;
 
+        this.entityRegisterable = entityRegisterable;
+        this.uiDisplayable = uiDisplayable;
         this.collidableRegisterable = collidableRegisterable;
         this.renderRegisterable = renderRegisterable;
         this.musicPlayable = musicPlayable;
@@ -36,15 +43,13 @@ public abstract class Scene implements Screen {
 
             // Register all entities with managers
             for (Entity entity : entities) {
-                GameContext.getEntityManager().addEntity(entity);
+                entityRegisterable.addEntity(entity);  // Uses interface
             }
 
             // Register all UI elements
             for (UIElement uiElement : uiElements) {
-                GameContext.getOutputManager().displayUI(uiElement);
+                uiDisplayable.displayUI(uiElement);  // Uses interface
             }
-
-            //GameContext.getOutputManager().playMusic("music/Super Mario Bros. medley.mp3-");
 
             loaded = true;
         }
@@ -56,23 +61,22 @@ public abstract class Scene implements Screen {
 
             // Unregister all entities from ALL managers
             for (Entity entity : entities) {
-                GameContext.getEntityManager().removeEntity(entity);
+                entityRegisterable.removeEntity(entity);  // Uses interface
 
                 // If entity is renderable, unregister from OutputManager
                 if (entity instanceof IRenderable) {
-                    renderRegisterable.unregisterRenderable(
-                        (IRenderable) entity);
+                    renderRegisterable.unregisterRenderable((IRenderable) entity);  // Same interface!
                 }
 
                 // If entity is collidable, unregister from CollisionManager
                 if (entity instanceof ICollidable) {
-                    collidableRegisterable.unregisterCollidable((ICollidable) entity);
+                    collidableRegisterable.unregisterCollidable((ICollidable) entity);  // Same interface!
                 }
             }
 
             // Unregister all UI elements
             for (UIElement uiElement : uiElements) {
-                GameContext.getOutputManager().removeUI(uiElement);
+                uiDisplayable.removeUI(uiElement);  // Uses interface
             }
 
             entities.clear();
@@ -82,8 +86,6 @@ public abstract class Scene implements Screen {
             System.out.println(">>> UNLOAD COMPLETE");
         }
     }
-
-
 
     public void update() {
         // Scene-specific update logic here
@@ -95,7 +97,11 @@ public abstract class Scene implements Screen {
         return name;
     }
 
-    public Array<Entity> getEntities() {
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    protected Array<Entity> getEntities() {
         return entities;
     }
 
@@ -103,36 +109,15 @@ public abstract class Scene implements Screen {
         entities.add(entity);
     }
 
-
     protected void addUI(UIElement uiElement) {
         uiElements.add(uiElement);
     }
-
-//    protected void registerRenderable(IRenderable renderable) {
-//        GameContext.getOutputManager().registerRenderable(renderable);
-//    }
-//
-//    protected void registerCollidable(ICollidable collidable) {
-//        GameContext.getCollisionManager().registerCollidable(collidable);
-//    }
 
     // LibGDX Screen interface methods
     @Override
     public void show() {
         load();
-
-        // Start background music for this scene
-        musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
     }
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resize(int x, int y) {}
 
     @Override
     public void render(float delta) {
@@ -140,8 +125,20 @@ public abstract class Scene implements Screen {
     }
 
     @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
     public void hide() {
-        GameContext.getOutputManager().getBGManager().stopMusic();
+        musicPlayable.stopMusic();
         unload();
     }
 

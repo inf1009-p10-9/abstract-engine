@@ -10,25 +10,18 @@ import io.github.inf1009_p10_9.interfaces.IInputListens;
 
 
 public class InputManager implements InputProcessor, IInputKeyCheckable {
-    private static InputManager instance;
 
     private IntMap<Boolean> keyStates;
     private Array<IInputListens> listeners;
     private Array<IInputListens> peripherals;
     private Input currentInput;
 
-    private InputManager() {
+    public InputManager() {
         keyStates = new IntMap<>();
         listeners = new Array<>();
         peripherals = new Array<>();
     }
 
-    public static InputManager getInstance() {
-        if (instance == null) {
-            instance = new InputManager();
-        }
-        return instance;
-    }
 
     public void initialize() {
         keyStates.clear();

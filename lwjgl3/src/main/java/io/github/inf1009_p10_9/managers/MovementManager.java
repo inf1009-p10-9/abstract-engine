@@ -5,35 +5,31 @@ import io.github.inf1009_p10_9.interfaces.*;
 
 public class MovementManager implements IMovementCalculatable,
                                         IMovementStrategyRegisterable {
-    private static MovementManager instance;
 
     private ObjectMap<String, IMovementStrategy> movementStrategies;
 
-    private MovementManager() {
+    public MovementManager() {
         movementStrategies = new ObjectMap<>();
     }
 
-    public static MovementManager getInstance() {
-        if (instance == null) {
-            instance = new MovementManager();
-        }
-        return instance;
-    }
 
     public void initialize() {
         movementStrategies.clear();
     }
 
+    @Override
     public void registerMovementStrategy(String objectType, IMovementStrategy strategy) {
         movementStrategies.put(objectType, strategy);
     }
 
     public IMovementStrategy getMovementStrategy(String objectType) {
+    @Override
         return movementStrategies.get(objectType);
     }
 
     public void move(IPositionable object, int moveDirection) {
         //Determine which strategy to use based on entity type
+    @Override
         String entityType = object.getClass().getSimpleName();
         IMovementStrategy strategy = movementStrategies.get(entityType);
 

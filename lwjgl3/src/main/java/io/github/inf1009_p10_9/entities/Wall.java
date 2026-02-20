@@ -1,15 +1,11 @@
 package io.github.inf1009_p10_9.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Wall extends Entity implements IRenderable, ICollidable {
-    private float width;
-    private float height;
+public class Wall extends Entity {
     private Color currentColor;
     private Color normalColor = Color.GRAY;
     private Color collisionColor = Color.YELLOW;
@@ -17,10 +13,7 @@ public class Wall extends Entity implements IRenderable, ICollidable {
     private static final float COLLISION_FLASH_DURATION = 0.3f;
 
     public Wall(float x, float y, float width, float height) {
-        super(x, y, width, height);
-        this.width = width;
-        this.height = height;
-        this.zIndex = 5; // Behind player
+        super(x, y, width, height, 5);
         this.currentColor = normalColor;
 
         // Optionally load texture here
@@ -34,7 +27,7 @@ public class Wall extends Entity implements IRenderable, ICollidable {
 
         // Handle color flash timer
         if (collisionTimer > 0) {
-            collisionTimer -= com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+            collisionTimer -= Gdx.graphics.getDeltaTime();
             if (collisionTimer <= 0) {
                 // Timer expired, return to normal color
                 currentColor = normalColor;
@@ -43,32 +36,21 @@ public class Wall extends Entity implements IRenderable, ICollidable {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        if (texture != null) {
-            // Draw texture if available
-            batch.draw(texture, position.x, position.y, width, height);
-        }
-        // If no texture, shape will be drawn in renderShapes() instead
-    }
-
-    @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
         if (texture == null) {
             // Fallback: draw colored rectangle (gray normally, yellow when hit)
             shapeRenderer.setColor(currentColor);
-            shapeRenderer.rect(position.x, position.y, width, height);
+            shapeRenderer.rect(position.x,
+                               position.y,
+                               width,
+                               height);
         }
     }
 
     @Override
     public void onCollision(ICollidable other) {
-        // Ignore wall-to-wall collisions
-        if (other.getClass().getSimpleName().equals("Wall")) {
-            return;
-        }
-
         // Change color when hit by player
-        if (other.getClass().getSimpleName().equals("Player")) {
+        if (other instanceof Player) {
             System.out.println("WALL COLLIDED WITH: Player");
             currentColor = collisionColor;
             collisionTimer = COLLISION_FLASH_DURATION;

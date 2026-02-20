@@ -15,37 +15,42 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Color;
 
 public class MidScene extends Scene {
-    private final ISceneSwitchable sceneSwitchable;
     private TextLabel titleLabel;
     private TextLabel instructionLabel;
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
 
+    private IInputKeyCheckable inputKeyCheckable;
+    private IMovementCalculatable movementCalculatable;
+    private IMovementStrategyRegisterable movementStrategyRegisterable;
+    private ISceneSwitchable sceneSwitchable;
+    private ISFXPlayable sfxPlayable;
+
     private float aiUpdateTimer = 0;
     private static final float AI_UPDATE_INTERVAL = 0.2f;
 
-    private IMovementCalculatable movementCalculatable;
-    private IMovementStrategyRegisterable movementStrategyRegisterable;
-    private IInputKeyCheckable inputKeyCheckable;
-    private ISFXPlayable sfxPlayable;
-    
+    public MidScene(IEntityRegisterable entityRegisterable,
+                    IUIDisplayable uiDisplayable,
+                    ICollidableRegisterable collidableRegisterable,
+                    IRenderRegisterable renderRegisterable,
+                    IMusicPlayable musicPlayable,
 
-    public MidScene(ISceneSwitchable sceneSwitchable,
-                IEntityRegisterable entityRegisterable,
-                IUIDisplayable uiDisplayable,
-                IMovementCalculatable movementCalculatable,
-                IMovementStrategyRegisterable movementStrategyRegisterable,
-                IInputKeyCheckable inputKeyCheckable,
-                ICollidableRegisterable collidableRegisterable,
-                ISFXPlayable sfxPlayable,
-                IRenderRegisterable renderRegisterable,
-                IMusicPlayable musicPlayable) {
-    super("MidScene", entityRegisterable, uiDisplayable, collidableRegisterable, renderRegisterable, musicPlayable);
+                    IInputKeyCheckable inputKeyCheckable,
+                    IMovementCalculatable movementCalculatable,
+                    IMovementStrategyRegisterable movementStrategyRegisterable,
+                    ISceneSwitchable sceneSwitchable,
+                    ISFXPlayable sfxPlayable) {
+        super("MidScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
+        this.inputKeyCheckable = inputKeyCheckable;
         this.movementCalculatable = movementCalculatable;
         this.movementStrategyRegisterable = movementStrategyRegisterable;
-        this.inputKeyCheckable = inputKeyCheckable;
-        this.sfxPlayable = sfxPlayable;
         this.sceneSwitchable = sceneSwitchable;
+        this.sfxPlayable = sfxPlayable;
     }
 
     @Override
@@ -60,23 +65,10 @@ public class MidScene extends Scene {
         instructionLabel.setColor(Color.YELLOW);
         addUI(instructionLabel);
 
-        // Player
-        Player player = new Player(400, 300, sfxPlayable);
-        addEntity(player);
-        renderRegisterable.registerRenderable(player);
-        collidableRegisterable.registerCollidable(player);
-
-
-        // Enemy 1 - top right
-        Enemy enemy1 = new Enemy(500, 300, sfxPlayable);
-        addEntity(enemy1);
-        renderRegisterable.registerRenderable(enemy1);
-        collidableRegisterable.registerCollidable(enemy1);
-
-        // Create walls around the edge of the screen
-        // Top wall
-
-        Wall[] walls = {
+        Entity[] entities = {
+            // Player / Enemy
+            new Player(400, 300, sfxPlayable),
+            new Enemy(500, 300, sfxPlayable),
             // Walls
             new Wall(0, 568, 800, 32),
             new Wall(0, 0, 800, 32),
@@ -88,10 +80,10 @@ public class MidScene extends Scene {
             new Wall(300, 450, 150, 32)
         };
 
-        for (Wall wall : walls) {
-            addEntity(wall);
-            renderRegisterable.registerRenderable(wall);
-            collidableRegisterable.registerCollidable(wall);
+        for (Entity entity : entities) {
+            addEntity(entity);
+            renderRegisterable.registerRenderable(entity);
+            collidableRegisterable.registerCollidable(entity);
         }
 
         System.out.println("MidScene loaded - Player and Walls only");
@@ -118,7 +110,7 @@ public class MidScene extends Scene {
         if (aiUpdateTimer >= AI_UPDATE_INTERVAL) {
             aiUpdateTimer = 0;
 
-            Array<Entity> entities = ((IEntityQueryable)entityRegisterable).getEntities()
+            Array<Entity> entities = entityRegisterable.getEntities();
 
             // FIND THE PLAYER FIRST
             Entity player = null;

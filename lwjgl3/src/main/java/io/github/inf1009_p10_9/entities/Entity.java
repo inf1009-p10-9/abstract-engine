@@ -3,16 +3,26 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
-import java.util.UUID;
-import io.github.inf1009_p10_9.interfaces.IPositionable;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public abstract class Entity implements IPositionable {
+import java.util.UUID;
+
+import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.IPositionable;
+import io.github.inf1009_p10_9.interfaces.IRenderable;
+
+public abstract class Entity implements IPositionable,
+                                        IRenderable,
+                                        ICollidable  {
+
     protected String id;
     protected Vector2 position;
     protected boolean active;
 
     protected Texture texture;
     protected Rectangle bounds;
+    protected float width;
+    protected float height;
     protected int zIndex;
 
     public Entity() {
@@ -33,10 +43,25 @@ public abstract class Entity implements IPositionable {
         this.active = true;
         this.texture = null;
         this.bounds = new Rectangle(x, y, width, height);
+        this.width = width;
+        this.height = height;
         this.zIndex = zIndex;
     }
 
     public abstract void update();
+
+    @Override
+    public void render(SpriteBatch spriteBatch) {
+        // Draw texture if available
+        // If no texture, shape will be drawn in renderShapes() instead
+        if (texture != null) {
+            spriteBatch.draw(texture,
+                             position.x,
+                             position.y,
+                             width,
+                             height);
+        }
+    }
 
     public String getId() {
         return id;

@@ -7,27 +7,47 @@ import com.badlogic.gdx.utils.IntMap;
 import io.github.inf1009_p10_9.input.*;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
+import io.github.inf1009_p10_9.interfaces.IManager;
 
 
-public class InputManager implements InputProcessor, IInputKeyCheckable {
-
-    private IntMap<Boolean> keyStates;
-    private Array<IInputListens> listeners;
-    private Array<IInputListens> peripherals;
+public class InputManager implements IManager,
+                                     InputProcessor,
+                                     IInputKeyCheckable {
+    private static InputManager instance;
+    private IntMap<Boolean> keyStates = new IntMap<>();
+    private Array<IInputListens> listeners = new Array<>();
+    private Array<IInputListens> peripherals = new Array<>();
     private Input currentInput;
 
-    public InputManager() {
-        keyStates = new IntMap<>();
-        listeners = new Array<>();
-        peripherals = new Array<>();
+    private InputManager() {}
+
+    public static InputManager getInstance() {
+        if (instance == null)
+            instance = new InputManager();
+        return instance;
     }
 
-
+    @Override
     public void initialize() {
+        clear();
+        Gdx.input.setInputProcessor(this);
+    }
+
+    @Override
+    public void update() {
+        processInput();
+     // Update all peripherals that need continuous checking
+        for (IInputListens peripheral : peripherals) {
+            if (peripheral instanceof Keyboard) {
+                ((Keyboard) peripheral).update();
+            }
+        }
+    }
+
+    public void clear() {
         keyStates.clear();
         listeners.clear();
         peripherals.clear();
-        Gdx.input.setInputProcessor(this);
     }
 
     public void registerPeripheral(IInputListens peripheral) {
@@ -54,22 +74,6 @@ public class InputManager implements InputProcessor, IInputKeyCheckable {
 
             currentInput = null;
         }
-    }
-
-    public void update() {
-        processInput();
-     // Update all peripherals that need continuous checking
-        for (IInputListens peripheral : peripherals) {
-            if (peripheral instanceof Keyboard) {
-                ((Keyboard) peripheral).update();
-            }
-        }
-    }
-
-    public void clear() {
-        keyStates.clear();
-        listeners.clear();
-        peripherals.clear();
     }
 
     // InputProcessor methods

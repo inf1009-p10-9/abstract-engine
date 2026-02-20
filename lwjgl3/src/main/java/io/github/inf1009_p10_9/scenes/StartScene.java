@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9.scenes;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class StartScene extends Scene {
@@ -10,21 +11,27 @@ public class StartScene extends Scene {
     private TextLabel instructionLabel;
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
-    
-    private final ISceneSwitchable sceneSwitchable;
-    private final IInputKeyCheckable inputKeyCheckable;
 
-    public StartScene(ISceneSwitchable sceneSwitchable,
-                      IEntityRegisterable entityRegisterable,
+    private IInputKeyCheckable inputKeyCheckable;
+    private ISceneSwitchable sceneSwitchable;
+
+    public StartScene(IEntityRegisterable entityRegisterable,
                       IUIDisplayable uiDisplayable,
-                      IInputKeyCheckable inputKeyCheckable,
                       ICollidableRegisterable collidableRegisterable,
                       IRenderRegisterable renderRegisterable,
-                      IMusicPlayable musicPlayable) {
-        super("StartScene", entityRegisterable, uiDisplayable,
-              collidableRegisterable, renderRegisterable, musicPlayable);
-        this.sceneSwitchable = sceneSwitchable;
+                      IMusicPlayable musicPlayable,
+
+                      IInputKeyCheckable inputKeyCheckable,
+                      ISceneSwitchable sceneSwitchable) {
+        super("StartScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
+
         this.inputKeyCheckable = inputKeyCheckable;
+        this.sceneSwitchable = sceneSwitchable;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class StartScene extends Scene {
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        sceneLoadTime += Gdx.graphics.getDeltaTime();
 
         // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {

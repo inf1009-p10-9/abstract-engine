@@ -27,89 +27,81 @@ public class Lwjgl3Launcher {
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
         return configuration;
     }
-    
+
     static class GameApplication extends GameMaster {
-        
+
         // COMPOSITION ROOT - Creates ALL dependencies
         public GameApplication() {
             super(
-                new SceneManager(),
-                new EntityManager(),
-                new CollisionManager(),
-                new MovementManager(),
-                new InputManager(),
-                new OutputManager()
-            );
+                  SceneManager.getInstance(),
+                  EntityManager.getInstance(),
+                  CollisionManager.getInstance(),
+                  MovementManager.getInstance(),
+                  InputManager.getInstance(),
+                  OutputManager.getInstance());
         }
-        
+
         @Override
         public void create() {
             super.create();
-            
-            // Get managers from parent (already injected)
-            SceneManager sceneMgr = getSceneManager();
-            EntityManager entityMgr = getEntityManager();
-            CollisionManager collisionMgr = getCollisionManager();
-            MovementManager moveMgr = getMovementManager();
-            InputManager inputMgr = getInputManager();
-            OutputManager outMgr = getOutputManager();
-            
             // Create Keyboard with interfaces
             Keyboard keyboard = new Keyboard(
-                moveMgr,      // as IMovementCalculatable
-                inputMgr,     // as IInputKeyCheckable
-                entityMgr     // as IEntityQueryable
+                movementManager,      // as IMovementCalculatable
+                inputManager,     // as IInputKeyCheckable
+                entityManager     // as IEntityQueryable
             );
-            inputMgr.registerPeripheral(keyboard);
-            
+            inputManager.registerPeripheral(keyboard);
+
             // Set up collision detection
             AABBCollisionStrategy collisionStrategy = new AABBCollisionStrategy();
-            collisionMgr.setCollisionStrategy(collisionStrategy);
-            
+            collisionManager.setCollisionStrategy(collisionStrategy);
+
             // Register movement strategies
-            UserMovement userMovement = new UserMovement(250f);
-            moveMgr.registerMovementStrategy("Player", userMovement);
-            
-            AIMovement enemyMovement = new AIMovement(200f, AIMovement.AIMovementPattern.FLEE);
-            moveMgr.registerMovementStrategy("Enemy", enemyMovement);
-            
-            // Create scenes with interfaces (simpler now!)
-            sceneMgr.addScene(new StartScene(
-                sceneMgr,           // as ISceneSwitchable
-                entityMgr,          // as IEntityRegisterable
-                outMgr,             // as IUIDisplayable
-                inputMgr,           // as IInputKeyCheckable
-                collisionMgr,       // as ICollidableRegisterable (has both register & unregister)
-                outMgr,             // as IRenderRegisterable (has both register & unregister)
-                outMgr.getBGManager()   // as IMusicPlayable
+            movementManager.registerMovementStrategy("Player",
+                                                     new UserMovement(250f));
+            movementManager.registerMovementStrategy("Enemy",
+                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
+
+            // Create scenes with interfaces
+            sceneManager.addScene(new StartScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                sceneManager                    // as ISceneSwitchable
             ));
-            
-            sceneMgr.addScene(new MidScene(
-                sceneMgr,           // as ISceneSwitchable
-                entityMgr,          // as IEntityRegisterable
-                outMgr,             // as IUIDisplayable
-                moveMgr,            // as IMovementCalculatable
-                moveMgr,            // as IMovementStrategyRegisterable (has both register & get)
-                inputMgr,           // as IInputKeyCheckable
-                collisionMgr,       // as ICollidableRegisterable
-                outMgr.getSFXManager(), // as ISFXPlayable
-                outMgr,             // as IRenderRegisterable
-                outMgr.getBGManager()   // as IMusicPlayable
+
+            sceneManager.addScene(new MidScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                movementManager,                // as IMovementCalculatable
+                movementManager,                // as IMovementStrategyRegisterable
+                sceneManager,                   // as ISceneSwitchable
+                outputManager.getSFXManager()   // as ISFXPlayable
             ));
-            
-            sceneMgr.addScene(new EndScene(
-                sceneMgr,           // as ISceneSwitchable
-                entityMgr,          // as IEntityRegisterable
-                outMgr,             // as IUIDisplayable
-                inputMgr,           // as IInputKeyCheckable
-                collisionMgr,       // as ICollidableRegisterable
-                outMgr,             // as IRenderRegisterable
-                outMgr.getBGManager()   // as IMusicPlayable
+
+            sceneManager.addScene(new EndScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                sceneManager                    // as ISceneSwitchable
             ));
-            
+
             // Start with first scene
-            sceneMgr.switchScene("StartScene");
-            
+            sceneManager.switchScene("StartScene");
+
             System.out.println("Game Engine started successfully!");
         }
     }

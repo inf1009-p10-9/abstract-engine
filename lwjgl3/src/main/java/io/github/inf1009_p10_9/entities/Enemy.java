@@ -1,25 +1,20 @@
 package io.github.inf1009_p10_9.entities;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
-public class Enemy extends Entity implements IRenderable, ICollidable {
+public class Enemy extends Entity {
 
     private Color color;
     private ISFXPlayable sfxPlayable;
 
     public Enemy(float x, float y, ISFXPlayable sfxPlayable) {
-        super(x, y);
-        this.bounds = new Rectangle(x, y, 32, 32);
-        this.zIndex = 10;
+        super(x, y, 32, 32, 10);
         this.color = Color.RED; // Red enemy
-
         this.sfxPlayable = sfxPlayable;
     }
 
@@ -30,31 +25,12 @@ public class Enemy extends Entity implements IRenderable, ICollidable {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        if (texture != null) {
-            // Draw texture if available
-            batch.draw(texture, position.x, position.y, 32, 32);
-        }
-        // If no texture, shape will be drawn in renderShapes() instead
-    }
-
-    @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
         if (texture == null) {
             // Fallback: draw colored rectangle (red, or orange when hit)
             shapeRenderer.setColor(color);
-            shapeRenderer.rect(position.x, position.y, 32, 32);
+            shapeRenderer.rect(position.x, position.y, width, height);
         }
-    }
-
-    @Override
-    public int getZIndex() {
-        return zIndex;
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return bounds;
     }
 
     @Override
@@ -81,11 +57,9 @@ public class Enemy extends Entity implements IRenderable, ICollidable {
         return 1; // Same layer as player so they can collide
     }
 
-
     public void setColor(Color color) {
         this.color = color;
     }
-
 
     public Color getColor() {
         return color;

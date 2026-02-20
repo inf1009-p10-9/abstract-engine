@@ -1,10 +1,10 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
+import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
@@ -15,22 +15,29 @@ import com.badlogic.gdx.Input.Keys;
 
 
 public class EndScene extends Scene {
-    private final ISceneSwitchable sceneSwitchable;
     private TextLabel titleLabel;
     private TextLabel instructionLabel1;
     private TextLabel instructionLabel2;
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
-    private IInputKeyCheckable inputKeyCheckable;
 
-    public EndScene(IInputKeyCheckable inputKeyCheckable,
+    private IInputKeyCheckable inputKeyCheckable;
+    private ISceneSwitchable sceneSwitchable;
+
+    public EndScene(IEntityRegisterable entityRegisterable,
+                    IUIDisplayable uiDisplayable,
                     ICollidableRegisterable collidableRegisterable,
                     IRenderRegisterable renderRegisterable,
                     IMusicPlayable musicPlayable,
-                    IEntityRegisterable entityRegisterable,
-                    IUIDisplayable uiDisplayable,
+
+                    IInputKeyCheckable inputKeyCheckable,
                     ISceneSwitchable sceneSwitchable) {
-        super("EndScene", entityRegisterable, uiDisplayable, collidableRegisterable, renderRegisterable, musicPlayable);
+        super("EndScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable = sceneSwitchable;
     }

@@ -1,5 +1,7 @@
 package io.github.inf1009_p10_9.scenes;
 
+import java.util.Collection;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.entities.Entity;
@@ -8,10 +10,10 @@ import io.github.inf1009_p10_9.ui.UIElement;
 
 public abstract class Scene implements Screen {
     private String name;
-    private Array<Entity> entities;
-    private Array<UIElement> uiElements;
-    private boolean loaded;
-    
+    private Array<Entity> entities = new Array<>();
+    private Array<UIElement> uiElements = new Array<>();
+    private boolean loaded = false;
+
     // Interface dependencies (NOT concrete managers!)
     protected final IEntityRegisterable entityRegisterable;
     protected final IUIDisplayable uiDisplayable;
@@ -26,10 +28,6 @@ public abstract class Scene implements Screen {
                  IRenderRegisterable renderRegisterable,
                  IMusicPlayable musicPlayable) {
         this.name = name;
-        this.entities = new Array<>();
-        this.uiElements = new Array<>();
-        this.loaded = false;
-
         this.entityRegisterable = entityRegisterable;
         this.uiDisplayable = uiDisplayable;
         this.collidableRegisterable = collidableRegisterable;
@@ -65,12 +63,12 @@ public abstract class Scene implements Screen {
 
                 // If entity is renderable, unregister from OutputManager
                 if (entity instanceof IRenderable) {
-                    renderRegisterable.unregisterRenderable((IRenderable) entity);  // Same interface!
+                    renderRegisterable.unregisterRenderable(entity);  // Same interface!
                 }
 
                 // If entity is collidable, unregister from CollisionManager
                 if (entity instanceof ICollidable) {
-                    collidableRegisterable.unregisterCollidable((ICollidable) entity);  // Same interface!
+                    collidableRegisterable.unregisterCollidable(entity);  // Same interface!
                 }
             }
 

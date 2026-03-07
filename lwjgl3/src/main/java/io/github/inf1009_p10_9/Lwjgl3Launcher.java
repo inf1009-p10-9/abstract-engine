@@ -29,6 +29,7 @@ public class Lwjgl3Launcher {
     }
 
     static class GameApplication extends GameMaster {
+        private final QuestionManager questionManager;
 
         // COMPOSITION ROOT - Creates ALL dependencies
         public GameApplication() {
@@ -39,6 +40,8 @@ public class Lwjgl3Launcher {
                   MovementManager.getInstance(),
                   InputManager.getInstance(),
                   OutputManager.getInstance());
+            this.questionManager = QuestionManager.getInstance();
+            this.managers.add(this.questionManager);
         }
 
         @Override
@@ -96,7 +99,33 @@ public class Lwjgl3Launcher {
                 outputManager.getBGManager(),   // as IMusicPlayable
 
                 inputManager,                   // as IInputKeyCheckable
-                sceneManager                    // as ISceneSwitchable
+                sceneManager,                   // as ISceneSwitchable
+                questionManager                 // as QuestionManager (#TODO: Create interface)
+            ));
+
+            sceneManager.addScene(new GameScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                outputManager.getSFXManager(),  // as ISFXPlayable
+                sceneManager,                   // as ISceneSwitchable
+                questionManager                 // as QuestionManager (#TODO: Create interface)
+            ));
+
+            sceneManager.addScene(new SubjectSelectScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                sceneManager,                   // as ISceneSwitchable
+                questionManager                 // as QuestionManager (#TODO: Create interface)
             ));
 
             // Start with first scene

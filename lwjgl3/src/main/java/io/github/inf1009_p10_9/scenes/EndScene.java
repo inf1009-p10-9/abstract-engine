@@ -10,35 +10,66 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
 
 public class EndScene extends Scene {
+
     private TextLabel titleLabel;
-    private TextLabel instructionLabel1;
-    private TextLabel instructionLabel2;
-    private boolean spacePressed = false;
+    private TextLabel subjectLabel;
+    private TextLabel scoreLabel;
+
+    private TextLabel[] menuOptionLabels;
+    private TextLabel[] arrowIndicators;
+    private String[] menuOptions = { "Restart", "Main Menu" };
+
+    private int highlightedIndex = 0;
+
+    private boolean upDownPressed = false;
+    private boolean enterPressed = false;
     private float sceneLoadTime = 0;
+
+    private static final Color NORMAL_COLOR = Color.WHITE;
+    private static final Color HIGHLIGHTED_COLOR = Color.YELLOW;
+
     private IInputKeyCheckable inputKeyCheckable;
 
     public EndScene(IInputKeyCheckable inputKeyCheckable,
-                    ICollidableUnregisterable collidableUnregistrable,
-                    IRenderUnregisterable renderUnregisterable, IMusicPlayable musicPlayable) {
-        super("EndScene", collidableUnregistrable, renderUnregisterable, musicPlayable);
+                    ICollidableUnregisterable collidableUnregisterable,
+                    IRenderUnregisterable renderUnregisterable,
+                    IMusicPlayable musicPlayable) {
+        super("EndScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
     }
 
     @Override
     protected void loadEntities() {
-        // Create scene title
-        titleLabel = new TextLabel("END SCENE", 330, 400);
-        titleLabel.setColor(Color.MAGENTA);
+        titleLabel = new TextLabel("WELL DONE!", 290, 500);
+        titleLabel.setColor(Color.YELLOW);
         addUI(titleLabel);
 
-        // Create instruction text
-        instructionLabel1 = new TextLabel("Press SPACE to restart (Mid Scene)", 180, 250);
-        instructionLabel1.setColor(Color.YELLOW);
-        addUI(instructionLabel1);
+        // placeholders updated in load()
+        subjectLabel = new TextLabel("", 250, 430);
+        subjectLabel.setColor(Color.CYAN);
+        addUI(subjectLabel);
 
-        instructionLabel2 = new TextLabel("Press ESC for Start Scene", 240, 200);
-        instructionLabel2.setColor(Color.WHITE);
-        addUI(instructionLabel2);
+        scoreLabel = new TextLabel("", 250, 370);
+        scoreLabel.setColor(Color.WHITE);
+        addUI(scoreLabel);
+
+        menuOptionLabels = new TextLabel[menuOptions.length];
+        arrowIndicators = new TextLabel[menuOptions.length];
+
+        float startY = 270;
+        float spacingY = 70;
+
+        for (int i = 0; i < menuOptions.length; i++) {
+            arrowIndicators[i] = new TextLabel("->", 170, startY - (i * spacingY));
+            arrowIndicators[i].setColor(HIGHLIGHTED_COLOR);
+            addUI(arrowIndicators[i]);
+
+            menuOptionLabels[i] = new TextLabel(menuOptions[i], 210, startY - (i * spacingY));
+            menuOptionLabels[i].setColor(NORMAL_COLOR);
+            addUI(menuOptionLabels[i]);
+        }
+
+        updateHighlight();
 
         System.out.println("EndScene loaded");
     }
@@ -47,8 +78,19 @@ public class EndScene extends Scene {
     public void load() {
         super.load();
         sceneLoadTime = 0;
-    }
+        highlightedIndex = 0;
+        enterPressed = false;
+        upDownPressed = false;
 
+        // update score and subject labels with current game results
+        String subject = GameContext.getQuestionManager().getActiveSubject();
+        String difficulty = GameContext.getQuestionManager().getActiveDifficulty();
+        int score = GameContext.getQuestionManager().getScore();
+        int total = GameContext.getQuestionManager().getTotalQuestions();
+
+        subjectLabel.setText(subject + " - " + difficulty);
+        scoreLabel.setText("Score: " + score + " / " + total);
+    }
 
     @Override
     public void update() {
@@ -56,29 +98,74 @@ public class EndScene extends Scene {
 
         sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
-        // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        // Press SPACE to go to mid scene
-        if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
-            if (!spacePressed) {
-                spacePressed = true;
-                System.out.println("Restarting - Going to MidScene...");
-                GameContext.getSceneManager().switchScene("MidScene");
+        // navigate with UP/DOWN or W/S
+        boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
+                               inputKeyCheckable.isKeyPressed(Keys.W);
+        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
+                                 inputKeyCheckable.isKeyPressed(Keys.S);
+
+        if (upKeyPressed || downKeyPressed) {
+            if (!upDownPressed) {
+                upDownPressed = true;
+
+                if (downKeyPressed) {
+                    highlightedIndex++;
+                } else {
+                    highlightedIndex--;
+                }
+
+                // wrap around
+                if (highlightedIndex < 0) {
+                    highlightedIndex = menuOptions.length - 1;
+                }
+                if (highlightedIndex >= menuOptions.length) {
+                    highlightedIndex = 0;
+                }
+
+                updateHighlight();
             }
         } else {
-            spacePressed = false;
+            upDownPressed = false;
         }
 
-        // Press ESC to go to start scene
-        if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
-            System.out.println("Going back to StartScene...");
+        // confirm with ENTER
+        if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
+            if (!enterPressed) {
+                enterPressed = true;
+                handleMenuSelection();
+            }
+        } else {
+            enterPressed = false;
+        }
+    }
+
+    private void updateHighlight() {
+        for (int i = 0; i < menuOptions.length; i++) {
+            if (i == highlightedIndex) {
+                menuOptionLabels[i].setColor(HIGHLIGHTED_COLOR);
+                arrowIndicators[i].setVisible(true);
+            } else {
+                menuOptionLabels[i].setColor(NORMAL_COLOR);
+                arrowIndicators[i].setVisible(false);
+            }
+        }
+    }
+
+    private void handleMenuSelection() {
+        String selectedOption = menuOptions[highlightedIndex];
+
+        if (selectedOption.equals("Restart")) {
+            System.out.println("Replaying same bank...");
+            GameContext.getQuestionManager().replayCurrentBank();
+            GameContext.getSceneManager().switchScene("GameScene");
+
+        } else if (selectedOption.equals("Main Menu")) {
+            System.out.println("Returning to StartScene...");
             GameContext.getSceneManager().switchScene("StartScene");
         }
-
-        // Make instruction text blink
-        instructionLabel1.setVisible((System.currentTimeMillis() / 500) % 2 == 0);
     }
 }

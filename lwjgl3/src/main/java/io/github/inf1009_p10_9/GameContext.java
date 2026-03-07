@@ -34,4 +34,8 @@ public class GameContext {
     public static OutputManager getOutputManager() {
         return GameMaster != null ? GameMaster.getOutputManager() : null;
     }
+    
+    public static QuestionManager getQuestionManager() {
+        return GameMaster != null ? GameMaster.getQuestionManager() : null;
+    }
 }

@@ -13,6 +13,7 @@ public class GameMaster extends ApplicationAdapter {
     private MovementManager movementManager;
     private InputManager inputManager;
     private OutputManager outputManager;
+    private QuestionManager questionManager;
 
     // Game loop control
     private boolean running;
@@ -41,13 +42,15 @@ public class GameMaster extends ApplicationAdapter {
         movementManager = MovementManager.getInstance();
         inputManager = InputManager.getInstance();
         outputManager = OutputManager.getInstance();
-
+        questionManager = QuestionManager.getInstance();
+        
         sceneManager.initialize();
         entityManager.initialize();
         collisionManager.initialize();
         movementManager.initialize();
         inputManager.initialize();
         outputManager.initialize();
+        questionManager.initialize();
 
         // Register context
         GameContext.setGameMaster(this);
@@ -98,6 +101,7 @@ public class GameMaster extends ApplicationAdapter {
         movementManager.clear();
         inputManager.clear();
         outputManager.clear();
+        questionManager.clear();
 
         System.out.println("GameMaster disposed");
     }
@@ -125,5 +129,9 @@ public class GameMaster extends ApplicationAdapter {
 
     public OutputManager getOutputManager() {
         return outputManager;
+    }
+    
+    public QuestionManager getQuestionManager() { 
+    	return questionManager; 
     }
 }

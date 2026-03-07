@@ -65,6 +65,9 @@ public class Lwjgl3Launcher {
             GameContext.getSceneManager().addScene(new MidScene(moveMgr, moveMgr, inputMgr, collisionMgr,
                 collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager())); //gameplay scene
             GameContext.getSceneManager().addScene(new EndScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
+            GameContext.getSceneManager().addScene(new GameScene(inputMgr, collisionMgr,
+            	    collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager()));
+            GameContext.getSceneManager().addScene(new SubjectSelectScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
 
             // Start with first scene
             GameContext.getSceneManager().switchScene("StartScene");

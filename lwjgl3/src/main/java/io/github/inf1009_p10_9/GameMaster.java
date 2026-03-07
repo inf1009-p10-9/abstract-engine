@@ -11,17 +11,7 @@ import io.github.inf1009_p10_9.managers.*;
 
 public class GameMaster extends ApplicationAdapter {
 
-<<<<<<< HEAD
-    // Managers
-    private SceneManager sceneManager;
-    private EntityManager entityManager;
-    private CollisionManager collisionManager;
-    private MovementManager movementManager;
-    private InputManager inputManager;
-    private OutputManager outputManager;
-    private QuestionManager questionManager;
-=======
-    // Managers (injected via constructor)
+    // managers (injected via constructor)
     protected final SceneManager sceneManager;
     protected final EntityManager entityManager;
     protected final CollisionManager collisionManager;
@@ -29,12 +19,13 @@ public class GameMaster extends ApplicationAdapter {
     protected final InputManager inputManager;
     protected final OutputManager outputManager;
     protected final List<IManager> managers;
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
 
-    // Game loop control
+    // question manager (singleton, not injected)
+    protected final QuestionManager questionManager;
+
+    // game loop control
     private boolean running;
 
-    // Constructor Injection (Dependency Injection)
     public GameMaster(SceneManager sceneManager,
                       EntityManager entityManager,
                       CollisionManager collisionManager,
@@ -47,6 +38,10 @@ public class GameMaster extends ApplicationAdapter {
         this.movementManager = movementManager;
         this.inputManager = inputManager;
         this.outputManager = outputManager;
+
+        // get singleton instance
+        this.questionManager = QuestionManager.getInstance();
+
         this.managers = new ArrayList<IManager>();
         this.managers.addAll(
             Arrays.asList(
@@ -63,32 +58,17 @@ public class GameMaster extends ApplicationAdapter {
     }
 
     public void initialize() {
-<<<<<<< HEAD
-        // Initialize all managers
-        sceneManager = SceneManager.getInstance();
-        entityManager = EntityManager.getInstance();
-        collisionManager = CollisionManager.getInstance();
-        movementManager = MovementManager.getInstance();
-        inputManager = InputManager.getInstance();
-        outputManager = OutputManager.getInstance();
-        questionManager = QuestionManager.getInstance();
-        
-        sceneManager.initialize();
-        entityManager.initialize();
-        collisionManager.initialize();
-        movementManager.initialize();
-        inputManager.initialize();
-        outputManager.initialize();
+        // initialize all managers
+        for (IManager manager : managers) {
+            manager.initialize();
+        }
+
+        // initialize question manager separately since it doesn't implement IManager
         questionManager.initialize();
 
-        // Register context
+        // register context
         GameContext.setGameMaster(this);
 
-=======
-        // Initialize all managers (they're already created)
-        for (IManager manager : managers)
-            manager.initialize();
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
         running = true;
         System.out.println("GameMaster initialized");
     }
@@ -98,7 +78,6 @@ public class GameMaster extends ApplicationAdapter {
         if (!running) {
             return;
         }
-
         gameLoop();
     }
 
@@ -114,25 +93,17 @@ public class GameMaster extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        // Clean up all managers
-<<<<<<< HEAD
-        entityManager.clear();
-        collisionManager.clear();
-        movementManager.clear();
-        inputManager.clear();
-        outputManager.clear();
-        questionManager.clear();
-=======
         for (IManager manager : managers) {
             manager.clear();
         }
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
+
+        // clean up question manager
+        questionManager.clear();
 
         System.out.println("GameMaster disposed");
     }
-<<<<<<< HEAD
 
-    // Getters for managers
+    // getters
     public SceneManager getSceneManager() {
         return sceneManager;
     }
@@ -156,10 +127,8 @@ public class GameMaster extends ApplicationAdapter {
     public OutputManager getOutputManager() {
         return outputManager;
     }
-    
-    public QuestionManager getQuestionManager() { 
-    	return questionManager; 
+
+    public QuestionManager getQuestionManager() {
+        return questionManager;
     }
-=======
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
 }

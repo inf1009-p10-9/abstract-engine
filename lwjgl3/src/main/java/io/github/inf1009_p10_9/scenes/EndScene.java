@@ -1,50 +1,29 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
-import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
-import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
-import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
-import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
-import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
-import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
+import io.github.inf1009_p10_9.GameContext;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-
 
 public class EndScene extends Scene {
 
     private TextLabel titleLabel;
     private TextLabel subjectLabel;
     private TextLabel scoreLabel;
-
     private TextLabel[] menuOptionLabels;
     private TextLabel[] arrowIndicators;
     private String[] menuOptions = { "Restart", "Main Menu" };
 
     private int highlightedIndex = 0;
-
     private boolean upDownPressed = false;
     private boolean enterPressed = false;
     private float sceneLoadTime = 0;
-<<<<<<< HEAD
 
     private static final Color NORMAL_COLOR = Color.WHITE;
     private static final Color HIGHLIGHTED_COLOR = Color.YELLOW;
 
-    private IInputKeyCheckable inputKeyCheckable;
-=======
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
-
-<<<<<<< HEAD
-    public EndScene(IInputKeyCheckable inputKeyCheckable,
-                    ICollidableUnregisterable collidableUnregisterable,
-                    IRenderUnregisterable renderUnregisterable,
-                    IMusicPlayable musicPlayable) {
-        super("EndScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
-=======
     private IInputKeyCheckable inputKeyCheckable;
     private ISceneSwitchable sceneSwitchable;
 
@@ -53,7 +32,6 @@ public class EndScene extends Scene {
                     ICollidableRegisterable collidableRegisterable,
                     IRenderRegisterable renderRegisterable,
                     IMusicPlayable musicPlayable,
-
                     IInputKeyCheckable inputKeyCheckable,
                     ISceneSwitchable sceneSwitchable) {
         super("EndScene",
@@ -62,7 +40,6 @@ public class EndScene extends Scene {
               collidableRegisterable,
               renderRegisterable,
               musicPlayable);
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable = sceneSwitchable;
     }
@@ -73,7 +50,6 @@ public class EndScene extends Scene {
         titleLabel.setColor(Color.YELLOW);
         addUI(titleLabel);
 
-        // placeholders updated in load()
         subjectLabel = new TextLabel("", 250, 430);
         subjectLabel.setColor(Color.CYAN);
         addUI(subjectLabel);
@@ -99,7 +75,6 @@ public class EndScene extends Scene {
         }
 
         updateHighlight();
-
         System.out.println("EndScene loaded");
     }
 
@@ -111,7 +86,6 @@ public class EndScene extends Scene {
         enterPressed = false;
         upDownPressed = false;
 
-        // update score and subject labels with current game results
         String subject = GameContext.getQuestionManager().getActiveSubject();
         String difficulty = GameContext.getQuestionManager().getActiveDifficulty();
         int score = GameContext.getQuestionManager().getScore();
@@ -126,13 +100,10 @@ public class EndScene extends Scene {
         super.update();
 
         sceneLoadTime += Gdx.graphics.getDeltaTime();
-
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-<<<<<<< HEAD
-        // navigate with UP/DOWN or W/S
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
@@ -148,7 +119,6 @@ public class EndScene extends Scene {
                     highlightedIndex--;
                 }
 
-                // wrap around
                 if (highlightedIndex < 0) {
                     highlightedIndex = menuOptions.length - 1;
                 }
@@ -157,21 +127,11 @@ public class EndScene extends Scene {
                 }
 
                 updateHighlight();
-=======
-        // Press SPACE to go to mid scene
-        if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
-            if (!spacePressed) {
-                spacePressed = true;
-                System.out.println("Restarting - Going to MidScene...");
-                sceneSwitchable.switchScene("MidScene");
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
             }
         } else {
             upDownPressed = false;
         }
 
-<<<<<<< HEAD
-        // confirm with ENTER
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -200,17 +160,11 @@ public class EndScene extends Scene {
         if (selectedOption.equals("Restart")) {
             System.out.println("Replaying same bank...");
             GameContext.getQuestionManager().replayCurrentBank();
-            GameContext.getSceneManager().switchScene("GameScene");
+            sceneSwitchable.switchScene("GameScene");
 
         } else if (selectedOption.equals("Main Menu")) {
             System.out.println("Returning to StartScene...");
-            GameContext.getSceneManager().switchScene("StartScene");
-=======
-        // Press ESC to go to start scene
-        if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
-            System.out.println("Going back to StartScene...");
             sceneSwitchable.switchScene("StartScene");
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
         }
     }
 }

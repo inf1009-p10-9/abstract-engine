@@ -20,7 +20,7 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("My LibGDX Game Engine");
+        configuration.setTitle("Drive and Learn");
         configuration.useVsync(true);
         configuration.setForegroundFPS(60);
         configuration.setWindowedMode(800, 600);
@@ -30,72 +30,67 @@ public class Lwjgl3Launcher {
 
     static class GameApplication extends GameMaster {
 
-        // COMPOSITION ROOT - Creates ALL dependencies
         public GameApplication() {
             super(
-                  SceneManager.getInstance(),
-                  EntityManager.getInstance(),
-                  CollisionManager.getInstance(),
-                  MovementManager.getInstance(),
-                  InputManager.getInstance(),
-                  OutputManager.getInstance());
+                SceneManager.getInstance(),
+                EntityManager.getInstance(),
+                CollisionManager.getInstance(),
+                MovementManager.getInstance(),
+                InputManager.getInstance(),
+                OutputManager.getInstance());
         }
 
         @Override
         public void create() {
             super.create();
-            // Create Keyboard with interfaces
+
+            // set up keyboard input
             Keyboard keyboard = new Keyboard(
-                movementManager,      // as IMovementCalculatable
-                inputManager,     // as IInputKeyCheckable
-                entityManager     // as IEntityQueryable
+                movementManager,    // as IMovementCalculatable
+                inputManager,       // as IInputKeyCheckable
+                entityManager       // as IEntityQueryable
             );
             inputManager.registerPeripheral(keyboard);
 
-            // Set up collision detection
+            // set up collision detection
             AABBCollisionStrategy collisionStrategy = new AABBCollisionStrategy();
             collisionManager.setCollisionStrategy(collisionStrategy);
 
-            // Register movement strategies
+            // register movement strategies
             movementManager.registerMovementStrategy("Player",
-                                                     new UserMovement(250f));
+                new UserMovement(250f));
             movementManager.registerMovementStrategy("Enemy",
-                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
+                new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
 
-            // Create scenes with interfaces
+            // register all scenes
             sceneManager.addScene(new StartScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable
                 collisionManager,               // as ICollidableRegisterable
                 outputManager,                  // as IRenderRegisterable
                 outputManager.getBGManager(),   // as IMusicPlayable
-
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager                    // as ISceneSwitchable
             ));
 
-<<<<<<< HEAD
-            // Add all game scenes
-            GameContext.getSceneManager().addScene(new StartScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
-            GameContext.getSceneManager().addScene(new MidScene(moveMgr, moveMgr, inputMgr, collisionMgr,
-                collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager())); //gameplay scene
-            GameContext.getSceneManager().addScene(new EndScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
-            GameContext.getSceneManager().addScene(new GameScene(inputMgr, collisionMgr,
-            	    collisionMgr, outMgr.getSFXManager(), outMgr, outMgr, outMgr.getBGManager()));
-            GameContext.getSceneManager().addScene(new SubjectSelectScene(inputMgr, collisionMgr, outMgr, outMgr.getBGManager()));
-=======
-            sceneManager.addScene(new MidScene(
+            sceneManager.addScene(new SubjectSelectScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable
                 collisionManager,               // as ICollidableRegisterable
                 outputManager,                  // as IRenderRegisterable
                 outputManager.getBGManager(),   // as IMusicPlayable
-
                 inputManager,                   // as IInputKeyCheckable
-                movementManager,                // as IMovementCalculatable
-                movementManager,                // as IMovementStrategyRegisterable
-                sceneManager,                   // as ISceneSwitchable
-                outputManager.getSFXManager()   // as ISFXPlayable
+                sceneManager                    // as ISceneSwitchable
+            ));
+
+            sceneManager.addScene(new GameScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+                outputManager.getSFXManager(),  // as ISFXPlayable
+                sceneManager                    // as ISceneSwitchable
             ));
 
             sceneManager.addScene(new EndScene(
@@ -104,13 +99,24 @@ public class Lwjgl3Launcher {
                 collisionManager,               // as ICollidableRegisterable
                 outputManager,                  // as IRenderRegisterable
                 outputManager.getBGManager(),   // as IMusicPlayable
-
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager                    // as ISceneSwitchable
             ));
->>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
 
-            // Start with first scene
+            sceneManager.addScene(new MidScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+                inputManager,                   // as IInputKeyCheckable
+                movementManager,                // as IMovementCalculatable
+                movementManager,                // as IMovementStrategyRegisterable
+                sceneManager,                   // as ISceneSwitchable
+                outputManager.getSFXManager()   // as ISFXPlayable
+            ));
+
+            // start with main menu
             sceneManager.switchScene("StartScene");
 
             System.out.println("Game Engine started successfully!");

@@ -9,7 +9,7 @@ import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
-public class Player extends Entity implements IRenderable, ICollidable {
+public class Player extends Entity {
     private Color color;
     private ISFXPlayable sfxPlayable;
 
@@ -26,26 +26,12 @@ public class Player extends Entity implements IRenderable, ICollidable {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        if (texture != null) {
-            // Draw texture if available
-            batch.draw(texture, position.x, position.y, 32, 32);
-        }
-        // If no texture, shape will be drawn in renderShapes() instead
-    }
-
-    @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
         if (texture == null) {
             // Fallback: draw colored rectangle (equivalent to renderer.drawRectangle)
             shapeRenderer.setColor(color);
-            shapeRenderer.rect(position.x, position.y, 32, 32);
+            shapeRenderer.rect(position.x, position.y, width, height);
         }
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return bounds;
     }
 
     @Override

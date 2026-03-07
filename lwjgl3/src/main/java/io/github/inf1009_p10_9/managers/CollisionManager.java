@@ -3,27 +3,41 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
-import io.github.inf1009_p10_9.interfaces.ICollidableUnregisterable;
 import io.github.inf1009_p10_9.interfaces.ICollisionStrategy;
+import io.github.inf1009_p10_9.interfaces.IManager;
 
-public class CollisionManager implements ICollidableUnregisterable, ICollidableRegisterable {
+public class CollisionManager implements IManager,
+                                         ICollidableRegisterable {
     private static CollisionManager instance;
 
-    private Array<ICollidable> collidables;
+    private Array<ICollidable> collidables = new Array<>();
     private ICollisionStrategy collisionStrategy;
 
-    private CollisionManager() {
-        collidables = new Array<>();
+    private CollisionManager() {}
+
+    protected void resolveCollision(ICollidable a, ICollidable b) {
+        a.onCollision(b);
+        b.onCollision(a);
     }
 
-    public static CollisionManager getInstance() {
-        if (instance == null) {
+    public static synchronized CollisionManager getInstance() {
+        if (instance == null)
             instance = new CollisionManager();
-        }
         return instance;
     }
 
+    @Override
     public void initialize() {
+        clear();
+    }
+
+    @Override
+    public void update() {
+        checkCollisions();
+    }
+
+    @Override
+    public void clear() {
         collidables.clear();
     }
 
@@ -40,7 +54,7 @@ public class CollisionManager implements ICollidableUnregisterable, ICollidableR
     }
 
     public void setCollisionStrategy(ICollisionStrategy strategy) {
-        this.collisionStrategy = strategy;
+        collisionStrategy = strategy;
     }
 
     public void checkCollisions() {
@@ -50,10 +64,8 @@ public class CollisionManager implements ICollidableUnregisterable, ICollidableR
 
         for (int i = 0; i < collidables.size; i++) {
             ICollidable a = collidables.get(i);
-
-            for (int j = i + 1; j < collidables.size; j++) {
+            for (int j = i+1; j < collidables.size; j++) {
                 ICollidable b = collidables.get(j);
-
                 // Check if collision layers allow collision
                 if (a.getCollisionLayer() != b.getCollisionLayer()) {
                     continue;
@@ -64,18 +76,5 @@ public class CollisionManager implements ICollidableUnregisterable, ICollidableR
                 }
             }
         }
-    }
-
-    public void resolveCollision(ICollidable a, ICollidable b) {
-        a.onCollision(b);
-        b.onCollision(a);
-    }
-
-    public void update() {
-        checkCollisions();
-    }
-
-    public void clear() {
-        collidables.clear();
     }
 }

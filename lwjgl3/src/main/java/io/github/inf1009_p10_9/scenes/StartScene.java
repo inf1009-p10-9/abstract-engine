@@ -1,12 +1,9 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.GameContext;
-import io.github.inf1009_p10_9.interfaces.ICollidableUnregisterable;
-import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
-import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class StartScene extends Scene {
@@ -24,6 +21,7 @@ public class StartScene extends Scene {
     private boolean upDownPressed = false;
     private boolean enterPressed = false;
     private float sceneLoadTime = 0;
+<<<<<<< HEAD
 
     // colors
     private static final Color NORMAL_COLOR = Color.WHITE;
@@ -31,13 +29,29 @@ public class StartScene extends Scene {
     private static final Color ARROW_COLOR = Color.YELLOW;
 
     private IInputKeyCheckable inputKeyCheckable;
+=======
+>>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
 
-    public StartScene(IInputKeyCheckable inputKeyCheckable,
-                      ICollidableUnregisterable collidableUnregisterable,
-                      IRenderUnregisterable renderUnregisterable,
-                      IMusicPlayable musicPlayable) {
-        super("StartScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
+    private IInputKeyCheckable inputKeyCheckable;
+    private ISceneSwitchable sceneSwitchable;
+
+    public StartScene(IEntityRegisterable entityRegisterable,
+                      IUIDisplayable uiDisplayable,
+                      ICollidableRegisterable collidableRegisterable,
+                      IRenderRegisterable renderRegisterable,
+                      IMusicPlayable musicPlayable,
+
+                      IInputKeyCheckable inputKeyCheckable,
+                      ISceneSwitchable sceneSwitchable) {
+        super("StartScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
+
         this.inputKeyCheckable = inputKeyCheckable;
+        this.sceneSwitchable = sceneSwitchable;
     }
 
     @Override
@@ -75,20 +89,27 @@ public class StartScene extends Scene {
     public void load() {
         super.load();
         sceneLoadTime = 0;
+<<<<<<< HEAD
         highlightedIndex = 0;
         GameContext.getOutputManager().getBGManager().playMusic("music/Super Mario Bros. medley.mp3");
+=======
+        System.out.println("Attempting to play music...");
+        musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
+        System.out.println("Music command sent!");
+>>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
     }
 
     @Override
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        sceneLoadTime += Gdx.graphics.getDeltaTime();
 
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
+<<<<<<< HEAD
         // navigate up with UP or W
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
@@ -116,6 +137,14 @@ public class StartScene extends Scene {
                 }
 
                 updateHighlight();
+=======
+        // Check if SPACE is pressed to go to mid scene
+        if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
+            if (!spacePressed) {
+                spacePressed = true;
+                System.out.println("Going to MidScene...");
+                sceneSwitchable.switchScene("MidScene");
+>>>>>>> branch 'main' of https://github.com/inf1009-p10-9/abstract-engine
             }
         } else {
             upDownPressed = false;

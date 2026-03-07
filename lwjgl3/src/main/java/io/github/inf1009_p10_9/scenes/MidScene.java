@@ -1,6 +1,5 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.entities.Enemy;
 import io.github.inf1009_p10_9.entities.Wall;
@@ -9,6 +8,7 @@ import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.movement.AIMovement;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -20,32 +20,37 @@ public class MidScene extends Scene {
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
 
+    private IInputKeyCheckable inputKeyCheckable;
+    private IMovementCalculatable movementCalculatable;
+    private IMovementStrategyRegisterable movementStrategyRegisterable;
+    private ISceneSwitchable sceneSwitchable;
+    private ISFXPlayable sfxPlayable;
+
     private float aiUpdateTimer = 0;
     private static final float AI_UPDATE_INTERVAL = 0.2f;
 
-    private IMovementCalculatable movementCalculatable;
-    private IMovementStrategyReturnable movementStrategyReturnable;
-    private IInputKeyCheckable inputKeyCheckable;
-    private ICollidableRegisterable collidableRegisterable;
-    private ISFXPlayable sfxPlayable;
-    private IRenderRegisterable renderRegisterable;
-
-    public MidScene(IMovementCalculatable movementCalculatable,
-                    IMovementStrategyReturnable movementStrategyReturnable,
-                    IInputKeyCheckable inputKeyCheckable,
-                    ICollidableUnregisterable collidableUnregisterable,
+    public MidScene(IEntityRegisterable entityRegisterable,
+                    IUIDisplayable uiDisplayable,
                     ICollidableRegisterable collidableRegisterable,
-                    ISFXPlayable sfxPlayable,
-                    IRenderUnregisterable renderUnregisterable,
                     IRenderRegisterable renderRegisterable,
-                    IMusicPlayable musicPlayable) {
-        super("MidScene", collidableUnregisterable, renderUnregisterable, musicPlayable);
-        this.movementCalculatable = movementCalculatable;
-        this.movementStrategyReturnable = movementStrategyReturnable;
+                    IMusicPlayable musicPlayable,
+
+                    IInputKeyCheckable inputKeyCheckable,
+                    IMovementCalculatable movementCalculatable,
+                    IMovementStrategyRegisterable movementStrategyRegisterable,
+                    ISceneSwitchable sceneSwitchable,
+                    ISFXPlayable sfxPlayable) {
+        super("MidScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
-        this.collidableRegisterable = collidableRegisterable;
+        this.movementCalculatable = movementCalculatable;
+        this.movementStrategyRegisterable = movementStrategyRegisterable;
+        this.sceneSwitchable = sceneSwitchable;
         this.sfxPlayable = sfxPlayable;
-        this.renderRegisterable = renderRegisterable;
     }
 
     @Override
@@ -60,59 +65,26 @@ public class MidScene extends Scene {
         instructionLabel.setColor(Color.YELLOW);
         addUI(instructionLabel);
 
-        // Create player at center
-        Player player = new Player(400, 300, sfxPlayable);
-        addEntity(player);
-        renderRegisterable.registerRenderable(player);
-        collidableRegisterable.registerCollidable(player);
+        Entity[] entities = {
+            // Player / Enemy
+            new Player(400, 300, sfxPlayable),
+            new Enemy(500, 300, sfxPlayable),
+            // Walls
+            new Wall(0, 568, 800, 32),
+            new Wall(0, 0, 800, 32),
+            new Wall(0, 0, 32, 600),
+            new Wall(768, 0, 32, 600),
+            // Obstacles
+            new Wall(200, 200, 100, 32),
+            new Wall(500, 400, 64, 64),
+            new Wall(300, 450, 150, 32)
+        };
 
-
-        // Enemy 1 - top right
-        Enemy enemy1 = new Enemy(500, 300, sfxPlayable);
-        addEntity(enemy1);
-        renderRegisterable.registerRenderable(enemy1);
-        collidableRegisterable.registerCollidable(enemy1);
-
-        // Create walls around the edge of the screen
-        // Top wall
-        Wall topWall = new Wall(0, 568, 800, 32);
-        addEntity(topWall);
-        renderRegisterable.registerRenderable(topWall);
-        collidableRegisterable.registerCollidable(topWall);
-
-        // Bottom wall
-        Wall bottomWall = new Wall(0, 0, 800, 32);
-        addEntity(bottomWall);
-        renderRegisterable.registerRenderable(bottomWall);
-        collidableRegisterable.registerCollidable(bottomWall);
-
-        // Left wall
-        Wall leftWall = new Wall(0, 0, 32, 600);
-        addEntity(leftWall);
-        renderRegisterable.registerRenderable(leftWall);
-        collidableRegisterable.registerCollidable(leftWall);
-
-        // Right wall
-        Wall rightWall = new Wall(768, 0, 32, 600);
-        addEntity(rightWall);
-        renderRegisterable.registerRenderable(rightWall);
-        collidableRegisterable.registerCollidable(rightWall);
-
-        // Create some obstacles in the middle
-        Wall obstacle1 = new Wall(200, 200, 100, 32);
-        addEntity(obstacle1);
-        renderRegisterable.registerRenderable(obstacle1);
-        collidableRegisterable.registerCollidable(obstacle1);
-
-        Wall obstacle2 = new Wall(500, 400, 64, 64);
-        addEntity(obstacle2);
-        renderRegisterable.registerRenderable(obstacle2);
-        collidableRegisterable.registerCollidable(obstacle2);
-
-        Wall obstacle3 = new Wall(300, 450, 150, 32);
-        addEntity(obstacle3);
-        renderRegisterable.registerRenderable(obstacle3);
-        collidableRegisterable.registerCollidable(obstacle3);
+        for (Entity entity : entities) {
+            addEntity(entity);
+            renderRegisterable.registerRenderable(entity);
+            collidableRegisterable.registerCollidable(entity);
+        }
 
         System.out.println("MidScene loaded - Player and Walls only");
     }
@@ -126,7 +98,7 @@ public class MidScene extends Scene {
     @Override
     public void update() {
         super.update();
-        float deltaTime = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        float deltaTime = Gdx.graphics.getDeltaTime();
         sceneLoadTime += deltaTime;
 
         // Only accept input after 0.2 seconds (prevents accidental double-press)
@@ -138,12 +110,12 @@ public class MidScene extends Scene {
         if (aiUpdateTimer >= AI_UPDATE_INTERVAL) {
             aiUpdateTimer = 0;
 
-            Array<Entity> entities = GameContext.getEntityManager().getEntities();
+            Array<Entity> entities = entityRegisterable.getEntities();
 
             // FIND THE PLAYER FIRST
             Entity player = null;
             for (Entity entity : entities) {
-                if (entity.getClass().getSimpleName().equals("Player")) {
+                if (entity instanceof Player) {
                     player = entity;
                     break;
                 }
@@ -154,14 +126,13 @@ public class MidScene extends Scene {
                 Vector2 playerPos = player.getPosition();
 
                 for (Entity entity : entities) {
-                    if (entity.getClass().getSimpleName().equals("Enemy")) {
+                    if (entity instanceof Enemy) {
                         // Get the Enemy's AI movement strategy
-                        IMovementStrategy strategy = movementStrategyReturnable.getMovementStrategy("Enemy");
+                        IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy("Enemy");
 
                         if (strategy instanceof AIMovement) {
-                            AIMovement aiMovement = (AIMovement) strategy;
-
-                            aiMovement.setTargetPosition(playerPos); // constantly set player's position as target to flee from
+                            // constantly set player's position as target to flee from:
+                            ((AIMovement)strategy).setTargetPosition(playerPos);
                         }
 
                         //Move the enemy (will flee from target)
@@ -176,7 +147,7 @@ public class MidScene extends Scene {
             if (!spacePressed) {
                 spacePressed = true;
                 System.out.println("Going to EndScene...");
-                GameContext.getSceneManager().switchScene("EndScene");
+                sceneSwitchable.switchScene("EndScene");
             }
         } else {
             spacePressed = false;

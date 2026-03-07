@@ -1,8 +1,8 @@
 package io.github.inf1009_p10_9.input;
 
 import com.badlogic.gdx.Input;
-import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.entities.Entity;
+import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
@@ -11,10 +11,14 @@ public class Keyboard implements IInputListens {
 
     private IMovementCalculatable movementCalculatable;
     private IInputKeyCheckable inputKeyCheckable;
+    private IEntityQueryable entityQueryable;  // Interface injection
 
-    public Keyboard(IMovementCalculatable movementCalculatable, IInputKeyCheckable inputKeyCheckable) {
+    public Keyboard(IMovementCalculatable movementCalculatable,
+                    IInputKeyCheckable inputKeyCheckable,
+                    IEntityQueryable entityQueryable) {
         this.movementCalculatable = movementCalculatable;
         this.inputKeyCheckable = inputKeyCheckable;
+        this.entityQueryable = entityQueryable;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class Keyboard implements IInputListens {
     // This method will be called every frame from the game loop
     public void update() {
         // Get all entities and find the player
-        com.badlogic.gdx.utils.Array<Entity> entities = GameContext.getEntityManager().getEntities();
+        com.badlogic.gdx.utils.Array<Entity> entities = entityQueryable.getEntities();  // Uses interface
 
         for (Entity entity : entities) {
             // Check if this entity is a Player

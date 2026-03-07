@@ -4,20 +4,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.Gdx;
 import io.github.inf1009_p10_9.audio.BGManager;
 import io.github.inf1009_p10_9.audio.SFXManager;
 import io.github.inf1009_p10_9.audio.Speaker;
+import io.github.inf1009_p10_9.interfaces.IManager;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
-import io.github.inf1009_p10_9.interfaces.IRenderUnregisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
+import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.ui.UIElement;
 
-
-public class OutputManager implements IRenderRegisterable, IRenderUnregisterable {
+public class OutputManager implements IManager,
+                                      IRenderRegisterable,
+                                      IUIDisplayable {
     private static OutputManager instance;
-
-    private Array<IRenderable> renderables;
-    private Array<UIElement> uiElements;
+    private Array<IRenderable> renderables = new Array<>();
+    private Array<UIElement> uiElements = new Array<>();
 
     // LibGDX rendering tools - entities will use these directly
     private SpriteBatch batch;
@@ -27,22 +29,19 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
     private SFXManager sfxManager;
 
     private OutputManager() {
-        renderables = new Array<>();
-        uiElements = new Array<>();
-
         // Initialize audio managers with a shared speaker
         Speaker speaker = new Speaker();
         bgManager = new BGManager(speaker);
         sfxManager = new SFXManager(speaker);
     }
 
-    public static OutputManager getInstance() {
-        if (instance == null) {
+    public static synchronized OutputManager getInstance() {
+        if (instance == null)
             instance = new OutputManager();
-        }
         return instance;
     }
 
+    @Override
     public void initialize() {
         renderables.clear();
         uiElements.clear();
@@ -57,6 +56,30 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
     }
 
     @Override
+    public void update() {
+        render();
+    }
+
+    @Override
+    public void clear() {
+        renderables.clear();
+        uiElements.clear();
+        bgManager.stopMusic();
+    }
+
+    public void dispose() {
+        // Clean up LibGDX resources
+        if (batch != null) {
+            batch.dispose();
+        }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
+
+        clear();
+    }
+
+    @Override
     public void registerRenderable(IRenderable obj) {
         if (!renderables.contains(obj, true)) {
             renderables.add(obj);
@@ -68,11 +91,13 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
         renderables.removeValue(obj, true);
     }
 
+    @Override
     public void displayUI(UIElement uiElement) {
         if (!uiElements.contains(uiElement, true)) {
             uiElements.add(uiElement);
         }
     }
+    @Override
 
     public void removeUI(UIElement uiElement) {
         uiElements.removeValue(uiElement, true);
@@ -97,8 +122,8 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
             return;
         }
 
-        com.badlogic.gdx.Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
-        com.badlogic.gdx.Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Combine all renderables (entities + UI) and sort by z-index
         Array<IRenderable> allRenderables = new Array<>();
@@ -120,31 +145,6 @@ public class OutputManager implements IRenderRegisterable, IRenderUnregisterable
             renderable.render(batch);
         }
         batch.end();
-    }
-
-
-
-    public void clear() {
-        renderables.clear();
-        uiElements.clear();
-        bgManager.stopMusic();
-    }
-
-    public void dispose() {
-        // Clean up LibGDX resources
-        if (batch != null) {
-            batch.dispose();
-        }
-        if (shapeRenderer != null) {
-            shapeRenderer.dispose();
-        }
-
-        // Clean up audio
-        bgManager.stopMusic();
-
-        // Clear collections
-        renderables.clear();
-        uiElements.clear();
     }
 
     public BGManager getBGManager() {

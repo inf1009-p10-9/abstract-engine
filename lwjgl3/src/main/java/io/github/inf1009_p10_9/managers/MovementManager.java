@@ -3,23 +3,31 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.interfaces.*;
 
-public class MovementManager implements IMovementCalculatable, IMovementStrategyReturnable, IMovementStrategyRegisterable {
+public class MovementManager implements IManager,
+                                        IMovementCalculatable,
+                                        IMovementStrategyRegisterable {
     private static MovementManager instance;
 
-    private ObjectMap<String, IMovementStrategy> movementStrategies;
+    private ObjectMap<String, IMovementStrategy> movementStrategies = new ObjectMap<>();
 
-    private MovementManager() {
-        movementStrategies = new ObjectMap<>();
-    }
+    private MovementManager() {}
 
-    public static MovementManager getInstance() {
-        if (instance == null) {
+    public static synchronized MovementManager getInstance() {
+        if (instance == null)
             instance = new MovementManager();
-        }
         return instance;
     }
 
+    @Override
     public void initialize() {
+        clear();
+    }
+
+    @Override
+    public void update() {}
+
+    @Override
+    public void clear() {
         movementStrategies.clear();
     }
 
@@ -42,13 +50,5 @@ public class MovementManager implements IMovementCalculatable, IMovementStrategy
         if (strategy != null) {
             strategy.calculateMovement(object, moveDirection);
         }
-    }
-
-//    public void update() {
-//        //
-//    }
-
-    public void clear() {
-        movementStrategies.clear();
     }
 }

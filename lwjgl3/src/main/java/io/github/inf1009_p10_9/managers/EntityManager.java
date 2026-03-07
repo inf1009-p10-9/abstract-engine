@@ -1,48 +1,37 @@
-	package io.github.inf1009_p10_9.managers;
+package io.github.inf1009_p10_9.managers;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import io.github.inf1009_p10_9.entities.Entity;
+import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
+import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
+import io.github.inf1009_p10_9.interfaces.IManager;
 
-public class EntityManager {
+public class EntityManager implements IManager,
+                                      IEntityQueryable,
+                                      IEntityRegisterable {
     private static EntityManager instance;
 
-    private Array<Entity> entities;
-    private Queue<Entity> entitiesToAdd;
-    private Queue<Entity> entitiesToRemove;
+    private Array<Entity> entities = new Array<>();
+    private Queue<Entity> entitiesToAdd = new Queue<>();
+    private Queue<Entity> entitiesToRemove = new Queue<>();
 
-    private EntityManager() {
-        entities = new Array<Entity>();
-        entitiesToAdd = new Queue<Entity>();
-        entitiesToRemove = new Queue<Entity>();
-    }
+    private EntityManager() {}
 
-    public static EntityManager getInstance() {
-        if (instance == null) {
+    public static synchronized EntityManager getInstance() {
+        if (instance == null)
             instance = new EntityManager();
-        }
         return instance;
     }
 
+    @Override
     public void initialize() {
-        entities.clear();
-        entitiesToAdd.clear();
-        entitiesToRemove.clear();
+        clear();
     }
 
-    public void addEntity(Entity entity) {
-        entitiesToAdd.addLast(entity);
-    }
-
-    public void removeEntity(Entity entity) {
-        entitiesToRemove.addLast(entity);
-    }
-
-    public Array<Entity> getEntities() {
-        return entities;
-    }
-
+    @Override
     public void update() {
         // Process pending additions
         while (entitiesToAdd.size > 0) {
@@ -56,9 +45,8 @@ public class EntityManager {
 
         // Update all entities
         for (Entity entity : entities) {
-            if (entity.isActive()) {
+            if (entity.isActive())
                 entity.update();
-            }
         }
     }
 
@@ -66,6 +54,21 @@ public class EntityManager {
         entities.clear();
         entitiesToAdd.clear();
         entitiesToRemove.clear();
+    }
+
+    @Override
+    public void addEntity(Entity entity) {
+        entitiesToAdd.addLast(entity);
+    }
+
+    @Override
+    public void removeEntity(Entity entity) {
+        entitiesToRemove.addLast(entity);
+    }
+
+    @Override
+    public Array<Entity> getEntities() {
+        return entities;
     }
 
     public int getEntityCount() {

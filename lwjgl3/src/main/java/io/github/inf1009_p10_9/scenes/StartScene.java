@@ -51,7 +51,9 @@ public class StartScene extends Scene {
 
     @Override
     protected void loadEntities() {
-        titleLabel = new TextLabel("DRIVE AND LEARN", 230, 500);
+    	float screenWidth = Gdx.graphics.getWidth();
+    	float centerX = screenWidth / 2;
+    	titleLabel = new TextLabel("DRIVE AND LEARN", centerX - 120, 500);
         titleLabel.setColor(Color.GREEN);
         addUI(titleLabel);
 
@@ -63,13 +65,11 @@ public class StartScene extends Scene {
         float spacingY = 70;
 
         for (int i = 0; i < menuOptions.length; i++) {
-            // arrow indicator to the left of each option
-            arrowIndicators[i] = new TextLabel("->", 170, startY - (i * spacingY));
+            arrowIndicators[i] = new TextLabel("->", centerX - 130, startY - (i * spacingY));
             arrowIndicators[i].setColor(ARROW_COLOR);
             addUI(arrowIndicators[i]);
 
-            // menu option label
-            menuOptionLabels[i] = new TextLabel(menuOptions[i], 210, startY - (i * spacingY));
+            menuOptionLabels[i] = new TextLabel(menuOptions[i], centerX - 90, startY - (i * spacingY));
             menuOptionLabels[i].setColor(NORMAL_COLOR);
             addUI(menuOptionLabels[i]);
         }

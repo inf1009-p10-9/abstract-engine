@@ -5,6 +5,7 @@ import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.managers.QuestionManager;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
+import com.badlogic.gdx.Gdx;
 
 public class GameScene extends Scene {
     private QuestionDisplay questionDisplay;
@@ -38,24 +39,30 @@ public class GameScene extends Scene {
 
     @Override
     protected void loadEntities() {
-        // question display at top of screen
-        questionDisplay = new QuestionDisplay(200, 570, questionManager);
+        questionDisplay = new QuestionDisplay(0, 690, questionManager);
         addUI(questionDisplay);
 
-        // player in center bottom
-        Player player = new Player(384, 100, sfxPlayable);
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float laneLeft = screenWidth * 0.25f;
+        float laneRight = screenWidth * 0.70f;
+        float gateWidth = 150f;
+        float gateHeight = 80f;
+
+        // player centered horizontally at bottom
+        Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
         addEntity(player);
         renderRegisterable.registerRenderable(player);
         collidableRegisterable.registerCollidable(player);
 
-        // gate A on left lane
-        Gate gateA = new Gate(150, 400, 100, 60, "A", questionManager);
+        // gate A on left lane, centered on lane
+            Gate gateA = new Gate(laneLeft - gateWidth / 2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager);
         addEntity(gateA);
         renderRegisterable.registerRenderable(gateA);
         collidableRegisterable.registerCollidable(gateA);
 
-        // gate B on right lane
-        Gate gateB = new Gate(550, 400, 100, 60, "B", questionManager);
+        // gate B on right lane, centered on lane
+        Gate gateB = new Gate(laneRight - gateWidth / 2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager);
         addEntity(gateB);
         renderRegisterable.registerRenderable(gateB);
         collidableRegisterable.registerCollidable(gateB);

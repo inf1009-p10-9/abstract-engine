@@ -23,7 +23,7 @@ public class EndScene extends Scene {
 
     private TextLabel[] menuOptionLabels;
     private TextLabel[] arrowIndicators;
-    private String[] menuOptions = { "Restart", "Main Menu" };
+    private String[] menuOptions = { "Restart", "Main Menu", "Quit Game" };
 
     private int highlightedIndex = 0;
 
@@ -62,31 +62,33 @@ public class EndScene extends Scene {
 
     @Override
     protected void loadEntities() {
-        titleLabel = new TextLabel("WELL DONE!", 290, 500);
+        float screenWidth = Gdx.graphics.getWidth();
+        float centerX = screenWidth / 2;
+
+        titleLabel = new TextLabel("WELL DONE!", centerX - 80, 500);
         titleLabel.setColor(Color.YELLOW);
         addUI(titleLabel);
 
-        // placeholders updated in load()
-        subjectLabel = new TextLabel("", 250, 430);
+        subjectLabel = new TextLabel("", centerX - 100, 430);
         subjectLabel.setColor(Color.CYAN);
         addUI(subjectLabel);
 
-        scoreLabel = new TextLabel("", 250, 370);
+        scoreLabel = new TextLabel("", centerX - 100, 370);
         scoreLabel.setColor(Color.WHITE);
         addUI(scoreLabel);
 
         menuOptionLabels = new TextLabel[menuOptions.length];
         arrowIndicators = new TextLabel[menuOptions.length];
 
-        float startY = 270;
-        float spacingY = 70;
+        float startY = 280;
+        float spacingY = 60;
 
         for (int i = 0; i < menuOptions.length; i++) {
-            arrowIndicators[i] = new TextLabel("->", 170, startY - (i * spacingY));
+            arrowIndicators[i] = new TextLabel("->", centerX - 130, startY - (i * spacingY));
             arrowIndicators[i].setColor(HIGHLIGHTED_COLOR);
             addUI(arrowIndicators[i]);
 
-            menuOptionLabels[i] = new TextLabel(menuOptions[i], 210, startY - (i * spacingY));
+            menuOptionLabels[i] = new TextLabel(menuOptions[i], centerX - 90, startY - (i * spacingY));
             menuOptionLabels[i].setColor(NORMAL_COLOR);
             addUI(menuOptionLabels[i]);
         }
@@ -188,6 +190,10 @@ public class EndScene extends Scene {
         } else if (selectedOption.equals("Main Menu")) {
             System.out.println("Returning to StartScene...");
             sceneSwitchable.switchScene("StartScene");
+
+        } else if (selectedOption.equals("Quit Game")) {
+            System.out.println("Quitting game...");
+            Gdx.app.exit();
         }
     }
 }

@@ -8,8 +8,9 @@ import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.managers.QuestionManager;
-
 import io.github.inf1009_p10_9.ui.TextLabel;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
 
@@ -18,22 +19,29 @@ public class SubjectSelectScene extends Scene {
     private final QuestionManager questionManager;
 
     private TextLabel titleLabel;
+
+    // subject row labels
     private TextLabel subjectTitleLabel;
+    private TextLabel subjectLeftArrow;
+    private TextLabel subjectValueLabel;
+    private TextLabel subjectRightArrow;
+
+    // difficulty row labels
     private TextLabel difficultyTitleLabel;
-    private TextLabel backInstructionLabel;
+    private TextLabel difficultyLeftArrow;
+    private TextLabel difficultyValueLabel;
+    private TextLabel difficultyRightArrow;
 
-    // subject options
-    private TextLabel[] subjectLabels;
-    private TextLabel[] subjectArrows;
+    // instruction labels
+    private TextLabel instructionLine1;
+    private TextLabel instructionLine2;
+
+
     private String[] subjectOptions = { "Math", "English" };
-
-    // difficulty options
-    private TextLabel[] difficultyLabels;
-    private TextLabel[] difficultyArrows;
     private String[] difficultyOptions = { "Easy", "Hard" };
 
-    private int highlightedSubjectIndex = 0;
-    private int highlightedDifficultyIndex = 0;
+    private int selectedSubjectIndex = 0;
+    private int selectedDifficultyIndex = 0;
 
     // tracks which row the cursor is in: 0 = subject, 1 = difficulty
     private int activeRow = 0;
@@ -46,10 +54,9 @@ public class SubjectSelectScene extends Scene {
     private float sceneLoadTime = 0;
 
     private static final Color NORMAL_COLOR = Color.WHITE;
-    private static final Color HIGHLIGHTED_COLOR = Color.YELLOW;
-    private static final Color SECTION_TITLE_COLOR = Color.CYAN;
     private static final Color ACTIVE_ROW_COLOR = Color.YELLOW;
     private static final Color INACTIVE_ROW_COLOR = Color.LIGHT_GRAY;
+    private static final Color SECTION_TITLE_COLOR = Color.CYAN;
 
     private IInputKeyCheckable inputKeyCheckable;
 
@@ -75,56 +82,59 @@ public class SubjectSelectScene extends Scene {
 
     @Override
     protected void loadEntities() {
-        titleLabel = new TextLabel("SELECT LEVEL", 260, 520);
+        float screenWidth = Gdx.graphics.getWidth();
+        float centerX = screenWidth / 2;
+
+        titleLabel = new TextLabel("SELECT LEVEL", centerX - 80, 550);
         titleLabel.setColor(Color.GREEN);
         addUI(titleLabel);
 
         // subject row
-        subjectTitleLabel = new TextLabel("Subject:", 100, 400);
+        subjectTitleLabel = new TextLabel("Subject:", centerX - 200, 420);
         subjectTitleLabel.setColor(SECTION_TITLE_COLOR);
         addUI(subjectTitleLabel);
 
-        subjectLabels = new TextLabel[subjectOptions.length];
-        subjectArrows = new TextLabel[subjectOptions.length];
+        subjectLeftArrow = new TextLabel("<", centerX - 30, 420);
+        subjectLeftArrow.setColor(ACTIVE_ROW_COLOR);
+        addUI(subjectLeftArrow);
 
-        float subjectStartX = 230;
-        float subjectSpacingX = 150;
+        subjectValueLabel = new TextLabel(subjectOptions[selectedSubjectIndex], centerX + 20, 420);
+        subjectValueLabel.setColor(ACTIVE_ROW_COLOR);
+        addUI(subjectValueLabel);
 
-        for (int i = 0; i < subjectOptions.length; i++) {
-            subjectArrows[i] = new TextLabel("->", subjectStartX + (i * subjectSpacingX) - 30, 400);
-            subjectArrows[i].setColor(HIGHLIGHTED_COLOR);
-            addUI(subjectArrows[i]);
-
-            subjectLabels[i] = new TextLabel(subjectOptions[i], subjectStartX + (i * subjectSpacingX), 400);
-            subjectLabels[i].setColor(NORMAL_COLOR);
-            addUI(subjectLabels[i]);
-        }
+        subjectRightArrow = new TextLabel(">", centerX + 110, 420);
+        subjectRightArrow.setColor(ACTIVE_ROW_COLOR);
+        addUI(subjectRightArrow);
 
         // difficulty row
-        difficultyTitleLabel = new TextLabel("Difficulty:", 100, 280);
+        difficultyTitleLabel = new TextLabel("Difficulty:", centerX - 200, 300);
         difficultyTitleLabel.setColor(SECTION_TITLE_COLOR);
         addUI(difficultyTitleLabel);
 
-        difficultyLabels = new TextLabel[difficultyOptions.length];
-        difficultyArrows = new TextLabel[difficultyOptions.length];
+        difficultyLeftArrow = new TextLabel("<", centerX - 30, 300);
+        difficultyLeftArrow.setColor(INACTIVE_ROW_COLOR);
+        addUI(difficultyLeftArrow);
 
-        float difficultyStartX = 230;
-        float difficultySpacingX = 150;
+        difficultyValueLabel = new TextLabel(difficultyOptions[selectedDifficultyIndex], centerX + 20, 300);
+        difficultyValueLabel.setColor(INACTIVE_ROW_COLOR);
+        addUI(difficultyValueLabel);
 
-        for (int i = 0; i < difficultyOptions.length; i++) {
-            difficultyArrows[i] = new TextLabel("->", difficultyStartX + (i * difficultySpacingX) - 30, 280);
-            difficultyArrows[i].setColor(HIGHLIGHTED_COLOR);
-            addUI(difficultyArrows[i]);
+        difficultyRightArrow = new TextLabel(">", centerX + 110, 300);
+        difficultyRightArrow.setColor(INACTIVE_ROW_COLOR);
+        addUI(difficultyRightArrow);
 
-            difficultyLabels[i] = new TextLabel(difficultyOptions[i], difficultyStartX + (i * difficultySpacingX), 280);
-            difficultyLabels[i].setColor(NORMAL_COLOR);
-            addUI(difficultyLabels[i]);
-        }
+        // instructions split across two lines
+        instructionLine1 = new TextLabel(
+            "UP/DOWN: switch row          LEFT/RIGHT: change value",
+            centerX - 240, 130);
+        instructionLine1.setColor(Color.LIGHT_GRAY);
+        addUI(instructionLine1);
 
-        // back instruction
-        backInstructionLabel = new TextLabel("ESC to go back   |   ENTER to confirm", 160, 100);
-        backInstructionLabel.setColor(Color.LIGHT_GRAY);
-        addUI(backInstructionLabel);
+        instructionLine2 = new TextLabel(
+            "ENTER: confirm          ESC: go back",
+            centerX - 165, 90);
+        instructionLine2.setColor(Color.LIGHT_GRAY);
+        addUI(instructionLine2);
 
         updateHighlight();
 
@@ -135,8 +145,8 @@ public class SubjectSelectScene extends Scene {
     public void load() {
         super.load();
         sceneLoadTime = 0;
-        highlightedSubjectIndex = 0;
-        highlightedDifficultyIndex = 0;
+        selectedSubjectIndex = 0;
+        selectedDifficultyIndex = 0;
         activeRow = 0;
         enterPressed = false;
         escPressed = false;
@@ -152,7 +162,7 @@ public class SubjectSelectScene extends Scene {
             return;
         }
 
-        // switch active row with UP or DOWN (or W/S)
+        // switch active row with UP/DOWN or W/S
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
@@ -174,7 +184,7 @@ public class SubjectSelectScene extends Scene {
             upDownPressed = false;
         }
 
-        // cycle options within active row with LEFT or RIGHT (or A/D)
+        // cycle value in active row with LEFT/RIGHT or A/D
         boolean leftKeyPressed = inputKeyCheckable.isKeyPressed(Keys.LEFT) ||
                                  inputKeyCheckable.isKeyPressed(Keys.A);
         boolean rightKeyPressed = inputKeyCheckable.isKeyPressed(Keys.RIGHT) ||
@@ -187,33 +197,29 @@ public class SubjectSelectScene extends Scene {
                 if (activeRow == 0) {
                     // cycling through subjects
                     if (rightKeyPressed) {
-                        highlightedSubjectIndex++;
+                        selectedSubjectIndex++;
                     } else {
-                        highlightedSubjectIndex--;
+                        selectedSubjectIndex--;
                     }
-
-                    // wrap around
-                    if (highlightedSubjectIndex < 0) {
-                        highlightedSubjectIndex = subjectOptions.length - 1;
+                    if (selectedSubjectIndex < 0) {
+                        selectedSubjectIndex = subjectOptions.length - 1;
                     }
-                    if (highlightedSubjectIndex >= subjectOptions.length) {
-                        highlightedSubjectIndex = 0;
+                    if (selectedSubjectIndex >= subjectOptions.length) {
+                        selectedSubjectIndex = 0;
                     }
 
                 } else {
                     // cycling through difficulties
                     if (rightKeyPressed) {
-                        highlightedDifficultyIndex++;
+                        selectedDifficultyIndex++;
                     } else {
-                        highlightedDifficultyIndex--;
+                        selectedDifficultyIndex--;
                     }
-
-                    // wrap around
-                    if (highlightedDifficultyIndex < 0) {
-                        highlightedDifficultyIndex = difficultyOptions.length - 1;
+                    if (selectedDifficultyIndex < 0) {
+                        selectedDifficultyIndex = difficultyOptions.length - 1;
                     }
-                    if (highlightedDifficultyIndex >= difficultyOptions.length) {
-                        highlightedDifficultyIndex = 0;
+                    if (selectedDifficultyIndex >= difficultyOptions.length) {
+                        selectedDifficultyIndex = 0;
                     }
                 }
 
@@ -228,8 +234,8 @@ public class SubjectSelectScene extends Scene {
             if (!enterPressed) {
                 enterPressed = true;
 
-                String chosenSubject = subjectOptions[highlightedSubjectIndex];
-                String chosenDifficulty = difficultyOptions[highlightedDifficultyIndex];
+                String chosenSubject = subjectOptions[selectedSubjectIndex];
+                String chosenDifficulty = difficultyOptions[selectedDifficultyIndex];
 
                 questionManager.selectBank(chosenSubject, chosenDifficulty);
 
@@ -240,7 +246,7 @@ public class SubjectSelectScene extends Scene {
             enterPressed = false;
         }
 
-        // go back to StartScene with ESC
+        // go back with ESC
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             if (!escPressed) {
                 escPressed = true;
@@ -252,38 +258,30 @@ public class SubjectSelectScene extends Scene {
     }
 
     private void updateHighlight() {
-        // update subject row
-        for (int i = 0; i < subjectOptions.length; i++) {
-            if (i == highlightedSubjectIndex) {
-                subjectArrows[i].setVisible(true);
-                if (activeRow == 0) {
-                    subjectLabels[i].setColor(HIGHLIGHTED_COLOR);
-                    subjectArrows[i].setColor(HIGHLIGHTED_COLOR);
-                } else {
-                    subjectLabels[i].setColor(INACTIVE_ROW_COLOR);
-                    subjectArrows[i].setColor(INACTIVE_ROW_COLOR);
-                }
-            } else {
-                subjectArrows[i].setVisible(false);
-                subjectLabels[i].setColor(NORMAL_COLOR);
-            }
+        if (activeRow == 0) {
+            subjectTitleLabel.setColor(SECTION_TITLE_COLOR);
+            subjectLeftArrow.setColor(ACTIVE_ROW_COLOR);
+            subjectValueLabel.setColor(ACTIVE_ROW_COLOR);
+            subjectRightArrow.setColor(ACTIVE_ROW_COLOR);
+
+            difficultyTitleLabel.setColor(INACTIVE_ROW_COLOR);
+            difficultyLeftArrow.setColor(INACTIVE_ROW_COLOR);
+            difficultyValueLabel.setColor(INACTIVE_ROW_COLOR);
+            difficultyRightArrow.setColor(INACTIVE_ROW_COLOR);
+        } else {
+            subjectTitleLabel.setColor(INACTIVE_ROW_COLOR);
+            subjectLeftArrow.setColor(INACTIVE_ROW_COLOR);
+            subjectValueLabel.setColor(INACTIVE_ROW_COLOR);
+            subjectRightArrow.setColor(INACTIVE_ROW_COLOR);
+
+            difficultyTitleLabel.setColor(SECTION_TITLE_COLOR);
+            difficultyLeftArrow.setColor(ACTIVE_ROW_COLOR);
+            difficultyValueLabel.setColor(ACTIVE_ROW_COLOR);
+            difficultyRightArrow.setColor(ACTIVE_ROW_COLOR);
         }
 
-        // update difficulty row
-        for (int i = 0; i < difficultyOptions.length; i++) {
-            if (i == highlightedDifficultyIndex) {
-                difficultyArrows[i].setVisible(true);
-                if (activeRow == 1) {
-                    difficultyLabels[i].setColor(HIGHLIGHTED_COLOR);
-                    difficultyArrows[i].setColor(HIGHLIGHTED_COLOR);
-                } else {
-                    difficultyLabels[i].setColor(INACTIVE_ROW_COLOR);
-                    difficultyArrows[i].setColor(INACTIVE_ROW_COLOR);
-                }
-            } else {
-                difficultyArrows[i].setVisible(false);
-                difficultyLabels[i].setColor(NORMAL_COLOR);
-            }
-        }
+        // update displayed values
+        subjectValueLabel.setText(subjectOptions[selectedSubjectIndex]);
+        difficultyValueLabel.setText(difficultyOptions[selectedDifficultyIndex]);
     }
 }

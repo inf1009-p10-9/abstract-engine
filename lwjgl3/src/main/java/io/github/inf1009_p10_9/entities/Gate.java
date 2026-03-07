@@ -20,9 +20,9 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private float flashTimer = 0;
     private boolean needsReset = false;
     private static final float FLASH_DURATION = 1.0f; // increased for visibility
-    private static final float LANE_LEFT = 150f;
-    private static final float LANE_RIGHT = 550f;
-    private static final float SPEED = 100f;
+    private static final float SPEED = 60f;
+    private final float LANE_LEFT;
+    private final float LANE_RIGHT;
     private Color defaultColor = Color.TAN;
     private Color color = defaultColor;
     private Gate partner;
@@ -31,6 +31,8 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager) {
         super(x, y, width, height, 5);
         this.option = option;
+        this.LANE_LEFT = Gdx.graphics.getWidth() * 0.25f;
+        this.LANE_RIGHT = Gdx.graphics.getWidth() * 0.70f;
         this.font = new BitmapFont();
         this.font.getData().setScale(2f);
         this.font.setColor(Color.WHITE);
@@ -88,7 +90,13 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         if (other instanceof Player) {
+            // prevent collision from firing if bank is already finished
             if (needsReset) {
+                return;
+            }
+
+            // prevent collision from firing if no active question
+            if (questionManager.getCurrentQuestion() == null) {
                 return;
             }
 
@@ -102,7 +110,6 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
             flashTimer = FLASH_DURATION;
             needsReset = true;
-            // nextQuestion() removed from here
         }
     }
 

@@ -41,6 +41,7 @@ public class Keyboard implements IInputListens {
                 // Check which keys are currently held down
                 boolean moved = false;
                 
+                // Use the current key bindings from SettingsManager
                 SettingsManager settings = SettingsManager.getInstance();
 
                 if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"))) {

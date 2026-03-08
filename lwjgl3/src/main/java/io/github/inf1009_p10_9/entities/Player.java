@@ -37,7 +37,7 @@ public class Player extends Entity {
     @Override
     public void onCollision(ICollidable other) {
         System.out.println("Player collided with: " + other.getClass().getSimpleName());
-        sfxPlayable.playSound("sound/jump.mp3");
+ 
     }
 
     @Override

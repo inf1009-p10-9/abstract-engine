@@ -115,6 +115,16 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 outputManager.getSFXManager()   // as ISFXPlayable
             ));
+            
+            sceneManager.addScene(new SettingsScene(
+            	    entityManager,
+            	    outputManager,
+            	    collisionManager,
+            	    outputManager,
+            	    outputManager.getBGManager(),
+            	    inputManager,
+            	    sceneManager
+            	));
 
             // start with main menu
             sceneManager.switchScene("StartScene");

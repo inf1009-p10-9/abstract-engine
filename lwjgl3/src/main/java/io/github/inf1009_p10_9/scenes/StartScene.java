@@ -145,7 +145,7 @@ public class StartScene extends Scene {
             sceneSwitchable.switchScene("SubjectSelectScene");
 
         } else if (selectedOption.equals("Settings")) {
-            System.out.println("Settings not yet implemented");
+        	sceneSwitchable.switchScene("SettingsScene");
 
         } else if (selectedOption.equals("Quit Game")) {
             System.out.println("Quitting game...");

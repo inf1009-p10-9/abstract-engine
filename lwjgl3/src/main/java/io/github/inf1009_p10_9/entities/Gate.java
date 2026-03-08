@@ -11,6 +11,7 @@ import io.github.inf1009_p10_9.GameContext;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.questions.Question;
+import io.github.inf1009_p10_9.managers.OutputManager;
 
 public class Gate extends Entity implements IRenderable, ICollidable {
     private String option; // "A" or "B"
@@ -86,24 +87,31 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         if (other instanceof Player) {
-            // prevent collision from firing if bank is already finished
+            // Ignore repeated collisions while the gate is waiting to reset
             if (needsReset) {
                 return;
             }
 
-            // prevent collision from firing if no active question
+            // Ignore collision if there is no active question
             if (GameContext.getQuestionManager().getCurrentQuestion() == null) {
                 return;
             }
 
+            // Check whether the player's chosen gate matches the correct answer
             boolean answeredCorrectly = GameContext.getQuestionManager().checkAnswer(option);
 
             if (answeredCorrectly) {
                 color = Color.LIME;
+
+                // Play sound for a correct answer
+                OutputManager.getInstance().getSFXManager().playCorrectAnswerSound();
             } else {
                 color = Color.RED;
-            }
 
+                // Play sound for a wrong answer
+                OutputManager.getInstance().getSFXManager().playWrongAnswerSound();
+            }
+            // Keep the result color on screen briefly before resetting
             flashTimer = FLASH_DURATION;
             needsReset = true;
         }

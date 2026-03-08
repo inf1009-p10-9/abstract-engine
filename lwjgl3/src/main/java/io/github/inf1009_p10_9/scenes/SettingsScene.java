@@ -43,7 +43,7 @@ public class SettingsScene extends Scene {
     private boolean leftRightPressed = false;
     private boolean enterPressed = false;
     private boolean escPressed = false;
-    private boolean waitingForRebind = false;
+    private boolean waitingForRebind = false; 
     private boolean rebindReady = false;
 
     public SettingsScene(
@@ -87,6 +87,7 @@ public class SettingsScene extends Scene {
     public void update() {
         super.update();
 
+     // Wait until the keys to enter menu are released before accepting the next fresh key press for rebinding
         if (waitingForRebind) {
             if (!rebindReady) {
                 boolean anyBlockedKeyHeld =
@@ -110,6 +111,7 @@ public class SettingsScene extends Scene {
                 return;
             }
 
+         // Capture the next valid key press and save it as the new binding
             int pressed = InputManager.getInstance().consumeLastJustPressedKey();
 
             if (pressed != -1
@@ -186,6 +188,7 @@ public class SettingsScene extends Scene {
         }
     }
 
+ // Start key rebinding mode for the selected movement action
     private void handleEnter() {
         if (selectedIndex >= 2 && selectedIndex <= 5) {
             waitingForRebind = true;

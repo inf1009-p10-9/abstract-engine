@@ -11,7 +11,7 @@ import io.github.inf1009_p10_9.managers.*;
 
 public class GameMaster extends ApplicationAdapter {
 
-    // managers (injected via constructor)
+    // Managers (injected via constructor)
     protected final SceneManager sceneManager;
     protected final EntityManager entityManager;
     protected final CollisionManager collisionManager;
@@ -20,12 +20,10 @@ public class GameMaster extends ApplicationAdapter {
     protected final OutputManager outputManager;
     protected final List<IManager> managers;
 
-    // question manager (singleton, not injected)
-    protected final QuestionManager questionManager;
-
-    // game loop control
+    // Game loop control
     private boolean running;
 
+    // Constructor Injection (Dependency Injection)
     public GameMaster(SceneManager sceneManager,
                       EntityManager entityManager,
                       CollisionManager collisionManager,
@@ -38,10 +36,6 @@ public class GameMaster extends ApplicationAdapter {
         this.movementManager = movementManager;
         this.inputManager = inputManager;
         this.outputManager = outputManager;
-
-        // get singleton instance
-        this.questionManager = QuestionManager.getInstance();
-
         this.managers = new ArrayList<IManager>();
         this.managers.addAll(
             Arrays.asList(
@@ -58,17 +52,9 @@ public class GameMaster extends ApplicationAdapter {
     }
 
     public void initialize() {
-        // initialize all managers
-        for (IManager manager : managers) {
+        // Initialize all managers (they're already created)
+        for (IManager manager : managers)
             manager.initialize();
-        }
-
-        // initialize question manager separately since it doesn't implement IManager
-        questionManager.initialize();
-
-        // register context
-        GameContext.setGameMaster(this);
-
         running = true;
         System.out.println("GameMaster initialized");
     }
@@ -78,6 +64,7 @@ public class GameMaster extends ApplicationAdapter {
         if (!running) {
             return;
         }
+
         gameLoop();
     }
 
@@ -93,42 +80,11 @@ public class GameMaster extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        // Clean up all managers
         for (IManager manager : managers) {
             manager.clear();
         }
 
-        // clean up question manager
-        questionManager.clear();
-
         System.out.println("GameMaster disposed");
-    }
-
-    // getters
-    public SceneManager getSceneManager() {
-        return sceneManager;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public CollisionManager getCollisionManager() {
-        return collisionManager;
-    }
-
-    public MovementManager getMovementManager() {
-        return movementManager;
-    }
-
-    public InputManager getInputManager() {
-        return inputManager;
-    }
-
-    public OutputManager getOutputManager() {
-        return outputManager;
-    }
-
-    public QuestionManager getQuestionManager() {
-        return questionManager;
     }
 }

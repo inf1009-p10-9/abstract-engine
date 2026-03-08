@@ -7,20 +7,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class StartScene extends Scene {
-
     private TextLabel titleLabel;
-    private TextLabel[] menuOptionLabels;
-    private TextLabel[] arrowIndicators;
-    private String[] menuOptions = { "Level Selection", "Settings", "Quit Game" };
-
-    private int highlightedIndex = 0;
-    private boolean upDownPressed = false;
-    private boolean enterPressed = false;
+    private TextLabel instructionLabel;
+    private boolean spacePressed = false;
     private float sceneLoadTime = 0;
-
-    private static final Color NORMAL_COLOR = Color.WHITE;
-    private static final Color HIGHLIGHTED_COLOR = Color.YELLOW;
-    private static final Color ARROW_COLOR = Color.YELLOW;
 
     private IInputKeyCheckable inputKeyCheckable;
     private ISceneSwitchable sceneSwitchable;
@@ -30,6 +20,7 @@ public class StartScene extends Scene {
                       ICollidableRegisterable collidableRegisterable,
                       IRenderRegisterable renderRegisterable,
                       IMusicPlayable musicPlayable,
+
                       IInputKeyCheckable inputKeyCheckable,
                       ISceneSwitchable sceneSwitchable) {
         super("StartScene",
@@ -38,35 +29,23 @@ public class StartScene extends Scene {
               collidableRegisterable,
               renderRegisterable,
               musicPlayable);
+
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable = sceneSwitchable;
     }
 
     @Override
     protected void loadEntities() {
-    	float screenWidth = Gdx.graphics.getWidth();
-    	float centerX = screenWidth / 2;
-    	titleLabel = new TextLabel("DRIVE AND LEARN", centerX - 120, 500);
+        // Create scene title
+        titleLabel = new TextLabel("START SCENE", 320, 400);
         titleLabel.setColor(Color.GREEN);
         addUI(titleLabel);
 
-        menuOptionLabels = new TextLabel[menuOptions.length];
-        arrowIndicators = new TextLabel[menuOptions.length];
+        // Create instruction text
+        instructionLabel = new TextLabel("Press SPACE to go to Mid Scene", 220, 250);
+        instructionLabel.setColor(Color.YELLOW);
+        addUI(instructionLabel);
 
-        float startY = 360;
-        float spacingY = 70;
-
-        for (int i = 0; i < menuOptions.length; i++) {
-            arrowIndicators[i] = new TextLabel("->", centerX - 130, startY - (i * spacingY));
-            arrowIndicators[i].setColor(ARROW_COLOR);
-            addUI(arrowIndicators[i]);
-
-            menuOptionLabels[i] = new TextLabel(menuOptions[i], centerX - 90, startY - (i * spacingY));
-            menuOptionLabels[i].setColor(NORMAL_COLOR);
-            addUI(menuOptionLabels[i]);
-        }
-
-        updateHighlight();
         System.out.println("StartScene loaded");
     }
 
@@ -74,8 +53,9 @@ public class StartScene extends Scene {
     public void load() {
         super.load();
         sceneLoadTime = 0;
-        highlightedIndex = 0;
+        System.out.println("Attempting to play music...");
         musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
+        System.out.println("Music command sent!");
     }
 
     @Override
@@ -83,73 +63,24 @@ public class StartScene extends Scene {
         super.update();
 
         sceneLoadTime += Gdx.graphics.getDeltaTime();
+
+        // Only accept input after 0.2 seconds
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
-                               inputKeyCheckable.isKeyPressed(Keys.W);
-        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
-                                 inputKeyCheckable.isKeyPressed(Keys.S);
-
-        if (upKeyPressed || downKeyPressed) {
-            if (!upDownPressed) {
-                upDownPressed = true;
-
-                if (downKeyPressed) {
-                    highlightedIndex++;
-                } else {
-                    highlightedIndex--;
-                }
-
-                if (highlightedIndex < 0) {
-                    highlightedIndex = menuOptions.length - 1;
-                }
-                if (highlightedIndex >= menuOptions.length) {
-                    highlightedIndex = 0;
-                }
-
-                updateHighlight();
+        // Check if SPACE is pressed to go to mid scene
+        if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
+            if (!spacePressed) {
+                spacePressed = true;
+                System.out.println("Going to MidScene...");
+                sceneSwitchable.switchScene("MidScene");
             }
         } else {
-            upDownPressed = false;
+            spacePressed = false;
         }
 
-        if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
-            if (!enterPressed) {
-                enterPressed = true;
-                handleMenuSelection();
-            }
-        } else {
-            enterPressed = false;
-        }
-    }
-
-    private void updateHighlight() {
-        for (int i = 0; i < menuOptions.length; i++) {
-            if (i == highlightedIndex) {
-                menuOptionLabels[i].setColor(HIGHLIGHTED_COLOR);
-                arrowIndicators[i].setVisible(true);
-            } else {
-                menuOptionLabels[i].setColor(NORMAL_COLOR);
-                arrowIndicators[i].setVisible(false);
-            }
-        }
-    }
-
-    private void handleMenuSelection() {
-        String selectedOption = menuOptions[highlightedIndex];
-
-        if (selectedOption.equals("Level Selection")) {
-            System.out.println("Going to SubjectSelectScene...");
-            sceneSwitchable.switchScene("SubjectSelectScene");
-
-        } else if (selectedOption.equals("Settings")) {
-        	sceneSwitchable.switchScene("SettingsScene");
-
-        } else if (selectedOption.equals("Quit Game")) {
-            System.out.println("Quitting game...");
-            Gdx.app.exit();
-        }
+        // Make instruction text blink
+        instructionLabel.setVisible((System.currentTimeMillis() / 500) % 2 == 0);
     }
 }

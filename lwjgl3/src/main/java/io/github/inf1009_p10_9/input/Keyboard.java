@@ -6,7 +6,6 @@ import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
-import io.github.inf1009_p10_9.managers.SettingsManager;
 
 public class Keyboard implements IInputListens {
 
@@ -40,31 +39,8 @@ public class Keyboard implements IInputListens {
 
                 // Check which keys are currently held down
                 boolean moved = false;
-                
-                // Use the current key bindings from SettingsManager
-                SettingsManager settings = SettingsManager.getInstance();
 
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"))) {
-                    movementCalculatable.move(entity, 0);
-                    moved = true;
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"))) {
-                    movementCalculatable.move(entity, 1);
-                    moved = true;
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_LEFT"))) {
-                    movementCalculatable.move(entity, 2);
-                    moved = true;
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_RIGHT"))) {
-                    movementCalculatable.move(entity, 3);
-                    moved = true;
-                }
-
-                /*// Move Up
+                // Move Up
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.W) || inputKeyCheckable.isKeyPressed(Input.Keys.UP)) {
                     movementCalculatable.move(entity, 0); // 0 = up
                     moved = true;
@@ -86,7 +62,7 @@ public class Keyboard implements IInputListens {
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.D) || inputKeyCheckable.isKeyPressed(Input.Keys.RIGHT)) {
                     movementCalculatable.move(entity, 3); // 3 = right
                     moved = true;
-                }*/
+                }
 
                 // Action keys
                 //if (inputKeyCheckable.isKeyPressed(Input.Keys.SPACE)) {

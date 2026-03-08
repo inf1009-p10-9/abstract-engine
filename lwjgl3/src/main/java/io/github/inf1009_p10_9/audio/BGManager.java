@@ -46,16 +46,12 @@ public class BGManager implements IMusicPlayable {
         currentMusic = null;
     }
 
-   public void setVolume(float volume) {
-        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
-       if (musicInstance != null) {
-           musicInstance.setVolume(this.volume);
-       }
-    }
-    
-    public float getVolume() {
-        return volume;
-    }
+//    public void setVolume(float volume) {
+//        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
+//        if (musicInstance != null) {
+//            musicInstance.setVolume(this.volume);
+//        }
+//    }
 //
 //    public String getCurrentMusic() {
 //        return currentMusic;
@@ -72,6 +68,4 @@ public class BGManager implements IMusicPlayable {
 //            musicInstance.play();
 //        }
 //    }
-
 }
-

@@ -39,9 +39,13 @@ public class SFXManager implements ISFXPlayable {
 //        }
 //    }
 //
-//    public void setVolume(float volume) {
-//        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
-//    }
+    public void setVolume(float volume) {
+       this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
+   }
+    
+    public float getVolume() {
+        return volume;
+    }
 //
 //    public void stopAllSounds() {
 //        activeSounds.clear();

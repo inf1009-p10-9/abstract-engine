@@ -18,6 +18,7 @@ public class InputManager implements IManager,
     private Array<IInputListens> listeners = new Array<>();
     private Array<IInputListens> peripherals = new Array<>();
     private Input currentInput;
+    private int lastJustPressedKey = -1;
 
     private InputManager() {}
 
@@ -75,14 +76,28 @@ public class InputManager implements IManager,
             currentInput = null;
         }
     }
+    
+    public int consumeLastJustPressedKey() {
+        int key = lastJustPressedKey;
+        lastJustPressedKey = -1;
+        return key;
+    }
+    
+    @Override
+    public boolean keyDown(int keycode) {
+        keyStates.put(keycode, true);
+        currentInput = new Input(keycode, "KEY_DOWN");
+        lastJustPressedKey = keycode;
+        return true;
+    }
 
-    // InputProcessor methods
+    /*// InputProcessor methods
     @Override
     public boolean keyDown(int keycode) {
         keyStates.put(keycode, true);
         currentInput = new Input(keycode, "KEY_DOWN");
         return true;
-    }
+    }*/
 
     @Override
     public boolean keyUp(int keycode) {

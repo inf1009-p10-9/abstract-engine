@@ -1,6 +1,7 @@
 package io.github.inf1009_p10_9.scenes;
 
 import io.github.inf1009_p10_9.entities.Gate;
+import io.github.inf1009_p10_9.entities.Road;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.managers.QuestionManager;
@@ -39,6 +40,11 @@ public class GameScene extends Scene {
 
     @Override
     protected void loadEntities() {
+    	
+    	Road road = new Road();
+        addEntity(road);
+        renderRegisterable.registerRenderable(road);
+        
         questionDisplay = new QuestionDisplay(0, 690, questionManager);
         addUI(questionDisplay);
 
@@ -48,7 +54,8 @@ public class GameScene extends Scene {
         float laneRight = screenWidth * 0.70f;
         float gateWidth = 150f;
         float gateHeight = 80f;
-
+        float centerX = screenWidth / 2;
+        float gap = 100f; 
         // player centered horizontally at bottom
         Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
         addEntity(player);
@@ -56,13 +63,13 @@ public class GameScene extends Scene {
         collidableRegisterable.registerCollidable(player);
 
         // gate A on left lane, centered on lane
-            Gate gateA = new Gate(laneLeft - gateWidth / 2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager);
+        Gate gateA = new Gate(centerX - gateWidth - gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager);
         addEntity(gateA);
         renderRegisterable.registerRenderable(gateA);
         collidableRegisterable.registerCollidable(gateA);
 
         // gate B on right lane, centered on lane
-        Gate gateB = new Gate(laneRight - gateWidth / 2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager);
+        Gate gateB = new Gate(centerX + gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager);
         addEntity(gateB);
         renderRegisterable.registerRenderable(gateB);
         collidableRegisterable.registerCollidable(gateB);

@@ -1,9 +1,13 @@
 package io.github.inf1009_p10_9.entities;
 
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.Texture;
+
 
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
@@ -17,8 +21,22 @@ public class Player extends Entity {
         super(x, y, 32, 32, 10);
         this.color = Color.BLUE;
         this.sfxPlayable = sfxPlayable;
+        
+        loadTexture();
     }
 
+    
+    private void loadTexture() {
+        try {
+            // ✅ Load your player image
+            this.texture = new Texture(Gdx.files.internal("cars/car1_stripe_racer.png"));
+            // Or try: "images/player.png" depending on your folder structure
+        } catch (Exception e) {
+            System.err.println("Failed to load player texture: " + e.getMessage());
+            this.texture = null;  // Will fall back to blue square
+        }
+    }
+    
     @Override
     public void update() {
         // Update bounds to match position
@@ -52,4 +70,12 @@ public class Player extends Entity {
     public Color getColor() {
         return color;
     }
+    
+    public void dispose() {
+        if (texture != null) {
+            texture.dispose();
+        }
+    }
+    
+    
 }

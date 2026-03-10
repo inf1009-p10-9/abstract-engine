@@ -8,7 +8,8 @@ import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.managers.QuestionManager;
+import io.github.inf1009_p10_9.questions.QuestionManager;
+import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.TextLabel;
 
 import com.badlogic.gdx.graphics.Color;
@@ -38,26 +39,28 @@ public class EndScene extends Scene {
     private IInputKeyCheckable inputKeyCheckable;
     private ISceneSwitchable sceneSwitchable;
     private QuestionManager questionManager;
+    private FontManager fontManager;
 
     public EndScene(IEntityRegisterable entityRegisterable,
-                    IUIDisplayable uiDisplayable,
-                    ICollidableRegisterable collidableRegisterable,
-                    IRenderRegisterable renderRegisterable,
-                    IMusicPlayable musicPlayable,
-
-                    IInputKeyCheckable inputKeyCheckable,
-                    ISceneSwitchable sceneSwitchable,
-                    QuestionManager questionManager) {
-        super("EndScene",
-              entityRegisterable,
-              uiDisplayable,
-              collidableRegisterable,
-              renderRegisterable,
-              musicPlayable);
-        this.inputKeyCheckable = inputKeyCheckable;
-        this.sceneSwitchable = sceneSwitchable;
-        this.questionManager = questionManager;
-    }
+            IUIDisplayable uiDisplayable,
+            ICollidableRegisterable collidableRegisterable,
+            IRenderRegisterable renderRegisterable,
+            IMusicPlayable musicPlayable,
+            IInputKeyCheckable inputKeyCheckable,
+            ISceneSwitchable sceneSwitchable,
+            QuestionManager questionManager,
+            FontManager fontManager) {
+			super("EndScene",
+			      entityRegisterable,
+			      uiDisplayable,
+			      collidableRegisterable,
+			      renderRegisterable,
+			      musicPlayable);
+			this.inputKeyCheckable = inputKeyCheckable;
+			this.sceneSwitchable = sceneSwitchable;
+			this.questionManager = questionManager;
+			this.fontManager = fontManager;
+			}
 
 
     @Override

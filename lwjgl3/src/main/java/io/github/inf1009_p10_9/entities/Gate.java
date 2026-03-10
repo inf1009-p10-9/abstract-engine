@@ -3,7 +3,7 @@ package io.github.inf1009_p10_9.entities;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.managers.OutputManager;
-import io.github.inf1009_p10_9.managers.QuestionManager;
+import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.questions.Question;
 
 import com.badlogic.gdx.Gdx;

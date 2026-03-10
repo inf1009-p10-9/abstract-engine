@@ -1,3 +1,13 @@
+cars/car1_stripe_racer.png
+cars/car2_gray_supercar.png
+cars/car3_dark_coupe.png
+cars/car4_yellow_supercar.png
+cars/car5_white_widebody.png
+cars/car6_gray_lowrider.png
+cars/car7_orange_hypercar.png
+cars/car8_blue_supercar.png
+cars/cars.png
+fonts/Fredoka.ttf
 libgdx.png
 music/Super Mario Bros. medley.mp3
 sound/correct.mp3

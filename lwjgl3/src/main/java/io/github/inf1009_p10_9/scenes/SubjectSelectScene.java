@@ -7,7 +7,8 @@ import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.managers.QuestionManager;
+import io.github.inf1009_p10_9.questions.QuestionManager;
+import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.TextLabel;
 
 import com.badlogic.gdx.Gdx;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.Input.Keys;
 public class SubjectSelectScene extends Scene {
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
+    private final FontManager fontManager;
 
     private TextLabel titleLabel;
 
@@ -61,24 +63,25 @@ public class SubjectSelectScene extends Scene {
     private IInputKeyCheckable inputKeyCheckable;
 
     public SubjectSelectScene(IEntityRegisterable entityRegisterable,
-                              IUIDisplayable uiDisplayable,
-                              ICollidableRegisterable collidableRegisterable,
-                              IRenderRegisterable renderRegisterable,
-                              IMusicPlayable musicPlayable,
-
-                              IInputKeyCheckable inputKeyCheckable,
-                              ISceneSwitchable sceneSwitchable,
-                              QuestionManager questionManager) {
-        super("SubjectSelectScene",
-              entityRegisterable,
-              uiDisplayable,
-              collidableRegisterable,
-              renderRegisterable,
-              musicPlayable);
-        this.inputKeyCheckable = inputKeyCheckable;
-        this.sceneSwitchable = sceneSwitchable;
-        this.questionManager = questionManager;
-    }
+            IUIDisplayable uiDisplayable,
+            ICollidableRegisterable collidableRegisterable,
+            IRenderRegisterable renderRegisterable,
+            IMusicPlayable musicPlayable,
+            IInputKeyCheckable inputKeyCheckable,
+            ISceneSwitchable sceneSwitchable,
+            QuestionManager questionManager,
+            FontManager fontManager) {
+		super("SubjectSelectScene",
+		entityRegisterable,
+		uiDisplayable,
+		collidableRegisterable,
+		renderRegisterable,
+		musicPlayable);
+		this.inputKeyCheckable = inputKeyCheckable;
+		this.sceneSwitchable = sceneSwitchable;
+		this.questionManager = questionManager;
+		this.fontManager = fontManager;
+	}
 
     @Override
     protected void loadEntities() {
@@ -126,13 +129,15 @@ public class SubjectSelectScene extends Scene {
         // instructions split across two lines
         instructionLine1 = new TextLabel(
             "UP/DOWN: switch row          LEFT/RIGHT: change value",
-            centerX - 240, 130);
+            centerX - 240, 130,
+            fontManager.getSmallFont());
         instructionLine1.setColor(Color.LIGHT_GRAY);
         addUI(instructionLine1);
 
         instructionLine2 = new TextLabel(
             "ENTER: confirm          ESC: go back",
-            centerX - 165, 90);
+            centerX - 165, 90,
+            fontManager.getSmallFont());
         instructionLine2.setColor(Color.LIGHT_GRAY);
         addUI(instructionLine2);
 

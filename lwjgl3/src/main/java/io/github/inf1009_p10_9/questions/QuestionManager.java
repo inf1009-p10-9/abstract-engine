@@ -1,9 +1,8 @@
-package io.github.inf1009_p10_9.managers;
+package io.github.inf1009_p10_9.questions;
 
 import java.util.Collections;
 import java.util.HashMap;
 import io.github.inf1009_p10_9.interfaces.IManager;
-import io.github.inf1009_p10_9.questions.*;
 
 public class QuestionManager implements IManager {
     private static QuestionManager instance;

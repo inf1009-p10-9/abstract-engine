@@ -4,7 +4,8 @@ import io.github.inf1009_p10_9.entities.Gate;
 import io.github.inf1009_p10_9.entities.Road;
 import io.github.inf1009_p10_9.entities.Player;
 import io.github.inf1009_p10_9.interfaces.*;
-import io.github.inf1009_p10_9.managers.QuestionManager;
+import io.github.inf1009_p10_9.questions.QuestionManager;
+import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
 import com.badlogic.gdx.Gdx;
 
@@ -15,28 +16,30 @@ public class GameScene extends Scene {
     private final ISFXPlayable sfxPlayable;
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
+    private final FontManager fontManager;
 
     public GameScene(IEntityRegisterable entityRegisterable,
-                     IUIDisplayable uiDisplayable,
-                     ICollidableRegisterable collidableRegisterable,
-                     IRenderRegisterable renderRegisterable,
-                     IMusicPlayable musicPlayable,
-
-                     IInputKeyCheckable inputKeyCheckable,
-                     ISFXPlayable sfxPlayable,
-                     ISceneSwitchable sceneSwitchable,
-                     QuestionManager questionManager) {
-        super("GameScene",
-              entityRegisterable,
-              uiDisplayable,
-              collidableRegisterable,
-              renderRegisterable,
-              musicPlayable);
-        this.inputKeyCheckable = inputKeyCheckable;
-        this.sfxPlayable = sfxPlayable;
-        this.sceneSwitchable = sceneSwitchable;
-        this.questionManager = questionManager;
-    }
+            IUIDisplayable uiDisplayable,
+            ICollidableRegisterable collidableRegisterable,
+            IRenderRegisterable renderRegisterable,
+            IMusicPlayable musicPlayable,
+            IInputKeyCheckable inputKeyCheckable,
+            ISFXPlayable sfxPlayable,
+            ISceneSwitchable sceneSwitchable,
+            QuestionManager questionManager,
+            FontManager fontManager) {
+			super("GameScene",
+			     entityRegisterable,
+			     uiDisplayable,
+			     collidableRegisterable,
+			     renderRegisterable,
+			     musicPlayable);
+			this.inputKeyCheckable = inputKeyCheckable;
+			this.sfxPlayable = sfxPlayable;
+			this.sceneSwitchable = sceneSwitchable;
+			this.questionManager = questionManager;
+			this.fontManager = fontManager;
+			}
 
     @Override
     protected void loadEntities() {
@@ -45,7 +48,7 @@ public class GameScene extends Scene {
         addEntity(road);
         renderRegisterable.registerRenderable(road);
         
-        questionDisplay = new QuestionDisplay(0, 690, questionManager);
+        questionDisplay = new QuestionDisplay(0, 690, questionManager, fontManager.getLargeFont());
         addUI(questionDisplay);
 
         float screenWidth = Gdx.graphics.getWidth();

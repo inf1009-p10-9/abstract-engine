@@ -8,6 +8,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 
 import io.github.inf1009_p10_9.interfaces.IManager;
 import io.github.inf1009_p10_9.managers.*;
+import io.github.inf1009_p10_9.questions.QuestionManager;
 
 public class GameMaster extends ApplicationAdapter {
 

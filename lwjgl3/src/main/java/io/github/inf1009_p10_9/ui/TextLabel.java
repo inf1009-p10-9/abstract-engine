@@ -9,22 +9,34 @@ public class TextLabel extends UIElement {
     private String text;
     private BitmapFont font;
     private Color color;
+    private boolean ownsFont;
 
+    // default constructor - creates its own BitmapFont (fallback only)
     public TextLabel(String text) {
         super(0, 0);
         this.text = text;
         this.font = new BitmapFont();
         this.color = Color.WHITE;
+        this.ownsFont = true;
     }
 
+    // position constructor - creates its own BitmapFont (fallback only)
     public TextLabel(String text, float x, float y) {
         super(x, y);
         this.text = text;
         this.font = new BitmapFont();
+        this.font.getData().setScale(2f);
         this.color = Color.WHITE;
+        this.ownsFont = true;
+    }
 
-        // Make font bigger
-        font.getData().setScale(2f);
+    // preferred constructor - uses a shared font from FontManager
+    public TextLabel(String text, float x, float y, BitmapFont sharedFont) {
+        super(x, y);
+        this.text = text;
+        this.font = sharedFont;
+        this.color = Color.WHITE;
+        this.ownsFont = false; // FontManager owns this font, don't dispose it
     }
 
     @Override
@@ -32,16 +44,13 @@ public class TextLabel extends UIElement {
         if (!visible) {
             return;
         }
-
-        // Text draws itself using BitmapFont with SpriteBatch
         font.setColor(color);
         font.draw(batch, text, x, y);
     }
 
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
-        // TextLabel doesn't need shape rendering
-        // This method can be empty since text is drawn with SpriteBatch
+        // no shapes needed for text
     }
 
     public void setText(String text) {
@@ -53,14 +62,15 @@ public class TextLabel extends UIElement {
     }
 
     public void setFont(BitmapFont font) {
-        if (this.font != null && this.font != font) {
+        if (this.ownsFont && this.font != null && this.font != font) {
             this.font.dispose();
         }
         this.font = font;
+        this.ownsFont = false;
     }
 
     public void dispose() {
-        if (font != null) {
+        if (ownsFont && font != null) {
             font.dispose();
         }
     }

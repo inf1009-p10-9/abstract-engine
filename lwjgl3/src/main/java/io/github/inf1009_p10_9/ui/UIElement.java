@@ -40,4 +40,9 @@ public abstract class UIElement implements IRenderable {
         this.x = x;
         this.y = y;
     }
+    public float getX() { return x; }
+    public float getY() { return y; }
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
+    }
 }

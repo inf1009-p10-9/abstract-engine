@@ -27,6 +27,8 @@ public class OutputManager implements IManager,
 
     private BGManager bgManager;
     private SFXManager sfxManager;
+    
+    private float bgR = 0, bgG = 0, bgB = 0; // default black
 
     private OutputManager() {
         // Initialize audio managers with a shared speaker
@@ -115,6 +117,11 @@ public class OutputManager implements IManager,
         sfxManager.playSound(soundFile);
     }
 
+    public void setBackgroundColor(float r, float g, float b) {
+        bgR = r;
+        bgG = g;
+        bgB = b;
+    }
 
     //coordinates rendering but delegates actual drawing to entities
     public void render() {
@@ -122,7 +129,7 @@ public class OutputManager implements IManager,
             return;
         }
 
-        Gdx.gl.glClearColor(0, 0, 0, 1); // Black background
+        Gdx.gl.glClearColor(bgR, bgG, bgB, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Combine all renderables (entities + UI) and sort by z-index

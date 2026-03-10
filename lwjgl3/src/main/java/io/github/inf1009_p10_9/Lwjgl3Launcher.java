@@ -7,6 +7,8 @@ import io.github.inf1009_p10_9.movement.*;
 import io.github.inf1009_p10_9.input.*;
 import io.github.inf1009_p10_9.scenes.*;
 import io.github.inf1009_p10_9.collision.*;
+import io.github.inf1009_p10_9.questions.QuestionManager;
+import io.github.inf1009_p10_9.ui.FontManager;
 
 public class Lwjgl3Launcher {
     public static void main(String[] args) {
@@ -30,6 +32,7 @@ public class Lwjgl3Launcher {
 
     static class GameApplication extends GameMaster {
         private final QuestionManager questionManager;
+        private final FontManager fontManager;
 
         // COMPOSITION ROOT - Creates ALL dependencies
         public GameApplication() {
@@ -42,6 +45,8 @@ public class Lwjgl3Launcher {
                   OutputManager.getInstance());
             this.questionManager = QuestionManager.getInstance();
             this.managers.add(this.questionManager);
+            this.fontManager = FontManager.getInstance();
+            this.managers.add(this.fontManager);
         }
 
         @Override
@@ -74,7 +79,9 @@ public class Lwjgl3Launcher {
                 outputManager.getBGManager(),   // as IMusicPlayable
 
                 inputManager,                   // as IInputKeyCheckable
-                sceneManager                    // as ISceneSwitchable
+                sceneManager,                    // as ISceneSwitchable
+                
+                fontManager
             ));
 
             sceneManager.addScene(new MidScene(
@@ -110,7 +117,8 @@ public class Lwjgl3Launcher {
 
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager,                   // as ISceneSwitchable
-                questionManager                 // as QuestionManager (#TODO: Create interface)
+                questionManager,                 // as QuestionManager (#TODO: Create interface)
+                fontManager
             ));
 
             sceneManager.addScene(new GameScene(
@@ -123,7 +131,8 @@ public class Lwjgl3Launcher {
                 inputManager,                   // as IInputKeyCheckable
                 outputManager.getSFXManager(),  // as ISFXPlayable
                 sceneManager,                   // as ISceneSwitchable
-                questionManager                 // as QuestionManager (#TODO: Create interface)
+                questionManager,                 // as QuestionManager (#TODO: Create interface)
+                fontManager
             ));
 
             sceneManager.addScene(new SubjectSelectScene(
@@ -135,7 +144,8 @@ public class Lwjgl3Launcher {
 
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager,                   // as ISceneSwitchable
-                questionManager                 // as QuestionManager (#TODO: Create interface)
+                questionManager,                 // as QuestionManager (#TODO: Create interface)
+                fontManager
             ));
 
             // Start with first scene

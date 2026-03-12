@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 // a gate that scrolls down the screen displaying one answer option (A or B).
 // when the player collides with it, it checks the answer, flashes a result color, then resets.
+// collisions are ignored briefly after spawning to prevent instant triggers when gates reappear at the top.
 // #TODO: refactor QuestionManager reference to use an interface
 public class Gate extends Entity implements IRenderable, ICollidable {
     private final QuestionManager questionManager;
@@ -26,6 +27,10 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private float flashTimer = 0;
     private boolean needsReset = false;
     private static final float FLASH_DURATION = 1.0f;
+
+    // immunity period after spawning at the top — prevents instant collision before gate scrolls into view
+    private float spawnImmunityTimer = 0;
+    private static final float SPAWN_IMMUNITY_DURATION = 1.5f;
 
     private static final float SPEED = 60f;
 
@@ -55,6 +60,11 @@ public class Gate extends Entity implements IRenderable, ICollidable {
         }
 
         bounds.setPosition(position.x, position.y);
+
+        // count down spawn immunity so collision activates once the gate is visible on screen
+        if (spawnImmunityTimer > 0) {
+            spawnImmunityTimer -= Gdx.graphics.getDeltaTime();
+        }
 
         // count down flash timer, then advance the question and reposition
         if (flashTimer > 0) {
@@ -94,7 +104,12 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         if (other instanceof Player) {
-            // ignore repeated collisions while already waiting to reset
+            // ignore collision while gate is still spawning in from the top
+            if (spawnImmunityTimer > 0) {
+                return;
+            }
+
+            // ignore repeated collisions while already flashing a result
             if (needsReset) {
                 return;
             }
@@ -123,6 +138,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     }
 
     // picks a random side for this gate and sends the partner to the opposite side
+    // resets spawn immunity so the gate cannot be triggered immediately after reappearing
     public void reset() {
         boolean goLeft = Math.random() < 0.5;
 
@@ -134,6 +150,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
         position.y = Gdx.graphics.getHeight();
         needsReset = false;
+        spawnImmunityTimer = SPAWN_IMMUNITY_DURATION;
 
         if (partner != null) {
             partner.resetToSide(!goLeft);
@@ -141,6 +158,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     }
 
     // positions this gate on the given side without triggering a partner reset
+    // resets spawn immunity so the gate cannot be triggered immediately after reappearing
     public void resetToSide(boolean goLeft) {
         if (goLeft) {
             position.x = Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
@@ -150,6 +168,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
         position.y = Gdx.graphics.getHeight();
         needsReset = false;
+        spawnImmunityTimer = SPAWN_IMMUNITY_DURATION;
     }
 
     public void setPartner(Gate partner) {

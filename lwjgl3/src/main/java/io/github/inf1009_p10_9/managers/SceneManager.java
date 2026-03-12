@@ -6,9 +6,11 @@ import io.github.inf1009_p10_9.interfaces.IManager;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.scenes.Scene;
 
+// singleton that owns all registered scenes and handles switching between them
 public class SceneManager implements IManager, ISceneSwitchable {
     private static SceneManager instance;
 
+    // all scenes keyed by name, e.g. "StartScene", "GameScene"
     private ObjectMap<String, Scene> scenes = new ObjectMap<>();
     private Scene currentScene;
 
@@ -42,6 +44,7 @@ public class SceneManager implements IManager, ISceneSwitchable {
         scenes.put(scene.getName(), scene);
     }
 
+    // unloads the current scene and loads the named one, logs an error if the name is not found
     @Override
     public void switchScene(String sceneName) {
         Scene newScene = scenes.get(sceneName);
@@ -51,12 +54,10 @@ public class SceneManager implements IManager, ISceneSwitchable {
             return;
         }
 
-        // Unload current scene
         if (currentScene != null) {
             currentScene.unload();
         }
 
-        // Load new scene
         currentScene = newScene;
         currentScene.load();
     }

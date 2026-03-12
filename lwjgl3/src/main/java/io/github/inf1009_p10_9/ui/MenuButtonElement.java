@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// a colored rectangle used as a button background, switches color when highlighted
 public class MenuButtonElement extends UIElement {
 
     private float width;
@@ -19,7 +20,7 @@ public class MenuButtonElement extends UIElement {
         this.color = color;
         this.highlightColor = highlightColor;
         this.highlighted = false;
-        this.zIndex = 50; // behind text labels (zIndex 100) but above background
+        this.zIndex = 50; // behind text labels but above the background
     }
 
     public void setHighlighted(boolean highlighted) {
@@ -28,7 +29,7 @@ public class MenuButtonElement extends UIElement {
 
     @Override
     public void render(SpriteBatch batch) {
-        // buttons are shapes only
+        // button is shapes only
     }
 
     @Override
@@ -41,10 +42,6 @@ public class MenuButtonElement extends UIElement {
             shapeRenderer.setColor(color);
         }
 
-        // draw filled rectangle as button background
         shapeRenderer.rect(x, y, width, height);
-
-        // draw slightly darker border by drawing a smaller rect on top
-        // this is done by the batch in render() since ShapeRenderer cant stack easily
     }
 }

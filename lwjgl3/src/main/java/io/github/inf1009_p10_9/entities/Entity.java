@@ -11,9 +11,10 @@ import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IPositionable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 
+// base class for all game entities, handles position, bounds, texture, and z-ordering
 public abstract class Entity implements IPositionable,
                                         IRenderable,
-                                        ICollidable  {
+                                        ICollidable {
 
     protected String id;
     protected Vector2 position;
@@ -25,6 +26,7 @@ public abstract class Entity implements IPositionable,
     protected float height;
     protected int zIndex;
 
+    // constructors with increasing specificity, all delegate to the full version
     public Entity() {
         this(0, 0);
     }
@@ -50,19 +52,15 @@ public abstract class Entity implements IPositionable,
 
     public abstract void update();
 
+    // draws the texture if one is set, otherwise subclasses handle drawing in renderShapes()
     @Override
     public void render(SpriteBatch spriteBatch) {
-        // Draw texture if available
-        // If no texture, shape will be drawn in renderShapes() instead
         if (texture != null) {
-            spriteBatch.draw(texture,
-                             position.x,
-                             position.y,
-                             width,
-                             height);
+            spriteBatch.draw(texture, position.x, position.y, width, height);
         }
     }
 
+    // getters and setters
     public String getId() {
         return id;
     }

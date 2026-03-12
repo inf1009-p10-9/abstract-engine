@@ -14,8 +14,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
+// the main menu screen, showing the title, animated background elements, and navigation buttons
 public class StartScene extends Scene {
 
+    // ui elements
     private TitleElement titleElement;
     private TitleCarElement titleCar;
     private TextLabel[] menuOptionLabels;
@@ -25,16 +27,21 @@ public class StartScene extends Scene {
     private CarElement grassCar;
     private String[] menuOptions = { "Level Selection", "Settings", "Quit Game" };
 
+    // menu navigation state
     private int highlightedIndex = 0;
     private boolean upDownPressed = false;
     private boolean enterPressed = false;
     private float sceneLoadTime = 0;
-    private float titleBounceTimer = 0;
 
-    private static final float BUTTON_WIDTH = 320f;
-    private static final float BUTTON_HEIGHT = 50f;
+    // animation timers
+    private float titleBounceTimer = 0;
     private float arrowBounceTimer = 0;
 
+    // button sizing
+    private static final float BUTTON_WIDTH = 320f;
+    private static final float BUTTON_HEIGHT = 50f;
+
+    // button colors, one per menu option, plus highlight and text states
     private static final Color[] BUTTON_COLORS = {
         new Color(0.2f, 0.6f, 0.9f, 0.85f),
         new Color(0.6f, 0.3f, 0.9f, 0.85f),
@@ -45,6 +52,7 @@ public class StartScene extends Scene {
     private static final Color HIGHLIGHTED_COLOR = new Color(0.1f, 0.1f, 0.1f, 1f);
     private static final Color ARROW_COLOR = Color.WHITE;
 
+    // external dependencies injected via constructor
     private IInputKeyCheckable inputKeyCheckable;
     private ISceneSwitchable sceneSwitchable;
     private final FontManager fontManager;
@@ -68,6 +76,7 @@ public class StartScene extends Scene {
         this.fontManager = fontManager;
     }
 
+    // builds and registers all visual elements for the scene
     @Override
     protected void loadEntities() {
         float screenWidth = Gdx.graphics.getWidth();
@@ -100,7 +109,7 @@ public class StartScene extends Scene {
         titleElement = new TitleElement("DRIVE AND LEARN", fontManager.getLargeFont(), Color.GREEN);
         addUI(titleElement);
 
-        // small car next to title — positioned just to the right of the title
+        // small car next to title, positioned just to the right of it
         GlyphLayout layout = new GlyphLayout(fontManager.getLargeFont(), "DRIVE AND LEARN");
         float titleRightEdge = (screenWidth + layout.width) / 2;
         titleCar = new TitleCarElement(
@@ -110,7 +119,7 @@ public class StartScene extends Scene {
         	);
         addUI(titleCar);
 
-        // menu buttons and labels
+        // menu buttons and labels, spaced evenly downward from startY
         menuOptionLabels = new TextLabel[menuOptions.length];
         arrowIndicators = new TextLabel[menuOptions.length];
         menuButtons = new MenuButtonElement[menuOptions.length];
@@ -129,8 +138,9 @@ public class StartScene extends Scene {
                 BUTTON_COLORS[i], BUTTON_HIGHLIGHT_COLOR);
             addUI(menuButtons[i]);
 
+            // arrow sits to the left of the button, only visible on the highlighted option
             float buttonLeftEdge = centerX - BUTTON_WIDTH / 2;
-            float arrowX = buttonLeftEdge - 50; // 50px clear gap to the left of button
+            float arrowX = buttonLeftEdge - 50;
 
             arrowIndicators[i] = new TextLabel(">>", arrowX, startY - (i * spacingY),
                                                fontManager.getMediumFont());
@@ -148,6 +158,7 @@ public class StartScene extends Scene {
         System.out.println("StartScene loaded");
     }
 
+    // resets scene state and starts background music on each visit
     @Override
     public void load() {
         super.load();
@@ -164,24 +175,24 @@ public class StartScene extends Scene {
         float delta = Gdx.graphics.getDeltaTime();
         sceneLoadTime += delta;
 
-        // animate clouds
+        // animate background elements
         for (CloudElement cloud : clouds) {
             cloud.update(delta);
         }
-
-        // animate grass car
         grassCar.update(delta);
 
-        // bounce title and keep title car aligned to it
+        // bounce title vertically and keep the title car glued to it
         titleBounceTimer += delta;
         float bounceOffset = (float) Math.sin(titleBounceTimer * 2.5f) * 10f;
         titleElement.setY(titleElement.getBaseY() + bounceOffset);
         titleCar.setY(titleElement.getBaseY() + bounceOffset - 35);
 
+        // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
+        // move the selection up or down, only triggers once per press
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
@@ -197,6 +208,7 @@ public class StartScene extends Scene {
                     highlightedIndex--;
                 }
 
+                // wrap around at the top and bottom
                 if (highlightedIndex < 0) {
                     highlightedIndex = menuOptions.length - 1;
                 }
@@ -210,6 +222,7 @@ public class StartScene extends Scene {
             upDownPressed = false;
         }
 
+        // confirm selection on enter
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -218,16 +231,15 @@ public class StartScene extends Scene {
         } else {
             enterPressed = false;
         }
-        
+
+        // animate the arrow next to the currently highlighted option
         float buttonLeftEdge = Gdx.graphics.getWidth() / 2 - BUTTON_WIDTH / 2;
         float arrowBaseX = buttonLeftEdge - 50;
-     // animate arrow bounce
         arrowBounceTimer += delta;
         float arrowBounce = (float) Math.sin(arrowBounceTimer * 6f) * 6f; // fast horizontal bounce
 
         for (int i = 0; i < arrowIndicators.length; i++) {
             if (i == highlightedIndex) {
-                // recalculate base X from menu option label position and apply bounce
                 GlyphLayout layout = new GlyphLayout(fontManager.getMediumFont(), menuOptions[i]);
                 float optionX = Gdx.graphics.getWidth() / 2 - layout.width / 2;
                 arrowIndicators[i].setPosition(arrowBaseX + arrowBounce, arrowIndicators[i].getY());
@@ -235,6 +247,7 @@ public class StartScene extends Scene {
         }
     }
 
+    // refreshes colors, arrow visibility, and button highlight state to match the current selection
     private void updateHighlight() {
         GlyphLayout layout = new GlyphLayout();
         float centerX = Gdx.graphics.getWidth() / 2;
@@ -248,7 +261,7 @@ public class StartScene extends Scene {
             if (i == highlightedIndex) {
                 menuOptionLabels[i].setColor(HIGHLIGHTED_COLOR);
                 arrowIndicators[i].setVisible(true);
-                arrowIndicators[i].setColor(new Color(1f, 0.9f, 0.1f, 1f)); // bright yellow
+                arrowIndicators[i].setColor(new Color(1f, 0.9f, 0.1f, 1f));
                 menuButtons[i].setHighlighted(true);
                 arrowBounceTimer = 0; // reset bounce on each new selection
             } else {
@@ -260,6 +273,7 @@ public class StartScene extends Scene {
         }
     }
 
+    // routes the confirmed selection to the appropriate scene or action
     private void handleMenuSelection() {
         String selectedOption = menuOptions[highlightedIndex];
 

@@ -6,15 +6,19 @@ import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.ICollisionStrategy;
 import io.github.inf1009_p10_9.interfaces.IManager;
 
+// singleton that checks for collisions between all registered collidables each frame
 public class CollisionManager implements IManager,
                                          ICollidableRegisterable {
     private static CollisionManager instance;
 
     private Array<ICollidable> collidables = new Array<>();
+
+    // the strategy determines how collision bounds are tested, swappable at runtime
     private ICollisionStrategy collisionStrategy;
 
     private CollisionManager() {}
 
+    // notifies both objects when a collision is detected
     protected void resolveCollision(ICollidable a, ICollidable b) {
         a.onCollision(b);
         b.onCollision(a);
@@ -41,6 +45,7 @@ public class CollisionManager implements IManager,
         collidables.clear();
     }
 
+    // registering and unregistering collidables
     @Override
     public void registerCollidable(ICollidable obj) {
         if (!collidables.contains(obj, true)) {
@@ -57,6 +62,7 @@ public class CollisionManager implements IManager,
         collisionStrategy = strategy;
     }
 
+    // tests each unique pair of collidables, skipping pairs on different collision layers
     public void checkCollisions() {
         if (collisionStrategy == null) {
             return;
@@ -66,7 +72,8 @@ public class CollisionManager implements IManager,
             ICollidable a = collidables.get(i);
             for (int j = i+1; j < collidables.size; j++) {
                 ICollidable b = collidables.get(j);
-                // Check if collision layers allow collision
+
+                // objects on different layers do not collide with each other
                 if (a.getCollisionLayer() != b.getCollisionLayer()) {
                     continue;
                 }

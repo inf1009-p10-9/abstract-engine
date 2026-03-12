@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// a positioned text element. prefer the shared font constructor wherever possible.
 public class TextLabel extends UIElement {
     private String text;
     private BitmapFont font;
     private Color color;
-    private boolean ownsFont;
+    private boolean ownsFont; // tracks whether this label should dispose the font on cleanup
 
-    // default constructor - creates its own BitmapFont (fallback only)
+    // fallback constructor, creates its own BitmapFont at default size
     public TextLabel(String text) {
         super(0, 0);
         this.text = text;
@@ -20,7 +21,7 @@ public class TextLabel extends UIElement {
         this.ownsFont = true;
     }
 
-    // position constructor - creates its own BitmapFont (fallback only)
+    // fallback constructor with position, creates its own BitmapFont scaled up 2x
     public TextLabel(String text, float x, float y) {
         super(x, y);
         this.text = text;
@@ -30,20 +31,18 @@ public class TextLabel extends UIElement {
         this.ownsFont = true;
     }
 
-    // preferred constructor - uses a shared font from FontManager
+    // preferred constructor, uses a shared font from FontManager
     public TextLabel(String text, float x, float y, BitmapFont sharedFont) {
         super(x, y);
         this.text = text;
         this.font = sharedFont;
         this.color = Color.WHITE;
-        this.ownsFont = false; // FontManager owns this font, don't dispose it
+        this.ownsFont = false;
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        if (!visible) {
-            return;
-        }
+        if (!visible) return;
         font.setColor(color);
         font.draw(batch, text, x, y);
     }
@@ -53,6 +52,7 @@ public class TextLabel extends UIElement {
         // no shapes needed for text
     }
 
+    // setters
     public void setText(String text) {
         this.text = text;
     }
@@ -61,6 +61,7 @@ public class TextLabel extends UIElement {
         this.color = color;
     }
 
+    // replaces the font, disposing the old one only if this label owns it
     public void setFont(BitmapFont font) {
         if (this.ownsFont && this.font != null && this.font != font) {
             this.font.dispose();
@@ -69,6 +70,7 @@ public class TextLabel extends UIElement {
         this.ownsFont = false;
     }
 
+    // only disposes the font if this label created it
     public void dispose() {
         if (ownsFont && font != null) {
             font.dispose();

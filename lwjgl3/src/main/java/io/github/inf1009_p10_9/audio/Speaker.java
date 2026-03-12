@@ -5,18 +5,23 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.ObjectMap;
 
+// low-level audio loader shared by BGManager and SFXManager.
+// sounds are cached by file path to avoid reloading the same file multiple times.
 public class Speaker {
     private Music currentMusic;
+
+    // sounds are cached by file path so the same file is only loaded once
     private ObjectMap<String, Sound> loadedSounds;
 
     public Speaker() {
         loadedSounds = new ObjectMap<>();
     }
 
+    // generic hook for audio playback, actual logic is handled by BGManager and SFXManager
     public void playAudio(String audioFile) {
-        // This is generic, specific implementations in BGManager/SFXManager
     }
 
+    // loads and returns a new Music instance each call, caller is responsible for disposing it
     public Music loadMusic(String musicFile) {
         try {
             return Gdx.audio.newMusic(Gdx.files.internal(musicFile));
@@ -26,6 +31,7 @@ public class Speaker {
         }
     }
 
+    // returns a cached Sound if already loaded, otherwise loads and caches it
     public Sound loadSound(String soundFile) {
         if (loadedSounds.containsKey(soundFile)) {
             return loadedSounds.get(soundFile);
@@ -53,6 +59,7 @@ public class Speaker {
         }
     }
 
+    // disposes all loaded audio resources, should be called on shutdown
     public void dispose() {
         if (currentMusic != null) {
             currentMusic.dispose();

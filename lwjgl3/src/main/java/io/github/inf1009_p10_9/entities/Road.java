@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// draws the scrolling road background with grass on the sides, solid lane edges, and a dashed center line
 public class Road extends Entity implements IRenderable {
     private static final float SCROLL_SPEED = 60f;
     private static final float DASH_LENGTH = 30f;
@@ -15,43 +16,40 @@ public class Road extends Entity implements IRenderable {
 
     private float scrollOffset = 0;
 
-    // Dynamic screen dimensions
+    // screen dimensions cached at construction
     private final float gameWidth;
     private final float gameHeight;
-    
-    // Lane positions (matching your gate lanes)
-    private final float laneLeft;      // Center of left lane
-    private final float laneRight;     // Center of right lane
-    private final float laneWidth = 200f;  // Width of each lane
-    
-    // Road boundaries
-    private final float roadLeftEdge;   // Far left edge of road
-    private final float roadRightEdge;  // Far right edge of road
 
-    // Colors
+    // lane centers and width, matched to the gate positions in GameScene
+    private final float laneLeft;
+    private final float laneRight;
+    private final float laneWidth = 200f;
+
+    // outer edges of the full road area
+    private final float roadLeftEdge;
+    private final float roadRightEdge;
+
+    // colors
     private static final Color ASPHALT_GRAY = new Color(0.2f, 0.2f, 0.22f, 1f);
-    private static final Color LINE_WHITE = new Color(0.9f, 0.9f, 0.9f, 1f);
-    private static final Color LINE_YELLOW = new Color(1f, 0.9f, 0.1f, 1f);
-    private static final Color GRASS_GREEN = new Color(0.2f, 0.5f, 0.2f, 1f);
+    private static final Color LINE_WHITE   = new Color(0.9f, 0.9f, 0.9f, 1f);
+    private static final Color LINE_YELLOW  = new Color(1f, 0.9f, 0.1f, 1f);
+    private static final Color GRASS_GREEN  = new Color(0.2f, 0.5f, 0.2f, 1f);
 
     public Road() {
-        // Get actual screen dimensions
-        this.gameWidth = Gdx.graphics.getWidth();
+        this.gameWidth  = Gdx.graphics.getWidth();
         this.gameHeight = Gdx.graphics.getHeight();
-        
-        // Match gate lane positions
-        this.laneLeft = gameWidth * 0.3f;   // 200 (if width = 800)
-        this.laneRight = gameWidth * 0.70f;  // 560 (if width = 800)
-        
-        // Calculate road edges (from leftmost to rightmost lane edge)
-        this.roadLeftEdge = laneLeft - laneWidth / 2;      // Left edge of left lane
-        this.roadRightEdge = laneRight + laneWidth / 2;    // Right edge of right lane
 
-        // Update entity bounds to match screen
+        this.laneLeft  = gameWidth * 0.3f;
+        this.laneRight = gameWidth * 0.70f;
+
+        this.roadLeftEdge  = laneLeft  - laneWidth / 2;
+        this.roadRightEdge = laneRight + laneWidth / 2;
+
         super.position.set(0, 0);
         super.bounds.set(0, 0, gameWidth, gameHeight);
     }
 
+    // advances the scroll offset and wraps it once a full dash cycle has passed
     @Override
     public void update() {
         scrollOffset -= SCROLL_SPEED * Gdx.graphics.getDeltaTime();
@@ -64,38 +62,36 @@ public class Road extends Entity implements IRenderable {
 
     @Override
     public void render(SpriteBatch batch) {
-        // No texture rendering
+        // road is shapes only
     }
 
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
-        //Draw GRASS on far left
+        // grass on the left
         shapeRenderer.setColor(GRASS_GREEN);
         shapeRenderer.rect(0, 0, roadLeftEdge, gameHeight);
 
-        //Draw CONTINUOUS ASPHALT ROAD (both lanes together)
+        // asphalt road covering both lanes
         shapeRenderer.setColor(ASPHALT_GRAY);
         float roadWidth = roadRightEdge - roadLeftEdge;
         shapeRenderer.rect(roadLeftEdge, 0, roadWidth, gameHeight);
 
-        //Draw GRASS on far right
+        // grass on the right
         shapeRenderer.setColor(GRASS_GREEN);
         shapeRenderer.rect(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
 
-        //Draw road edge lines (solid yellow) - ONLY on outer edges
+        // solid yellow lines on the outer road edges
         shapeRenderer.setColor(LINE_YELLOW);
-        shapeRenderer.rectLine(roadLeftEdge, 0, roadLeftEdge, gameHeight, 4);     // Left edge
-        
-        shapeRenderer.rectLine(roadRightEdge, 0, roadRightEdge, gameHeight, 4);   // Right edge
+        shapeRenderer.rectLine(roadLeftEdge,  0, roadLeftEdge,  gameHeight, 4);
+        shapeRenderer.rectLine(roadRightEdge, 0, roadRightEdge, gameHeight, 4);
 
-        //Draw center divider between the two lanes (white dashed)
+        // dashed white center divider between the two lanes
         shapeRenderer.setColor(LINE_WHITE);
-        float centerX = (laneLeft + laneRight) / 2;  // Middle between the two lanes
+        float centerX = (laneLeft + laneRight) / 2;
         drawDashedLine(shapeRenderer, centerX, scrollOffset);
-
-
     }
 
+    // draws a vertical dashed line at x, offset by the current scroll position
     private void drawDashedLine(ShapeRenderer shapeRenderer, float x, float offset) {
         float y = offset;
 
@@ -112,18 +108,16 @@ public class Road extends Entity implements IRenderable {
 
     @Override
     public int getZIndex() {
-        return 0;  // Background layer
+        return 0; // background layer
     }
 
-	@Override
-	public void onCollision(ICollidable other) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onCollision(ICollidable other) {
+        // the road does not participate in collisions
+    }
 
-	@Override
-	public int getCollisionLayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getCollisionLayer() {
+        return 0; // separate layer so nothing collides with the road
+    }
 }

@@ -10,14 +10,17 @@ import io.github.inf1009_p10_9.managers.OutputManager;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.interfaces.*;
 
+// settings screen for adjusting volume and rebinding movement keys
 public class SettingsScene extends Scene {
     private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable sceneSwitchable;
 
+    // ui elements
     private TextLabel titleLabel;
     private TextLabel[] optionLabels;
     private TextLabel[] valueLabels;
 
+    // the list of settings rows shown on screen
     private final String[] options = {
         "Music Volume",
         "SFX Volume",
@@ -28,6 +31,7 @@ public class SettingsScene extends Scene {
         "Back"
     };
 
+    // maps each row to its keybind action name, null means the row is not rebindable
     private final String[] bindActions = {
         null,
         null,
@@ -38,12 +42,15 @@ public class SettingsScene extends Scene {
         null
     };
 
+    // navigation and input state
     private int selectedIndex = 0;
     private boolean upDownPressed = false;
     private boolean leftRightPressed = false;
     private boolean enterPressed = false;
     private boolean escPressed = false;
-    private boolean waitingForRebind = false; 
+
+    // rebinding state, tracks whether we are waiting for a new key to be pressed
+    private boolean waitingForRebind = false;
     private boolean rebindReady = false;
 
     public SettingsScene(
@@ -67,6 +74,7 @@ public class SettingsScene extends Scene {
         titleLabel.setColor(Color.GREEN);
         addUI(titleLabel);
 
+        // build a label pair for each option row
         optionLabels = new TextLabel[options.length];
         valueLabels = new TextLabel[options.length];
 
@@ -87,7 +95,8 @@ public class SettingsScene extends Scene {
     public void update() {
         super.update();
 
-     // Wait until the keys to enter menu are released before accepting the next fresh key press for rebinding
+        // if waiting for a rebind, block until all navigation keys are released first,
+        // then capture the next fresh key press as the new binding
         if (waitingForRebind) {
             if (!rebindReady) {
                 boolean anyBlockedKeyHeld =
@@ -111,7 +120,7 @@ public class SettingsScene extends Scene {
                 return;
             }
 
-         // Capture the next valid key press and save it as the new binding
+            // capture the next valid key press and save it as the new binding
             int pressed = InputManager.getInstance().consumeLastJustPressedKey();
 
             if (pressed != -1
@@ -127,6 +136,7 @@ public class SettingsScene extends Scene {
             return;
         }
 
+        // up/down to move between rows, only triggers once per press
         boolean up = inputKeyCheckable.isKeyPressed(Keys.UP) || inputKeyCheckable.isKeyPressed(Keys.W);
         boolean down = inputKeyCheckable.isKeyPressed(Keys.DOWN) || inputKeyCheckable.isKeyPressed(Keys.S);
 
@@ -142,6 +152,7 @@ public class SettingsScene extends Scene {
             upDownPressed = false;
         }
 
+        // left/right to adjust volume on the first two rows, only triggers once per press
         boolean left = inputKeyCheckable.isKeyPressed(Keys.LEFT) || inputKeyCheckable.isKeyPressed(Keys.A);
         boolean right = inputKeyCheckable.isKeyPressed(Keys.RIGHT) || inputKeyCheckable.isKeyPressed(Keys.D);
 
@@ -155,6 +166,7 @@ public class SettingsScene extends Scene {
             leftRightPressed = false;
         }
 
+        // enter to confirm or start rebinding
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -165,6 +177,7 @@ public class SettingsScene extends Scene {
             enterPressed = false;
         }
 
+        // escape to go back to the main menu
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             if (!escPressed) {
                 escPressed = true;
@@ -175,6 +188,7 @@ public class SettingsScene extends Scene {
         }
     }
 
+    // adjusts music or sfx volume based on which row is selected
     private void handleLeftRight(float delta) {
         SettingsManager settings = SettingsManager.getInstance();
         OutputManager output = OutputManager.getInstance();
@@ -188,7 +202,7 @@ public class SettingsScene extends Scene {
         }
     }
 
- // Start key rebinding mode for the selected movement action
+    // starts key rebinding mode for the selected movement action, or goes back if on the last row
     private void handleEnter() {
         if (selectedIndex >= 2 && selectedIndex <= 5) {
             waitingForRebind = true;
@@ -199,6 +213,7 @@ public class SettingsScene extends Scene {
         }
     }
 
+    // updates label colors and value text to reflect current settings and selection
     private void refreshLabels() {
         SettingsManager settings = SettingsManager.getInstance();
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// a car sprite cut from the shared spritesheet that drives across the screen and wraps around
 public class CarElement extends UIElement {
 
     private TextureRegion carRegion;
@@ -15,6 +16,8 @@ public class CarElement extends UIElement {
     private float carWidth;
     private float carHeight;
 
+    // sheetX/Y and regionWidth/Height define the crop from the spritesheet,
+    // drawWidth/Height define how large it appears on screen
     public CarElement(float x, float y, float speed,
                       int sheetX, int sheetY, int regionWidth, int regionHeight,
                       float drawWidth, float drawHeight) {
@@ -25,11 +28,11 @@ public class CarElement extends UIElement {
         this.carHeight = drawHeight;
         this.zIndex = -30;
 
-        // load sheet and cut out the specific car
         this.sheet = new Texture(Gdx.files.internal("cars/cars.png"));
         this.carRegion = new TextureRegion(sheet, sheetX, sheetY, regionWidth, regionHeight);
     }
 
+    // moves the car forward and wraps it back to the left edge when it goes off screen
     public void update(float delta) {
         x += speed * delta;
         if (x > screenWidth + carWidth) {
@@ -45,7 +48,7 @@ public class CarElement extends UIElement {
 
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
-        // sprite only
+        // sprite only, no shapes
     }
 
     public void dispose() {

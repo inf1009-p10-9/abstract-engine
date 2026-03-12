@@ -3,12 +3,15 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
 
+// singleton that stores player preferences, volume levels and keybindings, across the session
 public class SettingsManager {
     private static SettingsManager instance;
 
+    // volume levels, clamped to 0.0 to 1.0 on write
     private float musicVolume = 0.5f;
     private float sfxVolume = 0.7f;
 
+    // keybindings keyed by action name, e.g. "MOVE_UP", "CONFIRM"
     private final ObjectMap<String, Integer> keybinds = new ObjectMap<>();
 
     private SettingsManager() {
@@ -22,6 +25,7 @@ public class SettingsManager {
         return instance;
     }
 
+    // sets up the default keyboard layout used on first launch
     private void setDefaultKeybinds() {
         keybinds.put("MOVE_UP", Keys.W);
         keybinds.put("MOVE_DOWN", Keys.S);
@@ -37,6 +41,7 @@ public class SettingsManager {
         keybinds.put("BACK", Keys.ESCAPE);
     }
 
+    // getters and setters for volume, setters clamp the value to a valid range
     public float getMusicVolume() {
         return musicVolume;
     }
@@ -53,6 +58,7 @@ public class SettingsManager {
         this.sfxVolume = Math.max(0f, Math.min(1f, sfxVolume));
     }
 
+    // returns the keycode for the given action, or Keys.UNKNOWN if not found
     public int getKeybind(String action) {
         return keybinds.get(action, Keys.UNKNOWN);
     }

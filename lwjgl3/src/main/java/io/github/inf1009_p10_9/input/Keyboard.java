@@ -8,11 +8,12 @@ import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
 import io.github.inf1009_p10_9.managers.SettingsManager;
 
+// polls held keys each frame and moves the player entity using the current keybindings
 public class Keyboard implements IInputListens {
 
     private IMovementCalculatable movementCalculatable;
     private IInputKeyCheckable inputKeyCheckable;
-    private IEntityQueryable entityQueryable;  // Interface injection
+    private IEntityQueryable entityQueryable;
 
     public Keyboard(IMovementCalculatable movementCalculatable,
                     IInputKeyCheckable inputKeyCheckable,
@@ -24,73 +25,53 @@ public class Keyboard implements IInputListens {
 
     @Override
     public void onInput(io.github.inf1009_p10_9.input.Input input) {
-        if (input == null) {
-            return;
-        }
+        // movement is handled in update() by polling, not by reacting to events
     }
 
-    // This method will be called every frame from the game loop
+    // called every frame, finds the player and applies movement for any held movement keys
     public void update() {
-        // Get all entities and find the player
-        com.badlogic.gdx.utils.Array<Entity> entities = entityQueryable.getEntities();  // Uses interface
+        com.badlogic.gdx.utils.Array<Entity> entities = entityQueryable.getEntities();
 
         for (Entity entity : entities) {
-            // Check if this entity is a Player
             if (entity.getClass().getSimpleName().equals("Player")) {
 
-                // Check which keys are currently held down
-                boolean moved = false;
-                
-                // Use the current key bindings from SettingsManager
                 SettingsManager settings = SettingsManager.getInstance();
 
                 if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"))) {
                     movementCalculatable.move(entity, 0);
-                    moved = true;
                 }
 
                 if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"))) {
                     movementCalculatable.move(entity, 1);
-                    moved = true;
                 }
 
                 if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_LEFT"))) {
                     movementCalculatable.move(entity, 2);
-                    moved = true;
                 }
 
                 if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_RIGHT"))) {
                     movementCalculatable.move(entity, 3);
-                    moved = true;
                 }
 
-                /*// Move Up
+                /*
+                // old hardcoded key checks, replaced by keybinding lookup above
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.W) || inputKeyCheckable.isKeyPressed(Input.Keys.UP)) {
-                    movementCalculatable.move(entity, 0); // 0 = up
-                    moved = true;
+                    movementCalculatable.move(entity, 0);
                 }
-
-                // Move Down
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.S) || inputKeyCheckable.isKeyPressed(Input.Keys.DOWN)) {
-                    movementCalculatable.move(entity, 1); // 1 = down
-                    moved = true;
+                    movementCalculatable.move(entity, 1);
                 }
-
-                // Move Left
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.A) || inputKeyCheckable.isKeyPressed(Input.Keys.LEFT)) {
-                    movementCalculatable.move(entity, 2); // 2 = left
-                    moved = true;
+                    movementCalculatable.move(entity, 2);
                 }
-
-                // Move Right
                 if (inputKeyCheckable.isKeyPressed(Input.Keys.D) || inputKeyCheckable.isKeyPressed(Input.Keys.RIGHT)) {
-                    movementCalculatable.move(entity, 3); // 3 = right
-                    moved = true;
-                }*/
+                    movementCalculatable.move(entity, 3);
+                }
+                */
 
-                // Action keys
+                // action keys placeholder
                 //if (inputKeyCheckable.isKeyPressed(Input.Keys.SPACE)) {
-                    // Add action logic here
+                //    // add action logic here
                 //}
             }
         }

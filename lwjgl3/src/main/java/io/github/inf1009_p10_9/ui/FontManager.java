@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import io.github.inf1009_p10_9.interfaces.IManager;
 
+// singleton that generates and owns the shared fonts used across all scenes
 public class FontManager implements IManager {
 
     private static FontManager instance;
 
+    // three sizes covering the main use cases across the game
     private BitmapFont smallFont;   // instructions and small text
     private BitmapFont mediumFont;  // menu options and gate answers
     private BitmapFont largeFont;   // titles and questions
@@ -23,6 +25,7 @@ public class FontManager implements IManager {
         return instance;
     }
 
+    // generates all three fonts from the same ttf file, then disposes the generator
     @Override
     public void initialize() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
@@ -41,7 +44,6 @@ public class FontManager implements IManager {
         largeParams.size = 52;
         largeFont = generator.generateFont(largeParams);
 
-        // generator is no longer needed once fonts are generated
         generator.dispose();
 
         System.out.println("FontManager initialized");
@@ -50,28 +52,16 @@ public class FontManager implements IManager {
     @Override
     public void update() {}
 
+    // disposes all fonts on shutdown, any ui elements using them must not call dispose themselves
     @Override
     public void clear() {
-        if (smallFont != null) {
-            smallFont.dispose();
-        }
-        if (mediumFont != null) {
-            mediumFont.dispose();
-        }
-        if (largeFont != null) {
-            largeFont.dispose();
-        }
+        if (smallFont != null)  smallFont.dispose();
+        if (mediumFont != null) mediumFont.dispose();
+        if (largeFont != null)  largeFont.dispose();
     }
 
-    public BitmapFont getSmallFont() {
-        return smallFont;
-    }
-
-    public BitmapFont getMediumFont() {
-        return mediumFont;
-    }
-
-    public BitmapFont getLargeFont() {
-        return largeFont;
-    }
+    // getters
+    public BitmapFont getSmallFont()  { return smallFont; }
+    public BitmapFont getMediumFont() { return mediumFont; }
+    public BitmapFont getLargeFont()  { return largeFont; }
 }

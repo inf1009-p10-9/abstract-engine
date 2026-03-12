@@ -9,15 +9,19 @@ import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IManager;
 
-
+// singleton that handles keyboard input, tracks key states, and notifies registered listeners each frame
 public class InputManager implements IManager,
                                      InputProcessor,
                                      IInputKeyCheckable {
     private static InputManager instance;
+
+    // current state of every key by keycode
     private IntMap<Boolean> keyStates = new IntMap<>();
     private Array<IInputListens> listeners = new Array<>();
     private Array<IInputListens> peripherals = new Array<>();
     private Input currentInput;
+
+    // holds the most recently pressed key so scenes can consume it for rebinding
     private int lastJustPressedKey = -1;
 
     private InputManager() {}
@@ -28,16 +32,17 @@ public class InputManager implements IManager,
         return instance;
     }
 
+    // registers this manager as the LibGDX input processor
     @Override
     public void initialize() {
         clear();
         Gdx.input.setInputProcessor(this);
     }
 
+    // dispatches the current input event and polls any peripherals that need continuous updates
     @Override
     public void update() {
         processInput();
-     // Update all peripherals that need continuous checking
         for (IInputListens peripheral : peripherals) {
             if (peripheral instanceof Keyboard) {
                 ((Keyboard) peripheral).update();
@@ -61,14 +66,13 @@ public class InputManager implements IManager,
         return keyStates.get(keyCode, false);
     }
 
+    // forwards the current input event to all peripherals and listeners, then clears it
     public void processInput() {
         if (currentInput != null) {
-            // Notify all peripherals
             for (IInputListens peripheral : peripherals) {
                 peripheral.onInput(currentInput);
             }
 
-            // Notify all listeners
             for (IInputListens listener : listeners) {
                 listener.onInput(currentInput);
             }
@@ -76,13 +80,15 @@ public class InputManager implements IManager,
             currentInput = null;
         }
     }
-    
+
+    // returns the last pressed key and resets it, used by settings scene for rebinding
     public int consumeLastJustPressedKey() {
         int key = lastJustPressedKey;
         lastJustPressedKey = -1;
         return key;
     }
-    
+
+    // LibGDX InputProcessor callbacks
     @Override
     public boolean keyDown(int keycode) {
         keyStates.put(keycode, true);
@@ -91,13 +97,14 @@ public class InputManager implements IManager,
         return true;
     }
 
-    /*// InputProcessor methods
+    /*
     @Override
     public boolean keyDown(int keycode) {
         keyStates.put(keycode, true);
         currentInput = new Input(keycode, "KEY_DOWN");
         return true;
-    }*/
+    }
+    */
 
     @Override
     public boolean keyUp(int keycode) {
@@ -136,9 +143,8 @@ public class InputManager implements IManager,
         return false;
     }
 
-	@Override
-	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
 }

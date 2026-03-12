@@ -3,9 +3,10 @@ package io.github.inf1009_p10_9.questions;
 import java.util.List;
 import java.util.ArrayList;
 
+// holds a collection of questions for a specific subject and difficulty pairing
 public class QuestionBank {
-    private String subject;    // e.g. "Math", "English"
-    private String difficulty; // e.g. "Easy", "Hard"
+    private String subject;
+    private String difficulty;
     private List<Question> questions = new ArrayList<>();
 
     public QuestionBank(String subject, String difficulty) {
@@ -13,6 +14,7 @@ public class QuestionBank {
         this.difficulty = difficulty;
     }
 
+    // adding and retrieving questions
     public void addQuestion(Question q) {
         questions.add(q);
     }
@@ -29,6 +31,7 @@ public class QuestionBank {
         return questions;
     }
 
+    // getters
     public String getSubject() {
         return subject;
     }

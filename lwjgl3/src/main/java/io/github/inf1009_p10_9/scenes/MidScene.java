@@ -14,18 +14,25 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Color;
 
+// a transitional scene with a player, enemies, and walls, used between gameplay sections
 public class MidScene extends Scene {
+
+    // ui elements
     private TextLabel titleLabel;
     private TextLabel instructionLabel;
+
+    // input state
     private boolean spacePressed = false;
     private float sceneLoadTime = 0;
 
+    // dependencies
     private IInputKeyCheckable inputKeyCheckable;
     private IMovementCalculatable movementCalculatable;
     private IMovementStrategyRegisterable movementStrategyRegisterable;
     private ISceneSwitchable sceneSwitchable;
     private ISFXPlayable sfxPlayable;
 
+    // how often the ai recalculates enemy movement, in seconds
     private float aiUpdateTimer = 0;
     private static final float AI_UPDATE_INTERVAL = 0.2f;
 
@@ -55,26 +62,22 @@ public class MidScene extends Scene {
 
     @Override
     protected void loadEntities() {
-        // Create scene title
         titleLabel = new TextLabel("MID SCENE", 330, 580);
         titleLabel.setColor(Color.CYAN);
         addUI(titleLabel);
 
-        // Create instruction text
         instructionLabel = new TextLabel("Press SPACE to go to End Scene", 220, 20);
         instructionLabel.setColor(Color.YELLOW);
         addUI(instructionLabel);
 
+        // player, enemy, boundary walls, and a few interior obstacles
         Entity[] entities = {
-            // Player / Enemy
             new Player(400, 300, sfxPlayable),
             new Enemy(500, 300, sfxPlayable),
-            // Walls
             new Wall(0, 568, 800, 32),
             new Wall(0, 0, 800, 32),
             new Wall(0, 0, 32, 600),
             new Wall(768, 0, 32, 600),
-            // Obstacles
             new Wall(200, 200, 100, 32),
             new Wall(500, 400, 64, 64),
             new Wall(300, 450, 150, 32)
@@ -101,18 +104,19 @@ public class MidScene extends Scene {
         float deltaTime = Gdx.graphics.getDeltaTime();
         sceneLoadTime += deltaTime;
 
-        // Only accept input after 0.2 seconds (prevents accidental double-press)
+        // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
+        // periodically update enemy ai targeting
         aiUpdateTimer += deltaTime;
         if (aiUpdateTimer >= AI_UPDATE_INTERVAL) {
             aiUpdateTimer = 0;
 
             Array<Entity> entities = entityRegisterable.getEntities();
 
-            // FIND THE PLAYER FIRST
+            // find the player in the entity list
             Entity player = null;
             for (Entity entity : entities) {
                 if (entity instanceof Player) {
@@ -121,28 +125,25 @@ public class MidScene extends Scene {
                 }
             }
 
-            // IF PLAYER FOUND, MAKE ENEMIES FLEE FROM PLAYER
+            // if the player exists, make all enemies flee from their position
             if (player != null) {
                 Vector2 playerPos = player.getPosition();
 
                 for (Entity entity : entities) {
                     if (entity instanceof Enemy) {
-                        // Get the Enemy's AI movement strategy
                         IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy("Enemy");
 
                         if (strategy instanceof AIMovement) {
-                            // constantly set player's position as target to flee from:
                             ((AIMovement)strategy).setTargetPosition(playerPos);
                         }
 
-                        //Move the enemy (will flee from target)
                         movementCalculatable.move(entity, 0);
                     }
                 }
             }
         }
 
-        // Press SPACE to go to end scene
+        // press space to skip to the end scene
         if (inputKeyCheckable.isKeyPressed(Keys.SPACE)) {
             if (!spacePressed) {
                 spacePressed = true;

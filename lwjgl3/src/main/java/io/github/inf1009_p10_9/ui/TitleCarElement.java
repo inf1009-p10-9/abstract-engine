@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// a small static car sprite shown next to the title, moves with it during the bounce animation
 public class TitleCarElement extends UIElement {
 
     private Texture sheet;
@@ -13,6 +14,8 @@ public class TitleCarElement extends UIElement {
     private float carWidth;
     private float carHeight;
 
+    // sheetX/Y and regionWidth/Height define the crop from the spritesheet,
+    // drawWidth/Height define how large it appears on screen
     public TitleCarElement(float x, float y,
                            int sheetX, int sheetY, int regionWidth, int regionHeight,
                            float drawWidth, float drawHeight) {
@@ -37,7 +40,7 @@ public class TitleCarElement extends UIElement {
 
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
-        // sprite only
+        // sprite only, no shapes
     }
 
     public void dispose() {

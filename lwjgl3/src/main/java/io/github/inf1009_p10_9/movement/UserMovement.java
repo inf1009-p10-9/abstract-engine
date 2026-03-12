@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.inf1009_p10_9.interfaces.IPositionable;
 import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 
+// movement strategy for player-controlled entities, maps a direction integer to positional movement
 public class UserMovement implements IMovementStrategy {
     private float speed;
 
@@ -12,6 +13,7 @@ public class UserMovement implements IMovementStrategy {
         this.speed = speed;
     }
 
+    // moveDirection: 0 = up, 1 = down, 2 = left, 3 = right
     public void calculateMovement(IPositionable object, int moveDirection) {
         if (object == null) {
             return;
@@ -20,26 +22,25 @@ public class UserMovement implements IMovementStrategy {
         Vector2 currentPos = object.getPosition();
         Vector2 newPos = new Vector2(currentPos);
 
+        // multiply by delta so movement is consistent regardless of frame rate
         float delta = Gdx.graphics.getDeltaTime();
-        float moveDistance = speed * delta; //calculate considering delta: consistent across all fps
+        float moveDistance = speed * delta;
 
-        //Calculate new position based on direction
         switch (moveDirection) {
-            case 0: //Up
+            case 0: // up
                 newPos.y += moveDistance;
                 break;
-            case 1: //Down
+            case 1: // down
                 newPos.y -= moveDistance;
                 break;
-            case 2: //Left
+            case 2: // left
                 newPos.x -= moveDistance;
                 break;
-            case 3: //Right
+            case 3: // right
                 newPos.x += moveDistance;
                 break;
         }
 
-        //Apply movement through IPositionable
         object.setPosition(newPos);
     }
 }

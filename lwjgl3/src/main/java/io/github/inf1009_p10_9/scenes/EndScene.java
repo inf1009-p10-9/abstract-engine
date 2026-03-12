@@ -4,7 +4,6 @@ import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
-import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
@@ -16,8 +15,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-
+// shown after the player finishes all questions, displays their score and offers next steps
 public class EndScene extends Scene {
+
+    // ui elements
     private TextLabel titleLabel;
     private TextLabel subjectLabel;
     private TextLabel scoreLabel;
@@ -26,16 +27,17 @@ public class EndScene extends Scene {
     private TextLabel[] arrowIndicators;
     private String[] menuOptions = { "Restart", "Main Menu", "Quit Game" };
 
+    // navigation state
     private int highlightedIndex = 0;
-
     private boolean upDownPressed = false;
     private boolean enterPressed = false;
     private float sceneLoadTime = 0;
 
-
+    // colors
     private static final Color NORMAL_COLOR = Color.WHITE;
     private static final Color HIGHLIGHTED_COLOR = Color.YELLOW;
 
+    // dependencies
     private IInputKeyCheckable inputKeyCheckable;
     private ISceneSwitchable sceneSwitchable;
     private QuestionManager questionManager;
@@ -62,7 +64,6 @@ public class EndScene extends Scene {
 			this.fontManager = fontManager;
 			}
 
-
     @Override
     protected void loadEntities() {
         float screenWidth = Gdx.graphics.getWidth();
@@ -72,6 +73,7 @@ public class EndScene extends Scene {
         titleLabel.setColor(Color.YELLOW);
         addUI(titleLabel);
 
+        // score display, text is populated in load() once results are available
         subjectLabel = new TextLabel("", centerX - 100, 430);
         subjectLabel.setColor(Color.CYAN);
         addUI(subjectLabel);
@@ -80,6 +82,7 @@ public class EndScene extends Scene {
         scoreLabel.setColor(Color.WHITE);
         addUI(scoreLabel);
 
+        // menu options with arrow indicators
         menuOptionLabels = new TextLabel[menuOptions.length];
         arrowIndicators = new TextLabel[menuOptions.length];
 
@@ -101,6 +104,7 @@ public class EndScene extends Scene {
         System.out.println("EndScene loaded");
     }
 
+    // resets navigation state and fills in the score from the just-finished game
     @Override
     public void load() {
         super.load();
@@ -109,7 +113,6 @@ public class EndScene extends Scene {
         enterPressed = false;
         upDownPressed = false;
 
-        // update score and subject labels with current game results
         String subject = questionManager.getActiveSubject();
         String difficulty = questionManager.getActiveDifficulty();
         int score = questionManager.getScore();
@@ -125,11 +128,12 @@ public class EndScene extends Scene {
 
         sceneLoadTime += Gdx.graphics.getDeltaTime();
 
+        // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        // navigate with UP/DOWN or W/S
+        // navigate up/down, only triggers once per press
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
@@ -145,7 +149,7 @@ public class EndScene extends Scene {
                     highlightedIndex--;
                 }
 
-                // wrap around
+                // wrap around at the top and bottom
                 if (highlightedIndex < 0) {
                     highlightedIndex = menuOptions.length - 1;
                 }
@@ -159,7 +163,7 @@ public class EndScene extends Scene {
             upDownPressed = false;
         }
 
-        // confirm with ENTER
+        // confirm selection
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -170,6 +174,7 @@ public class EndScene extends Scene {
         }
     }
 
+    // shows the arrow and highlights the currently selected option
     private void updateHighlight() {
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == highlightedIndex) {
@@ -182,6 +187,7 @@ public class EndScene extends Scene {
         }
     }
 
+    // routes the confirmed selection to the appropriate scene or action
     private void handleMenuSelection() {
         String selectedOption = menuOptions[highlightedIndex];
 

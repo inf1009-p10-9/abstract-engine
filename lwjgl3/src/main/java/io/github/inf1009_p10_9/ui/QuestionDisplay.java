@@ -10,18 +10,21 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Gdx;
 
+// draws the current question text centered at the top of the game screen
+// #TODO: refactor QuestionManager to interface
 public class QuestionDisplay extends UIElement {
     private final QuestionManager questionManager;
     private BitmapFont font;
 
-    // #TODO: Refactor QuestionManager to interface
+    // font is shared from FontManager, this class must not dispose it
     public QuestionDisplay(float x, float y, QuestionManager questionManager, BitmapFont sharedFont) {
         super(x, y);
-        this.font = sharedFont; // font owned by FontManager, not disposed here
+        this.font = sharedFont;
         this.zIndex = 100;
         this.questionManager = questionManager;
     }
 
+    // fetches the current question each frame and draws it centered horizontally
     @Override
     public void render(SpriteBatch batch) {
         if (!visible) return;

@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9.audio;
 import com.badlogic.gdx.audio.Music;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 
+// manages background music playback, one track at a time
 public class BGManager implements IMusicPlayable {
     private String currentMusic;
     private float volume;
@@ -14,20 +15,12 @@ public class BGManager implements IMusicPlayable {
         this.volume = 0.5f;
     }
 
-    /*public void playMusic(String musicFile) {
-        System.out.println("Trying to play music: " + musicFile);
-        System.out.println("Playing: " + musicFile);
-    }*/
-
-
-
+    // stops any currently playing track, then loads and starts the new one on loop
     public void playMusic(String musicFile) {
-        // Stop current music if playing
         if (musicInstance != null) {
             stopMusic();
         }
 
-        // Load and play new music
         musicInstance = speaker.loadMusic(musicFile);
         if (musicInstance != null) {
             musicInstance.setVolume(volume);
@@ -37,6 +30,7 @@ public class BGManager implements IMusicPlayable {
         }
     }
 
+    // stops and disposes the current track
     public void stopMusic() {
         if (musicInstance != null) {
             musicInstance.stop();
@@ -46,17 +40,18 @@ public class BGManager implements IMusicPlayable {
         currentMusic = null;
     }
 
-   public void setVolume(float volume) {
-        this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
-       if (musicInstance != null) {
-           musicInstance.setVolume(this.volume);
-       }
+    // clamps volume to 0-1 and applies it to the current track if one is playing
+    public void setVolume(float volume) {
+        this.volume = Math.max(0f, Math.min(1f, volume));
+        if (musicInstance != null) {
+            musicInstance.setVolume(this.volume);
+        }
     }
-    
+
     public float getVolume() {
         return volume;
     }
-//
+
 //    public String getCurrentMusic() {
 //        return currentMusic;
 //    }
@@ -72,6 +67,4 @@ public class BGManager implements IMusicPlayable {
 //            musicInstance.play();
 //        }
 //    }
-
 }
-

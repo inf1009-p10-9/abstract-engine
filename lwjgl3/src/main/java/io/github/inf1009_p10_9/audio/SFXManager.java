@@ -4,8 +4,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.LongMap;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
+// manages sound effect playback, tracking active sounds by their LibGDX sound id
 public class SFXManager implements ISFXPlayable {
-    private LongMap<String> activeSounds; // Maps sound IDs to sound file names
+
+    // maps sound ids returned by play() back to their file names
+    private LongMap<String> activeSounds;
     private float volume;
     private Speaker speaker;
 
@@ -15,6 +18,7 @@ public class SFXManager implements ISFXPlayable {
         this.volume = 0.7f;
     }
 
+    // loads the sound via Speaker (cached) and plays it at the current volume
     public void playSound(String soundFile) {
         Sound sound = speaker.loadSound(soundFile);
         if (sound != null) {
@@ -38,25 +42,25 @@ public class SFXManager implements ISFXPlayable {
 //            System.err.println("Invalid sound ID: " + soundId);
 //        }
 //    }
-//
+
+    // clamps volume to 0-1, applies to future sounds only
     public void setVolume(float volume) {
-       this.volume = Math.max(0f, Math.min(1f, volume)); // Clamp between 0 and 1
-   }
-    
+        this.volume = Math.max(0f, Math.min(1f, volume));
+    }
+
     public float getVolume() {
         return volume;
     }
-    
-    // Plays the sound effect for a correct answer
+
+    // convenience methods for the two in-game feedback sounds
     public void playCorrectAnswerSound() {
         playSound("sound/correct.mp3");
     }
 
-    // Plays the sound effect for a wrong answer
     public void playWrongAnswerSound() {
         playSound("sound/wrong.mp3");
     }
-//
+
 //    public void stopAllSounds() {
 //        activeSounds.clear();
 //    }

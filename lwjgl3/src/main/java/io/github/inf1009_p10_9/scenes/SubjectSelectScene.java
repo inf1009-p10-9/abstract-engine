@@ -15,33 +15,36 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
 
+// screen where the player picks a subject and difficulty before starting the game
 public class SubjectSelectScene extends Scene {
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
     private final FontManager fontManager;
 
+    // ui elements
     private TextLabel titleLabel;
 
-    // subject row labels
+    // subject row
     private TextLabel subjectTitleLabel;
     private TextLabel subjectLeftArrow;
     private TextLabel subjectValueLabel;
     private TextLabel subjectRightArrow;
 
-    // difficulty row labels
+    // difficulty row
     private TextLabel difficultyTitleLabel;
     private TextLabel difficultyLeftArrow;
     private TextLabel difficultyValueLabel;
     private TextLabel difficultyRightArrow;
 
-    // instruction labels
+    // instructions at the bottom of the screen
     private TextLabel instructionLine1;
     private TextLabel instructionLine2;
 
-
+    // available options for each row
     private String[] subjectOptions = { "Math", "English" };
     private String[] difficultyOptions = { "Easy", "Hard" };
 
+    // current selection state
     private int selectedSubjectIndex = 0;
     private int selectedDifficultyIndex = 0;
 
@@ -55,6 +58,7 @@ public class SubjectSelectScene extends Scene {
     private boolean escPressed = false;
     private float sceneLoadTime = 0;
 
+    // colors
     private static final Color NORMAL_COLOR = Color.WHITE;
     private static final Color ACTIVE_ROW_COLOR = Color.YELLOW;
     private static final Color INACTIVE_ROW_COLOR = Color.LIGHT_GRAY;
@@ -126,7 +130,7 @@ public class SubjectSelectScene extends Scene {
         difficultyRightArrow.setColor(INACTIVE_ROW_COLOR);
         addUI(difficultyRightArrow);
 
-        // instructions split across two lines
+        // instructions split across two lines at the bottom
         instructionLine1 = new TextLabel(
             "UP/DOWN: switch row          LEFT/RIGHT: change value",
             centerX - 240, 130,
@@ -146,6 +150,7 @@ public class SubjectSelectScene extends Scene {
         System.out.println("SubjectSelectScene loaded");
     }
 
+    // resets all selections back to defaults on each visit
     @Override
     public void load() {
         super.load();
@@ -163,11 +168,12 @@ public class SubjectSelectScene extends Scene {
 
         sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
+        // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        // switch active row with UP/DOWN or W/S
+        // up/down to switch between the subject and difficulty rows, only triggers once per press
         boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
                                inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
@@ -178,9 +184,9 @@ public class SubjectSelectScene extends Scene {
                 upDownPressed = true;
 
                 if (downKeyPressed && activeRow == 0) {
-                    activeRow = 1; // move to difficulty row
+                    activeRow = 1;
                 } else if (upKeyPressed && activeRow == 1) {
-                    activeRow = 0; // move back to subject row
+                    activeRow = 0;
                 }
 
                 updateHighlight();
@@ -189,7 +195,7 @@ public class SubjectSelectScene extends Scene {
             upDownPressed = false;
         }
 
-        // cycle value in active row with LEFT/RIGHT or A/D
+        // left/right to cycle the value in the active row, only triggers once per press
         boolean leftKeyPressed = inputKeyCheckable.isKeyPressed(Keys.LEFT) ||
                                  inputKeyCheckable.isKeyPressed(Keys.A);
         boolean rightKeyPressed = inputKeyCheckable.isKeyPressed(Keys.RIGHT) ||
@@ -234,7 +240,7 @@ public class SubjectSelectScene extends Scene {
             leftRightPressed = false;
         }
 
-        // confirm with ENTER
+        // confirm selection and load the game
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -251,7 +257,7 @@ public class SubjectSelectScene extends Scene {
             enterPressed = false;
         }
 
-        // go back with ESC
+        // go back to the main menu
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             if (!escPressed) {
                 escPressed = true;
@@ -262,6 +268,7 @@ public class SubjectSelectScene extends Scene {
         }
     }
 
+    // updates arrow and label colors to show which row is active, and refreshes displayed values
     private void updateHighlight() {
         if (activeRow == 0) {
             subjectTitleLabel.setColor(SECTION_TITLE_COLOR);
@@ -285,7 +292,7 @@ public class SubjectSelectScene extends Scene {
             difficultyRightArrow.setColor(ACTIVE_ROW_COLOR);
         }
 
-        // update displayed values
+        // update the displayed text values
         subjectValueLabel.setText(subjectOptions[selectedSubjectIndex]);
         difficultyValueLabel.setText(difficultyOptions[selectedDifficultyIndex]);
     }

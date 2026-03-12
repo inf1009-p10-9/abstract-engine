@@ -8,17 +8,18 @@ import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.UIElement;
 
+// base class for all scenes, handles loading, unloading, and the lifecycle hooks LibGDX expects
 public abstract class Scene implements Screen {
     private String name;
     private Array<Entity> entities = new Array<>();
     private Array<UIElement> uiElements = new Array<>();
     private boolean loaded = false;
 
-    // Interface dependencies (NOT concrete managers!)
+    // interface dependencies passed in from outside, never tied to concrete implementations
     protected final IEntityRegisterable entityRegisterable;
     protected final IUIDisplayable uiDisplayable;
-    protected final ICollidableRegisterable collidableRegisterable;  // Has both register & unregister
-    protected final IRenderRegisterable renderRegisterable;          // Has both register & unregister
+    protected final ICollidableRegisterable collidableRegisterable;
+    protected final IRenderRegisterable renderRegisterable;
     protected final IMusicPlayable musicPlayable;
 
     public Scene(String name,
@@ -35,46 +36,43 @@ public abstract class Scene implements Screen {
         this.musicPlayable = musicPlayable;
     }
 
+    // registers all entities and ui elements on first load, skips if already loaded
     public void load() {
         if (!loaded) {
             loadEntities();
 
-            // Register all entities with managers
             for (Entity entity : entities) {
-                entityRegisterable.addEntity(entity);  // Uses interface
+                entityRegisterable.addEntity(entity);
             }
 
-            // Register all UI elements
             for (UIElement uiElement : uiElements) {
-                uiDisplayable.displayUI(uiElement);  // Uses interface
+                uiDisplayable.displayUI(uiElement);
             }
 
             loaded = true;
         }
     }
 
+    // removes all entities and ui elements from their respective managers and clears local lists
     public void unload() {
         if (loaded) {
             System.out.println(">>> UNLOADING: " + name + " (Entities: " + entities.size + ", UI: " + uiElements.size + ")");
 
-            // Unregister all entities from ALL managers
             for (Entity entity : entities) {
-                entityRegisterable.removeEntity(entity);  // Uses interface
+                entityRegisterable.removeEntity(entity);
 
-                // If entity is renderable, unregister from OutputManager
+                // also unregister from render and collision systems if applicable
                 if (entity instanceof IRenderable) {
-                    renderRegisterable.unregisterRenderable(entity);  // Same interface!
+                    renderRegisterable.unregisterRenderable(entity);
                 }
 
-                // If entity is collidable, unregister from CollisionManager
                 if (entity instanceof ICollidable) {
-                    collidableRegisterable.unregisterCollidable(entity);  // Same interface!
+                    collidableRegisterable.unregisterCollidable(entity);
                 }
             }
 
-            // Unregister all UI elements
             for (UIElement uiElement : uiElements) {
-                uiDisplayable.removeUI(uiElement);  // Uses interface
+                uiDisplayable.removeUI(uiElement);
             }
 
             entities.clear();
@@ -85,12 +83,14 @@ public abstract class Scene implements Screen {
         }
     }
 
+    // override in subclasses to add per-frame logic
     public void update() {
-        // Scene-specific update logic here
     }
 
+    // subclasses must implement this to define what entities and ui elements belong to the scene
     protected abstract void loadEntities();
 
+    // getters and helpers
     public String getName() {
         return name;
     }
@@ -111,7 +111,7 @@ public abstract class Scene implements Screen {
         uiElements.add(uiElement);
     }
 
-    // LibGDX Screen interface methods
+    // LibGDX screen lifecycle, mapped to our own load/update/unload methods
     @Override
     public void show() {
         load();

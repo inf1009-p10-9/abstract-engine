@@ -14,20 +14,27 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+// a gate that scrolls down the screen displaying one answer option (A or B).
+// when the player collides with it, it checks the answer, flashes a result color, then resets.
+// #TODO: refactor QuestionManager reference to use an interface
 public class Gate extends Entity implements IRenderable, ICollidable {
     private final QuestionManager questionManager;
     private String option; // "A" or "B"
     private BitmapFont font;
+
+    // flash state after a collision
     private float flashTimer = 0;
     private boolean needsReset = false;
-    private static final float FLASH_DURATION = 1.0f; // increased for visibility
+    private static final float FLASH_DURATION = 1.0f;
+
     private static final float SPEED = 60f;
 
     private Color defaultColor = Color.TAN;
     private Color color = defaultColor;
+
+    // the other gate, so both can be repositioned together after a collision
     private Gate partner;
 
-    // #TODO: Refactor QuestionManager reference
     public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager) {
         super(x, y, width, height, 5);
         this.option = option;
@@ -39,34 +46,33 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     @Override
     public void update() {
-        // move gate downward each frame
+        // scroll downward
         position.y -= SPEED * Gdx.graphics.getDeltaTime();
 
-        // if gate goes off the bottom, wrap to top
+        // wrap back to the top when fully off screen
         if (position.y + bounds.height < 0) {
             position.y = Gdx.graphics.getHeight();
         }
 
-        // keep collision bounds in sync with position
         bounds.setPosition(position.x, position.y);
 
-        // count down the flash timer
+        // count down flash timer, then advance the question and reposition
         if (flashTimer > 0) {
             flashTimer -= Gdx.graphics.getDeltaTime();
 
-            // once flash is done, reset color and reposition gate
             if (flashTimer <= 0) {
                 color = defaultColor;
 
                 if (needsReset) {
                     needsReset = false;
                     questionManager.nextQuestion();
-                    reset(); // reset() handles partner internally now
+                    reset();
                 }
             }
         }
     }
 
+    // draws the answer option text centered inside the gate
     @Override
     public void render(SpriteBatch batch) {
         Question q = questionManager.getCurrentQuestion();
@@ -88,62 +94,58 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     @Override
     public void onCollision(ICollidable other) {
         if (other instanceof Player) {
-            // Ignore repeated collisions while the gate is waiting to reset
+            // ignore repeated collisions while already waiting to reset
             if (needsReset) {
                 return;
             }
 
-            // Ignore collision if there is no active question
+            // ignore if there is no active question
             if (questionManager.getCurrentQuestion() == null) {
                 return;
             }
 
-            // Check whether the player's chosen gate matches the correct answer
             boolean answeredCorrectly = questionManager.checkAnswer(option);
 
             if (answeredCorrectly) {
                 color = Color.LIME;
-
-                // Play sound for a correct answer
-                // #TODO: Refactor this to use constructor injection from GameApplication.
+                // #TODO: refactor to use constructor injection from GameApplication
                 OutputManager.getInstance().getSFXManager().playCorrectAnswerSound();
             } else {
                 color = Color.RED;
-
-                // Play sound for a wrong answer
-                // #TODO: Refactor this to use constructor injection from GameApplication.
+                // #TODO: refactor to use constructor injection from GameApplication
                 OutputManager.getInstance().getSFXManager().playWrongAnswerSound();
             }
-            // Keep the result color on screen briefly before resetting
+
+            // hold the result color briefly before resetting
             flashTimer = FLASH_DURATION;
             needsReset = true;
         }
     }
 
+    // picks a random side for this gate and sends the partner to the opposite side
     public void reset() {
-        // this gate decides randomly
         boolean goLeft = Math.random() < 0.5;
 
         if (goLeft) {
-            position.x = Gdx.graphics.getWidth()/ 2 - 150f - 100f/2 ;
+            position.x = Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
         } else {
-            position.x = Gdx.graphics.getWidth()/ 2 + 100f /2;
+            position.x = Gdx.graphics.getWidth() / 2 + 100f / 2;
         }
 
         position.y = Gdx.graphics.getHeight();
         needsReset = false;
 
-        // tell partner to go to the opposite side
         if (partner != null) {
             partner.resetToSide(!goLeft);
         }
     }
 
+    // positions this gate on the given side without triggering a partner reset
     public void resetToSide(boolean goLeft) {
         if (goLeft) {
-            position.x = Gdx.graphics.getWidth()/ 2 - 150f - 100f/2 ;
-         } else {
-             position.x = Gdx.graphics.getWidth()/ 2 + 100f /2;
+            position.x = Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
+        } else {
+            position.x = Gdx.graphics.getWidth() / 2 + 100f / 2;
         }
 
         position.y = Gdx.graphics.getHeight();

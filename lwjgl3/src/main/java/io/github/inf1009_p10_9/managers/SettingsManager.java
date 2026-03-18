@@ -2,9 +2,10 @@ package io.github.inf1009_p10_9.managers;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
+import io.github.inf1009_p10_9.interfaces.ISettingsControllable;
 
 // singleton that stores player preferences, volume levels and keybindings, across the session
-public class SettingsManager {
+public class SettingsManager implements ISettingsControllable {
     private static SettingsManager instance;
 
     // volume levels, clamped to 0.0 to 1.0 on write

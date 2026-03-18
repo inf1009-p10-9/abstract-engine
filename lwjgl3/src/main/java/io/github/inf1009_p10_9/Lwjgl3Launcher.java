@@ -104,10 +104,14 @@ public class Lwjgl3Launcher {
             	    collisionManager,
             	    outputManager,
             	    outputManager.getBGManager(),
-            	    inputManager,
-            	    sceneManager
+            	    outputManager.getSFXManager(),
+            	    inputManager,                 // IInputKeyCheckable
+            	    inputManager,                 // IKeyPressConsumable
+            	    sceneManager,
+            	    SettingsManager.getInstance(),
+            	    fontManager
             	));
-
+            
             sceneManager.addScene(new EndScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable

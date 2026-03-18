@@ -76,4 +76,14 @@ public class TextLabel extends UIElement {
             font.dispose();
         }
     }
+
+	public void setX(float f) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setY(float f) {
+		// TODO Auto-generated method stub
+		
+	}
 }

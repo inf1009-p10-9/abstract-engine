@@ -56,4 +56,9 @@ public class CarElement extends UIElement {
             sheet.dispose();
         }
     }
+
+	public void setX(float f) {
+		// TODO Auto-generated method stub
+		
+	}
 }

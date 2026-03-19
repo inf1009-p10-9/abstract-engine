@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.interfaces.*;
 
 // singleton that holds a movement strategy per entity type and applies the right one when move() is called
-public class MovementManager implements IManager,
+public class MovementManager implements IManagerMinimal,
                                         IMovementCalculatable,
                                         IMovementStrategyRegisterable {
     private static MovementManager instance;
@@ -22,11 +22,9 @@ public class MovementManager implements IManager,
 
     @Override
     public void initialize() {
+        System.out.println("MovementManger initialised");
         clear();
     }
-
-    @Override
-    public void update() {}
 
     @Override
     public void clear() {

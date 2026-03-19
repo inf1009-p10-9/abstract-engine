@@ -85,7 +85,7 @@ public class SettingsScene extends Scene {
     private final ISettingsControllable settingsControllable;
     private final IKeyPressConsumable keyPressConsumable;
     private final IMusicPlayable musicPlayable;
-    private final ISFXPlayable sfxPlayable;
+    private final ISFXVolume sfxVolume;
     private final FontManager fontManager;
 
     public SettingsScene(IEntityRegisterable entityRegisterable,
@@ -93,13 +93,13 @@ public class SettingsScene extends Scene {
                          ICollidableRegisterable collidableRegisterable,
                          IRenderRegisterable renderRegisterable,
                          IMusicPlayable musicPlayable,
-                         ISFXPlayable sfxPlayable,
+                         ISFXVolume sfxVolume,
                          IInputKeyCheckable inputKeyCheckable,
                          IKeyPressConsumable keyPressConsumable,
                          ISceneSwitchable sceneSwitchable,
                          ISettingsControllable settingsControllable,
                          FontManager fontManager) {
-    	
+
         super("SettingsScene",
               entityRegisterable,
               uiDisplayable,
@@ -107,7 +107,7 @@ public class SettingsScene extends Scene {
               renderRegisterable,
               musicPlayable);
         this.musicPlayable = musicPlayable;
-        this.sfxPlayable = sfxPlayable;
+        this.sfxVolume = sfxVolume;
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable = sceneSwitchable;
         this.keyPressConsumable = keyPressConsumable;
@@ -368,7 +368,7 @@ public class SettingsScene extends Scene {
     // changes sfx volume and immediately applies it to the sfx manager
     private void adjustSfxVolume(float delta) {
         settingsControllable.setSfxVolume(settingsControllable.getSfxVolume() + delta);
-        sfxPlayable.setVolume(settingsControllable.getSfxVolume());
+        sfxVolume.setVolume(settingsControllable.getSfxVolume());
     }
 
     // handles enter based on the currently selected row

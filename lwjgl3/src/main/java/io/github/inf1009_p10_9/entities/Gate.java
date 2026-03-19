@@ -125,10 +125,12 @@ public class Gate extends Entity implements IRenderable, ICollidable {
                 color = Color.LIME;
                 // #TODO: refactor to use constructor injection from GameApplication
                 OutputManager.getInstance().getSFXManager().playCorrectAnswerSound();
+                //playSound("sound/correct.mp3");
             } else {
                 color = Color.RED;
                 // #TODO: refactor to use constructor injection from GameApplication
                 OutputManager.getInstance().getSFXManager().playWrongAnswerSound();
+                //playSound("sound/wrong.mp3");
             }
 
             // hold the result color briefly before resetting

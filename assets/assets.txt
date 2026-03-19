@@ -11,5 +11,4 @@ fonts/Fredoka.ttf
 libgdx.png
 music/Super Mario Bros. medley.mp3
 sound/correct.mp3
-sound/jump.mp3
 sound/wrong.mp3

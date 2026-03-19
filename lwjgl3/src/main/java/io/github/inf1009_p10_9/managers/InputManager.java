@@ -9,7 +9,6 @@ import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IKeyPressConsumable;
 import io.github.inf1009_p10_9.interfaces.IManager;
-import io.github.inf1009_p10_9.interfaces.ISettingsControllable;
 
 // singleton that handles keyboard input, tracks key states, and notifies registered listeners each frame
 public class InputManager implements IManager,

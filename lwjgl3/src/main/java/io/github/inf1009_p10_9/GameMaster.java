@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 import com.badlogic.gdx.ApplicationAdapter;
 
+import io.github.inf1009_p10_9.interfaces.IManagerMinimal;
 import io.github.inf1009_p10_9.interfaces.IManager;
 import io.github.inf1009_p10_9.managers.*;
-import io.github.inf1009_p10_9.questions.QuestionManager;
 
 public class GameMaster extends ApplicationAdapter {
 
@@ -20,6 +20,7 @@ public class GameMaster extends ApplicationAdapter {
     protected final InputManager inputManager;
     protected final OutputManager outputManager;
     protected final List<IManager> managers;
+    protected final List<IManagerMinimal> managersMinimal;
 
     // Game loop control
     private boolean running;
@@ -45,6 +46,8 @@ public class GameMaster extends ApplicationAdapter {
                 entityManager,
                 collisionManager,
                 outputManager));
+        this.managersMinimal = new ArrayList<IManagerMinimal>();
+        this.managersMinimal.add(this.movementManager);
     }
 
     @Override
@@ -56,6 +59,8 @@ public class GameMaster extends ApplicationAdapter {
         // Initialize all managers (they're already created)
         for (IManager manager : managers)
             manager.initialize();
+        for (IManagerMinimal managerMinimal : managersMinimal)
+            managerMinimal.initialize();
         running = true;
         System.out.println("GameMaster initialized");
     }
@@ -82,9 +87,10 @@ public class GameMaster extends ApplicationAdapter {
     @Override
     public void dispose() {
         // Clean up all managers
-        for (IManager manager : managers) {
+        for (IManager manager : managers)
             manager.clear();
-        }
+        for (IManagerMinimal managerCore : managersMinimal)
+            managerCore.clear();
 
         System.out.println("GameMaster disposed");
     }

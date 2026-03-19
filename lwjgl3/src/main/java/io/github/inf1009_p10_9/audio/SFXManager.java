@@ -3,9 +3,10 @@ package io.github.inf1009_p10_9.audio;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.LongMap;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
+import io.github.inf1009_p10_9.interfaces.ISFXVolume;
 
 // manages sound effect playback, tracking active sounds by their LibGDX sound id
-public class SFXManager implements ISFXPlayable {
+public class SFXManager implements ISFXPlayable, ISFXVolume {
 
     // maps sound ids returned by play() back to their file names
     private LongMap<String> activeSounds;
@@ -46,10 +47,6 @@ public class SFXManager implements ISFXPlayable {
     // clamps volume to 0-1, applies to future sounds only
     public void setVolume(float volume) {
         this.volume = Math.max(0f, Math.min(1f, volume));
-    }
-
-    public float getVolume() {
-        return volume;
     }
 
     // convenience methods for the two in-game feedback sounds

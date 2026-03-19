@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import io.github.inf1009_p10_9.interfaces.IManager;
+import io.github.inf1009_p10_9.interfaces.IManagerMinimal;
 
 // singleton that generates and owns the shared fonts used across all scenes
-public class FontManager implements IManager {
+public class FontManager implements IManagerMinimal {
 
     private static FontManager instance;
 
@@ -48,9 +48,6 @@ public class FontManager implements IManager {
 
         System.out.println("FontManager initialized");
     }
-
-    @Override
-    public void update() {}
 
     // disposes all fonts on shutdown, any ui elements using them must not call dispose themselves
     @Override

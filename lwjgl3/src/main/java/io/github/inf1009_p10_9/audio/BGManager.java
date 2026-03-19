@@ -48,9 +48,6 @@ public class BGManager implements IMusicPlayable {
         }
     }
 
-    public float getVolume() {
-        return volume;
-    }
 
 //    public String getCurrentMusic() {
 //        return currentMusic;

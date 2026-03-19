@@ -43,10 +43,11 @@ public class Lwjgl3Launcher {
                   MovementManager.getInstance(),
                   InputManager.getInstance(),
                   OutputManager.getInstance());
+
             this.questionManager = QuestionManager.getInstance();
-            this.managers.add(this.questionManager);
+            this.managersMinimal.add(this.questionManager);
             this.fontManager = FontManager.getInstance();
-            this.managers.add(this.fontManager);
+            this.managersMinimal.add(this.fontManager);
         }
 
         @Override
@@ -80,7 +81,7 @@ public class Lwjgl3Launcher {
 
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager,                    // as ISceneSwitchable
-                
+
                 fontManager
             ));
 
@@ -97,7 +98,7 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 outputManager.getSFXManager()   // as ISFXPlayable
             ));
-            
+
             sceneManager.addScene(new SettingsScene(
             	    entityManager,
             	    outputManager,
@@ -111,7 +112,7 @@ public class Lwjgl3Launcher {
             	    SettingsManager.getInstance(),
             	    fontManager
             	));
-            
+
             sceneManager.addScene(new EndScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable

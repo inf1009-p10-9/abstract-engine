@@ -2,10 +2,10 @@ package io.github.inf1009_p10_9.questions;
 
 import java.util.Collections;
 import java.util.HashMap;
-import io.github.inf1009_p10_9.interfaces.IManager;
+import io.github.inf1009_p10_9.interfaces.IManagerMinimal;
 
 // singleton that manages all question banks and tracks progress through the active one
-public class QuestionManager implements IManager {
+public class QuestionManager implements IManagerMinimal {
     private static QuestionManager instance;
 
     // all loaded banks keyed by "Subject_Difficulty", e.g. "Math_Easy"
@@ -36,9 +36,6 @@ public class QuestionManager implements IManager {
         loadAllBanks();
         System.out.println("QuestionManager initialized");
     }
-
-    @Override
-    public void update() {}
 
     // resets all state, called on shutdown or full restart
     @Override

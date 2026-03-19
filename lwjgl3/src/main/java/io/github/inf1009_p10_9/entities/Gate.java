@@ -34,7 +34,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     private static final float SPEED = 60f;
 
-    private Color defaultColor = Color.TAN;
+    private final Color defaultColor = Color.TAN;
     private Color color = defaultColor;
 
     // the other gate, so both can be repositioned together after a collision
@@ -110,7 +110,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
             }
 
             // ignore repeated collisions while already flashing a result
-            if (needsReset) {
+            if (needsReset || partner.isNeedsReset()) {
                 return;
             }
 
@@ -143,9 +143,9 @@ public class Gate extends Entity implements IRenderable, ICollidable {
         boolean goLeft = Math.random() < 0.5;
 
         if (goLeft) {
-            position.x = Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
+            position.x = (float) Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
         } else {
-            position.x = Gdx.graphics.getWidth() / 2 + 100f / 2;
+            position.x = (float) Gdx.graphics.getWidth() / 2 + 100f / 2;
         }
 
         position.y = Gdx.graphics.getHeight();
@@ -161,9 +161,9 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     // resets spawn immunity so the gate cannot be triggered immediately after reappearing
     public void resetToSide(boolean goLeft) {
         if (goLeft) {
-            position.x = Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
+            position.x = (float) Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
         } else {
-            position.x = Gdx.graphics.getWidth() / 2 + 100f / 2;
+            position.x = (float) Gdx.graphics.getWidth() / 2 + 100f / 2;
         }
 
         position.y = Gdx.graphics.getHeight();
@@ -177,10 +177,6 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     public boolean isNeedsReset() {
         return needsReset;
-    }
-
-    public void setNeedsReset(boolean needsReset) {
-        this.needsReset = needsReset;
     }
 
     @Override

@@ -2,13 +2,10 @@ package io.github.inf1009_p10_9.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 
 import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
 // the player entity, renders as a car sprite with a blue square fallback if the texture fails to load
@@ -48,7 +45,7 @@ public class Player extends Entity {
 
     @Override
     public void onCollision(ICollidable other) {
-        System.out.println("Player collided with: " + other.getClass().getSimpleName());
+        //System.out.println("Player collided with: " + other.getClass().getSimpleName());
     }
 
     @Override

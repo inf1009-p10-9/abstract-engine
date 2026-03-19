@@ -69,12 +69,12 @@ public class GameScene extends Scene {
         collidableRegisterable.registerCollidable(player);
 
         // gate A on the left, gate B on the right, both positioned above center
-        Gate gateA = new Gate(centerX - gateWidth - gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager);
+        Gate gateA = new Gate(centerX - gateWidth - gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager, sfxPlayable);
         addEntity(gateA);
         renderRegisterable.registerRenderable(gateA);
         collidableRegisterable.registerCollidable(gateA);
 
-        Gate gateB = new Gate(centerX + gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager);
+        Gate gateB = new Gate(centerX + gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager, sfxPlayable);
         addEntity(gateB);
         renderRegisterable.registerRenderable(gateB);
         collidableRegisterable.registerCollidable(gateB);

@@ -49,15 +49,6 @@ public class SFXManager implements ISFXPlayable, ISFXVolume {
         this.volume = Math.max(0f, Math.min(1f, volume));
     }
 
-    // convenience methods for the two in-game feedback sounds
-    public void playCorrectAnswerSound() {
-        playSound("sound/correct.mp3");
-    }
-
-    public void playWrongAnswerSound() {
-        playSound("sound/wrong.mp3");
-    }
-
 //    public void stopAllSounds() {
 //        activeSounds.clear();
 //    }

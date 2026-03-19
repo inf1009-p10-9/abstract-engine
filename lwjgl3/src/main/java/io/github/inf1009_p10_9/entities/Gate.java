@@ -2,7 +2,7 @@ package io.github.inf1009_p10_9.entities;
 
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
-import io.github.inf1009_p10_9.managers.OutputManager;
+import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.questions.Question;
 
@@ -22,6 +22,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private final QuestionManager questionManager;
     private String option; // "A" or "B"
     private BitmapFont font;
+    private ISFXPlayable sfxPlayable;
 
     // flash state after a collision
     private float flashTimer = 0;
@@ -40,13 +41,14 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     // the other gate, so both can be repositioned together after a collision
     private Gate partner;
 
-    public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager) {
+    public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager, ISFXPlayable sfxPlayable) {
         super(x, y, width, height, 5);
         this.option = option;
         this.font = new BitmapFont();
         this.font.getData().setScale(2f);
         this.font.setColor(Color.WHITE);
         this.questionManager = questionManager;
+        this.sfxPlayable = sfxPlayable;
     }
 
     @Override
@@ -123,14 +125,10 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
             if (answeredCorrectly) {
                 color = Color.LIME;
-                // #TODO: refactor to use constructor injection from GameApplication
-                OutputManager.getInstance().getSFXManager().playCorrectAnswerSound();
-                //playSound("sound/correct.mp3");
+                sfxPlayable.playSound("sound/correct.mp3");
             } else {
                 color = Color.RED;
-                // #TODO: refactor to use constructor injection from GameApplication
-                OutputManager.getInstance().getSFXManager().playWrongAnswerSound();
-                //playSound("sound/wrong.mp3");
+                sfxPlayable.playSound("sound/wrong.mp3");
             }
 
             // hold the result color briefly before resetting

@@ -278,8 +278,8 @@ public class StartScene extends Scene {
         String selectedOption = menuOptions[highlightedIndex];
 
         if (selectedOption.equals("Level Selection")) {
-            System.out.println("Going to SubjectSelectScene...");
-            sceneSwitchable.switchScene("SubjectSelectScene");
+            System.out.println("Going to LevelSelectScene...");
+            sceneSwitchable.switchScene("LevelSelectScene");
 
         } else if (selectedOption.equals("Settings")) {
             sceneSwitchable.switchScene("SettingsScene");

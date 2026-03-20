@@ -10,5 +10,7 @@ cars/cars.png
 fonts/Fredoka.ttf
 libgdx.png
 music/Super Mario Bros. medley.mp3
+scenery/scenery_city.png
+scenery/scenery_desert.png
 sound/correct.mp3
 sound/wrong.mp3

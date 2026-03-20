@@ -1,7 +1,5 @@
 package io.github.inf1009_p10_9.scenes;
 
-import java.util.Collection;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.entities.Entity;

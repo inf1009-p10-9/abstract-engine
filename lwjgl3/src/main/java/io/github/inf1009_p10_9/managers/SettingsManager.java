@@ -75,6 +75,7 @@ public class SettingsManager implements ISettingsControllable {
     public ObjectMap<String, Integer> getAllKeybinds() {
         return keybinds;
     }
+    
     // scenery selection persists for the whole session until overwritten
     public String getSelectedScenery() { return selectedScenery; }
  

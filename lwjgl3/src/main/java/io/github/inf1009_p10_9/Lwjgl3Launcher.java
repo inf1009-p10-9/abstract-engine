@@ -68,8 +68,9 @@ public class Lwjgl3Launcher {
             // Register movement strategies
             movementManager.registerMovementStrategy("Player",
                                                      new UserMovement(250f));
-            movementManager.registerMovementStrategy("Enemy",
-                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
+//            movementManager.registerMovementStrategy("Enemy",
+//                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
+            movementManager.registerMovementStrategy("Gate", new ScrollerMovement());
 
             // Create scenes with interfaces
             sceneManager.addScene(new StartScene(
@@ -137,7 +138,9 @@ public class Lwjgl3Launcher {
                 outputManager.getSFXManager(),  // as ISFXPlayable
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
-                fontManager
+                fontManager,
+                movementManager,                // as IMovementCalculatable
+                movementManager                 // as IMovementStrategyRegisterable
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

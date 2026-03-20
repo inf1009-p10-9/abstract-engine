@@ -89,8 +89,8 @@ public class GameMaster extends ApplicationAdapter {
         // Clean up all managers
         for (IManager manager : managers)
             manager.clear();
-        for (IManagerMinimal managerCore : managersMinimal)
-            managerCore.clear();
+        for (IManagerMinimal managerMinimal : managersMinimal)
+            managerMinimal.clear();
 
         System.out.println("GameMaster disposed");
     }

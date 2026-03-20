@@ -1,8 +1,7 @@
 package io.github.inf1009_p10_9.scenes;
 
-import io.github.inf1009_p10_9.entities.Gate;
-import io.github.inf1009_p10_9.entities.Road;
-import io.github.inf1009_p10_9.entities.Player;
+import com.badlogic.gdx.utils.Array;
+import io.github.inf1009_p10_9.entities.*;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.ui.FontManager;
@@ -19,6 +18,8 @@ public class GameScene extends Scene {
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
     private final FontManager fontManager;
+    private final IMovementStrategyRegisterable movementStrategyRegisterable;
+    private final IMovementCalculatable movementCalculatable;
 
     public GameScene(IEntityRegisterable entityRegisterable,
             IUIDisplayable uiDisplayable,
@@ -29,7 +30,9 @@ public class GameScene extends Scene {
             ISFXPlayable sfxPlayable,
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
-            FontManager fontManager) {
+            FontManager fontManager,
+            IMovementStrategyRegisterable movementStrategyRegisterable,
+            IMovementCalculatable movementCalculatable) {
 			super("GameScene",
 			     entityRegisterable,
 			     uiDisplayable,
@@ -41,6 +44,8 @@ public class GameScene extends Scene {
 			this.sceneSwitchable = sceneSwitchable;
 			this.questionManager = questionManager;
 			this.fontManager = fontManager;
+            this.movementCalculatable = movementCalculatable;
+            this.movementStrategyRegisterable = movementStrategyRegisterable;
 			}
 
     @Override
@@ -94,6 +99,16 @@ public class GameScene extends Scene {
         if (questionManager.isBankFinished()) {
             System.out.println("All questions done, going to EndScene...");
             sceneSwitchable.switchScene("EndScene");
+        }
+
+        Array<Entity> entities = entityRegisterable.getEntities();
+        //enable movement
+        for (Entity entity : entities) {
+            if (entity instanceof Gate) {
+                IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy("Gate");
+
+                movementCalculatable.move(entity, 0);
+            }
         }
     }
 }

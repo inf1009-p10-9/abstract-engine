@@ -33,8 +33,6 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private float spawnImmunityTimer = 0;
     private static final float SPAWN_IMMUNITY_DURATION = 1.5f;
 
-    private static final float SPEED = 60f;
-
     private final Color defaultColor = Color.TAN;
     private Color color = defaultColor;
 
@@ -53,14 +51,6 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     @Override
     public void update() {
-        // scroll downward
-        position.y -= SPEED * Gdx.graphics.getDeltaTime();
-
-        // wrap back to the top when fully off screen
-        if (position.y + bounds.height < 0) {
-            position.y = Gdx.graphics.getHeight();
-        }
-
         bounds.setPosition(position.x, position.y);
 
         // count down spawn immunity so collision activates once the gate is visible on screen

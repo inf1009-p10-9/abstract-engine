@@ -15,6 +15,10 @@ public class SettingsManager implements ISettingsControllable {
     // keybindings keyed by action name, e.g. "MOVE_UP", "CONFIRM"
     private final ObjectMap<String, Integer> keybinds = new ObjectMap<>();
 
+    // scenery chosen on the level select screen, defaults to City
+    private String selectedScenery = "City";
+
+
     private SettingsManager() {
         setDefaultKeybinds();
     }
@@ -70,5 +74,11 @@ public class SettingsManager implements ISettingsControllable {
 
     public ObjectMap<String, Integer> getAllKeybinds() {
         return keybinds;
+    }
+    // scenery selection persists for the whole session until overwritten
+    public String getSelectedScenery() { return selectedScenery; }
+ 
+    public void setSelectedScenery(String scenery) {
+        this.selectedScenery = scenery;
     }
 }

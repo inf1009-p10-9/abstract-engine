@@ -84,6 +84,19 @@ public class Lwjgl3Launcher {
 
                 fontManager
             ));
+            
+            sceneManager.addScene(new LevelSelectScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+
+                inputManager,                   // as IInputKeyCheckable
+                sceneManager,                    // as ISceneSwitchable
+
+                fontManager
+            ));
 
             sceneManager.addScene(new MidScene(
                 entityManager,                  // as IEntityRegisterable

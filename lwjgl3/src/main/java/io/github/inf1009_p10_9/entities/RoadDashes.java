@@ -52,7 +52,7 @@ public class RoadDashes extends Entity implements IRenderable {
         
     }
 
-    @Override public int getZIndex() { return 2; }
+    @Override public int getZIndex() { return 1; }
     @Override public void onCollision(ICollidable other) {}
     @Override public int getCollisionLayer() { return 0; }
 }

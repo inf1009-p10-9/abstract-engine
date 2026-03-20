@@ -42,7 +42,7 @@ public class RoadSurrounding extends Entity implements IRenderable {
         sr.rect(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
     }
 
-    @Override public int getZIndex() { return 0; }
+    @Override public int getZIndex() { return 2; }
     @Override public void onCollision(ICollidable other) {}
     @Override public int getCollisionLayer() { return 0; }
 }

@@ -43,7 +43,7 @@ public class RoadAsphalt extends Entity implements IRenderable {
         sr.rectLine(roadRightEdge, 0, roadRightEdge, gameHeight, 4);
     }
 
-    @Override public int getZIndex() { return 1; }
+    @Override public int getZIndex() { return 0; }
     @Override public void onCollision(ICollidable other) {}
     @Override public int getCollisionLayer() { return 0; }
 }

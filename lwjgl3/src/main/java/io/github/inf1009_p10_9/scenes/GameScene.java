@@ -50,22 +50,36 @@ public class GameScene extends Scene {
 
     @Override
     protected void loadEntities() {
-
-        // scrolling road background
-    	Road road = new Road();
-        addEntity(road);
-        renderRegisterable.registerRenderable(road);
-
-        // question text shown at the top of the screen
-        questionDisplay = new QuestionDisplay(0, 690, questionManager, fontManager.getLargeFont());
-        addUI(questionDisplay);
-
+    	
+    	
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float gateWidth = 150f;
         float gateHeight = 80f;
         float centerX = screenWidth / 2;
         float gap = 100f;
+
+        // scrolling road background
+    	RoadSurrounding roadsurrounding = new RoadSurrounding();
+        addEntity(roadsurrounding);
+        renderRegisterable.registerRenderable(roadsurrounding);
+        
+        RoadAsphalt roadasphalt = new RoadAsphalt();
+        addEntity(roadsurrounding);
+        renderRegisterable.registerRenderable(roadasphalt);
+        
+
+        float dashCycle = 50f;
+
+        for (float y = 0; y < screenHeight; y += dashCycle) {
+            RoadDashes roaddashes = new RoadDashes(y);
+            addEntity(roaddashes);
+            renderRegisterable.registerRenderable(roaddashes);
+        }
+        
+        // question text shown at the top of the screen
+        questionDisplay = new QuestionDisplay(0, 690, questionManager, fontManager.getLargeFont());
+        addUI(questionDisplay);
 
         // player centered horizontally at the bottom
         Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
@@ -105,10 +119,14 @@ public class GameScene extends Scene {
         //enable movement
         for (Entity entity : entities) {
             if (entity instanceof Gate) {
-                IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy("Gate");
-
                 movementCalculatable.move(entity, 0);
             }
+            
+            if (entity instanceof RoadDashes) {
+            	movementCalculatable.move(entity, 0);
+            }
         }
+        
+       
     }
 }

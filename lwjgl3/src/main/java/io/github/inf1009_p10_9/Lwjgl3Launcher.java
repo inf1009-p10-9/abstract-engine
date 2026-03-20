@@ -71,6 +71,7 @@ public class Lwjgl3Launcher {
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
             movementManager.registerMovementStrategy("Gate", new ScrollerMovement());
+            movementManager.registerMovementStrategy("RoadDashes", new ScrollerMovement());
 
             // Create scenes with interfaces
             sceneManager.addScene(new StartScene(

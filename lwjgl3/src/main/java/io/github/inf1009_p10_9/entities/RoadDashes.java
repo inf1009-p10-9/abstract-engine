@@ -9,13 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 // a single dashed white line in the centre of the road, scrolled downward each frame
 public class RoadDashes extends Entity implements IRenderable {
-    private static final float SCROLL_SPEED = 60f;
     private static final float DASH_LENGTH  = 30f;
-    private static final float DASH_GAP     = 20f;
     private static final float DASH_WIDTH   = 4f;
     private static final Color LINE_WHITE   = new Color(0.9f, 0.9f, 0.9f, 1f);
 
-    private float scrollOffset = 0;
     private final float gameWidth;
     private final float gameHeight;
     private final float centerX;
@@ -23,7 +20,6 @@ public class RoadDashes extends Entity implements IRenderable {
     private final float laneLeft;
     private final float laneRight;
     
-    private float position_y;
     
     
 

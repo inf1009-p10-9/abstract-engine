@@ -18,7 +18,7 @@ public class StartScene extends MenuScene {
     private TitleElement titleElement;
     private TitleCarElement titleCar;
     private SceneBackdrop backdrop;
-    private final String[] menuOptions = { "Level Selection", "Settings", "Quit Game" };
+    private final String[] menuOptions = { "Play", "Settings", "Quit Game" };
 
     // animation timers
     private float titleBounceTimer = 0;
@@ -170,8 +170,7 @@ public class StartScene extends MenuScene {
     @Override
     protected void handleMenuSelection() {
         String selectedOption = menuOptions[highlightedIndex];
-
-        if (selectedOption.equals("Level Selection")) {
+        if (selectedOption.equals("Play")) {
             System.out.println("Going to LevelSelectScene...");
             sceneSwitchable.switchScene("LevelSelectScene");
 

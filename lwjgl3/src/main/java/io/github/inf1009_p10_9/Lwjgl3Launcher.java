@@ -1,5 +1,6 @@
 package io.github.inf1009_p10_9;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import io.github.inf1009_p10_9.managers.*;
@@ -66,8 +67,21 @@ public class Lwjgl3Launcher {
             collisionManager.setCollisionStrategy(collisionStrategy);
 
             // Register movement strategies
-            movementManager.registerMovementStrategy("Player",
-                                                     new UserMovement(250f));
+            float gameWidth  = Gdx.graphics.getWidth();
+            float laneWidth = 200f;
+
+            float playerWidth = 52f;
+            float LeftEdge  = gameWidth * 0.3f  - laneWidth / 2;
+            float RightEdge = gameWidth * 0.70f + laneWidth / 2 - playerWidth;
+
+            //UserMovement parameters : float speed, float leftBoundary, float rightBoundary, boolean enableVerticalMovement
+            movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge, false));
+            
+            movementManager.registerMovementStrategy("Building", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Cactus", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Rock", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Tree", new ScrollerMovement());
+            movementManager.registerMovementStrategy("StreetLamp", new ScrollerMovement());
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
             movementManager.registerMovementStrategy("Gate", new ScrollerMovement());
@@ -86,7 +100,7 @@ public class Lwjgl3Launcher {
 
                 fontManager
             ));
-            
+
             sceneManager.addScene(new LevelSelectScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable
@@ -154,7 +168,7 @@ public class Lwjgl3Launcher {
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager,
                 movementManager,                // as IMovementCalculatable
-                movementManager                 // as IMovementStrategyRegisterable
+                SettingsManager.getInstance() // TEMPORARY LINE
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

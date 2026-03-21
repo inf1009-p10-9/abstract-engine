@@ -8,6 +8,7 @@ cars/car7_orange_hypercar.png
 cars/car8_blue_supercar.png
 cars/cars.png
 fonts/Fredoka.ttf
+gameScene/heart.png
 libgdx.png
 music/Super Mario Bros. medley.mp3
 scenery/scenery_city.png

@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9.entities;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
+import io.github.inf1009_p10_9.interfaces.IUILives;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.questions.Question;
 
@@ -23,6 +24,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private String option; // "A" or "B"
     private BitmapFont font;
     private ISFXPlayable sfxPlayable;
+    private IUILives livesCounter;
 
     // flash state after a collision
     private float flashTimer = 0;
@@ -39,7 +41,10 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     // the other gate, so both can be repositioned together after a collision
     private Gate partner;
 
-    public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager, ISFXPlayable sfxPlayable) {
+    public Gate(float x, float y, float width, float height, String option,
+                QuestionManager questionManager,
+                ISFXPlayable sfxPlayable,
+                IUILives uiLivesCounter) {
         super(x, y, width, height, 5);
         this.option = option;
         this.font = new BitmapFont();
@@ -47,6 +52,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
         this.font.setColor(Color.WHITE);
         this.questionManager = questionManager;
         this.sfxPlayable = sfxPlayable;
+        this.livesCounter = uiLivesCounter;
     }
 
     @Override
@@ -89,8 +95,16 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
+    	// fill
         shapeRenderer.setColor(color);
         shapeRenderer.rect(position.x, position.y, bounds.width, bounds.height);
+        
+        // border
+        shapeRenderer.setColor(new Color(0.4f, 0.25f, 0.1f, 1f));
+        shapeRenderer.rectLine(position.x, position.y, position.x + bounds.width, position.y, 3); // bottom
+        shapeRenderer.rectLine(position.x, position.y + bounds.height, position.x + bounds.width, position.y + bounds.height, 3); // top
+        shapeRenderer.rectLine(position.x, position.y, position.x, position.y + bounds.height, 3); // left
+        shapeRenderer.rectLine(position.x + bounds.width, position.y, position.x + bounds.width, position.y + bounds.height, 3); // right
     }
 
     @Override
@@ -119,6 +133,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
             } else {
                 color = Color.RED;
                 sfxPlayable.playSound("sound/wrong.mp3");
+                livesCounter.setLivesCounter(livesCounter.getLivesCounter()-1);
             }
 
             // hold the result color briefly before resetting
@@ -131,29 +146,20 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     // resets spawn immunity so the gate cannot be triggered immediately after reappearing
     public void reset() {
         boolean goLeft = Math.random() < 0.5;
-
-        if (goLeft) {
-            position.x = (float) Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
-        } else {
-            position.x = (float) Gdx.graphics.getWidth() / 2 + 100f / 2;
-        }
-
-        position.y = Gdx.graphics.getHeight();
-        needsReset = false;
-        spawnImmunityTimer = SPAWN_IMMUNITY_DURATION;
+        resetToSide(goLeft);
 
         if (partner != null) {
             partner.resetToSide(!goLeft);
         }
     }
 
-    // positions this gate on the given side without triggering a partner reset
-    // resets spawn immunity so the gate cannot be triggered immediately after reappearing
     public void resetToSide(boolean goLeft) {
+        float centerX = Gdx.graphics.getWidth() / 2f;
+
         if (goLeft) {
-            position.x = (float) Gdx.graphics.getWidth() / 2 - 150f - 100f / 2;
+            position.x = centerX - bounds.width; // flush left of center
         } else {
-            position.x = (float) Gdx.graphics.getWidth() / 2 + 100f / 2;
+            position.x = centerX; // flush right of center
         }
 
         position.y = Gdx.graphics.getHeight();

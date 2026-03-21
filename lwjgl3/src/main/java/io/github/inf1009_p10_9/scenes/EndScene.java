@@ -92,7 +92,7 @@ public class EndScene extends MenuScene {
         float centerX = screenWidth / 2f;
 
         // shared decorative background
-        backdrop = new SceneBackdrop(true);
+        backdrop = new SceneBackdrop(false);
         backdrop.addToScene(this);
 
         // title and result section

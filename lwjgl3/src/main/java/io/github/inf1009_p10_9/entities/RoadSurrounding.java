@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 // draws the green grass strips on either side of the road
 public class RoadSurrounding extends Entity implements IRenderable {
-    private static final Color GRASS_GREEN = new Color(0.2f, 0.5f, 0.2f, 1f);
+    private final Color color;
     
     private final float gameWidth;
     private final float gameHeight;
@@ -16,18 +16,28 @@ public class RoadSurrounding extends Entity implements IRenderable {
     private final float roadRightEdge;
     private final float laneWidth = 200f;
 
-    public RoadSurrounding() {
+    public RoadSurrounding(String side, Color color) {
+    	this.color = color;
+    	
         this.gameWidth    = Gdx.graphics.getWidth();
         this.gameHeight   = Gdx.graphics.getHeight();
         
-
-
         this.roadLeftEdge  = gameWidth * 0.3f  - laneWidth / 2;
         this.roadRightEdge = gameWidth * 0.70f + laneWidth / 2;
         
+        if (side.equals("left")) {
+        	super.position.set(0, 0);
+        	super.bounds.set(0, 0, roadLeftEdge, gameHeight);
+        }
+        
+        else if (side.equals("right")) {
+        	super.position.set(roadRightEdge, 0);
+        	super.bounds.set(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
+        }
+        
 
-        super.position.set(0, 0);
-        super.bounds.set(0, 0, gameWidth, gameHeight);
+        
+        
     }
 
     @Override public void update() {
@@ -38,12 +48,17 @@ public class RoadSurrounding extends Entity implements IRenderable {
 
     @Override
     public void renderShapes(ShapeRenderer sr) {
-        sr.setColor(GRASS_GREEN);
+        sr.setColor(color);
         sr.rect(0, 0, roadLeftEdge, gameHeight);
         sr.rect(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
     }
 
     @Override public int getZIndex() { return 2; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
+    @Override public void onCollision(ICollidable other) {
+    	 if (other instanceof Player) {
+             System.out.println("GRASS COLLIDED WITH: Player");
+         }
+    }
+    
+    @Override public int getCollisionLayer() { return 1; }
 }

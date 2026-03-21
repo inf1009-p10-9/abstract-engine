@@ -6,7 +6,7 @@ import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 import io.github.inf1009_p10_9.interfaces.IPositionable;
 
 public class ScrollerMovement implements IMovementStrategy {
-    private static final float SPEED = 60f;
+    private static final float SPEED = 90f;
 
     public void calculateMovement(IPositionable object, int moveDirection){
         if (object == null){

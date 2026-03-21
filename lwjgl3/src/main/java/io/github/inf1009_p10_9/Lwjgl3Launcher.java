@@ -76,7 +76,12 @@ public class Lwjgl3Launcher {
 
             //UserMovement parameters : float speed, float leftBoundary, float rightBoundary, boolean enableVerticalMovement
             movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge, false));
-
+            
+            movementManager.registerMovementStrategy("Building", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Cactus", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Rock", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Tree", new ScrollerMovement());
+            movementManager.registerMovementStrategy("StreetLamp", new ScrollerMovement());
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
             movementManager.registerMovementStrategy("Gate", new ScrollerMovement());

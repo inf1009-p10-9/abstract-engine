@@ -10,13 +10,15 @@ public class UserMovement implements IMovementStrategy {
     private float speed;
     private final float leftBoundary;
     private final float rightBoundary;
-
-    public UserMovement(float speed, float leftBoundary, float rightBoundary) {
+    private final boolean enableVerticalMovement;
+    
+    public UserMovement(float speed, float leftBoundary, float rightBoundary, boolean enableVerticalMovement) {
         this.speed = speed;
         this.leftBoundary = leftBoundary;
         this.rightBoundary = rightBoundary;
+        this.enableVerticalMovement = enableVerticalMovement;
     }
-
+    
     // moveDirection: 0 = up, 1 = down, 2 = left, 3 = right
     public void calculateMovement(IPositionable object, int moveDirection) {
         if (object == null) {
@@ -29,14 +31,21 @@ public class UserMovement implements IMovementStrategy {
         // multiply by delta so movement is consistent regardless of frame rate
         float delta = Gdx.graphics.getDeltaTime();
         float moveDistance = speed * delta;
-
+        
+        
+        // if enable vertical movement, else skip this block of code
+        if (enableVerticalMovement) {
+	        switch (moveDirection) {
+	            case 0: // up
+	                newPos.y += moveDistance;
+	                break;
+	            case 1: // down
+	                newPos.y -= moveDistance;
+	                break;
+	        }	
+        }
+        
         switch (moveDirection) {
-            case 0: // up
-                newPos.y += moveDistance;
-                break;
-            case 1: // down
-                newPos.y -= moveDistance;
-                break;
             case 2: // left
                 newPos.x -= moveDistance;
                 break;

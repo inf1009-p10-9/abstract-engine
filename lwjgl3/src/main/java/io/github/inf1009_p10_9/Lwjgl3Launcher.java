@@ -74,7 +74,8 @@ public class Lwjgl3Launcher {
             float LeftEdge  = gameWidth * 0.3f  - laneWidth / 2;
             float RightEdge = gameWidth * 0.70f + laneWidth / 2 - playerWidth;
             
-            movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge));
+            //UserMovement parameters : float speed, float leftBoundary, float rightBoundary, boolean enableVerticalMovement
+            movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge, false));
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
             movementManager.registerMovementStrategy("Gate", new ScrollerMovement());

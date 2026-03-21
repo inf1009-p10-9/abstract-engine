@@ -59,7 +59,7 @@ public class GameScene extends Scene {
         float centerX = screenWidth / 2;
         float gap = 100f;
 
-        // scrolling road background
+        // road background layers
     	RoadSurrounding roadsurrounding = new RoadSurrounding();
         addEntity(roadsurrounding);
         renderRegisterable.registerRenderable(roadsurrounding);
@@ -116,7 +116,7 @@ public class GameScene extends Scene {
         }
 
         Array<Entity> entities = entityRegisterable.getEntities();
-        //enable movement
+        // move gates and road dashes each frame
         for (Entity entity : entities) {
             if (entity instanceof Gate) {
                 movementCalculatable.move(entity, 0);

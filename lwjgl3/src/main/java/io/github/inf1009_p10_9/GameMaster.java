@@ -12,7 +12,7 @@ import io.github.inf1009_p10_9.managers.*;
 
 public class GameMaster extends ApplicationAdapter {
 
-    // Managers (injected via constructor)
+    // all managers injected via constructor
     protected final SceneManager sceneManager;
     protected final EntityManager entityManager;
     protected final CollisionManager collisionManager;
@@ -22,10 +22,10 @@ public class GameMaster extends ApplicationAdapter {
     protected final List<IManager> managers;
     protected final List<IManagerMinimal> managersMinimal;
 
-    // Game loop control
+    // controls whether the game loop is running
     private boolean running;
 
-    // Constructor Injection (Dependency Injection)
+    // all dependencies are passed in from outside, nothing is created here
     public GameMaster(SceneManager sceneManager,
                       EntityManager entityManager,
                       CollisionManager collisionManager,
@@ -56,7 +56,7 @@ public class GameMaster extends ApplicationAdapter {
     }
 
     public void initialize() {
-        // Initialize all managers (they're already created)
+        // kick off each manager in order
         for (IManager manager : managers)
             manager.initialize();
         for (IManagerMinimal managerMinimal : managersMinimal)
@@ -86,7 +86,7 @@ public class GameMaster extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        // Clean up all managers
+        // clean up all managers on shutdown
         for (IManager manager : managers)
             manager.clear();
         for (IManagerMinimal managerMinimal : managersMinimal)

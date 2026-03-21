@@ -34,7 +34,7 @@ public class Lwjgl3Launcher {
         private final QuestionManager questionManager;
         private final FontManager fontManager;
 
-        // COMPOSITION ROOT - Creates ALL dependencies
+        // creates all managers and wires everything together
         public GameApplication() {
             super(
                   SceneManager.getInstance(),
@@ -170,7 +170,7 @@ public class Lwjgl3Launcher {
                 fontManager
             ));
 
-            // Start with first scene
+            // kick off the game on the start screen
             sceneManager.switchScene("StartScene");
 
             System.out.println("Game Engine started successfully!");

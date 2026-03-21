@@ -8,63 +8,83 @@ import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.questions.QuestionManager;
+import io.github.inf1009_p10_9.ui.BackgroundElement;
+import io.github.inf1009_p10_9.ui.CarElement;
+import io.github.inf1009_p10_9.ui.CloudElement;
 import io.github.inf1009_p10_9.ui.FontManager;
+import io.github.inf1009_p10_9.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.ui.TextLabel;
+import io.github.inf1009_p10_9.ui.TitleCarElement;
+import io.github.inf1009_p10_9.ui.TitleElement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 // screen where the player picks a subject and difficulty before starting the game
 public class SubjectSelectScene extends Scene {
+
+    // dependencies
+    private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
     private final FontManager fontManager;
 
-    // ui elements
-    private TextLabel titleLabel;
+    // background and decoration elements
+    private TitleElement titleElement;
+    private TitleCarElement titleCar;
+    private CloudElement[] clouds;
+    private CarElement grassCar;
 
-    // subject row
+    // subject selector row
     private TextLabel subjectTitleLabel;
     private TextLabel subjectLeftArrow;
     private TextLabel subjectValueLabel;
     private TextLabel subjectRightArrow;
+    private MenuButtonElement subjectButton;
 
-    // difficulty row
+    // difficulty selector row
     private TextLabel difficultyTitleLabel;
     private TextLabel difficultyLeftArrow;
     private TextLabel difficultyValueLabel;
     private TextLabel difficultyRightArrow;
+    private MenuButtonElement difficultyButton;
 
-    // instructions at the bottom of the screen
-    private TextLabel instructionLine1;
-    private TextLabel instructionLine2;
+    private TextLabel instructionLabel;
 
     // available options for each row
     private String[] subjectOptions = { "Math", "English" };
     private String[] difficultyOptions = { "Easy", "Hard" };
 
-    // current selection state
     private int selectedSubjectIndex = 0;
     private int selectedDifficultyIndex = 0;
 
-    // tracks which row the cursor is in: 0 = subject, 1 = difficulty
+    // tracks which row the cursor is on: 0 = subject, 1 = difficulty
     private int activeRow = 0;
 
-    // input state
+    // animation and input state
+    private float titleBounceTimer = 0f;
+    private float sceneLoadTime = 0f;
+
     private boolean upDownPressed = false;
     private boolean leftRightPressed = false;
     private boolean enterPressed = false;
     private boolean escPressed = false;
-    private float sceneLoadTime = 0;
 
     // colors
-    private static final Color NORMAL_COLOR = Color.WHITE;
-    private static final Color ACTIVE_ROW_COLOR = Color.YELLOW;
-    private static final Color INACTIVE_ROW_COLOR = Color.LIGHT_GRAY;
-    private static final Color SECTION_TITLE_COLOR = Color.CYAN;
+    private static final Color ACTIVE_COLOR     = new Color(0.1f, 0.1f, 0.1f, 1f);
+    private static final Color INACTIVE_COLOR   = new Color(0.75f, 0.75f, 0.75f, 1f);
+    private static final Color SECTION_COLOR    = Color.CYAN;
+    private static final Color ARROW_ACTIVE     = new Color(1f, 0.9f, 0.1f, 1f);
+    private static final Color ARROW_INACTIVE   = new Color(0.55f, 0.55f, 0.55f, 1f);
 
-    private IInputKeyCheckable inputKeyCheckable;
+    private static final Color SUBJECT_COLOR    = new Color(0.2f, 0.6f, 0.9f, 0.88f);
+    private static final Color DIFFICULTY_COLOR = new Color(0.6f, 0.3f, 0.9f, 0.88f);
+    private static final Color HIGHLIGHT_COLOR  = new Color(1f, 0.85f, 0.1f, 0.95f);
+
+    private static final float BUTTON_WIDTH  = 320f;
+    private static final float BUTTON_HEIGHT = 50f;
 
     public SubjectSelectScene(IEntityRegisterable entityRegisterable,
             IUIDisplayable uiDisplayable,
@@ -75,78 +95,118 @@ public class SubjectSelectScene extends Scene {
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
             FontManager fontManager) {
-		super("SubjectSelectScene",
-		entityRegisterable,
-		uiDisplayable,
-		collidableRegisterable,
-		renderRegisterable,
-		musicPlayable);
-		this.inputKeyCheckable = inputKeyCheckable;
-		this.sceneSwitchable = sceneSwitchable;
-		this.questionManager = questionManager;
-		this.fontManager = fontManager;
-	}
+        super("SubjectSelectScene",
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
+        this.inputKeyCheckable = inputKeyCheckable;
+        this.sceneSwitchable = sceneSwitchable;
+        this.questionManager = questionManager;
+        this.fontManager = fontManager;
+    }
 
+    // builds and registers all visual elements for the scene
     @Override
     protected void loadEntities() {
-        float screenWidth = Gdx.graphics.getWidth();
-        float centerX = screenWidth / 2;
+        float screenWidth  = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float centerX      = screenWidth / 2f;
 
-        titleLabel = new TextLabel("SELECT LEVEL", centerX - 80, 550);
-        titleLabel.setColor(Color.GREEN);
-        addUI(titleLabel);
+        // background and decorations
+        addUI(new BackgroundElement());
 
-        // subject row
-        subjectTitleLabel = new TextLabel("Subject:", centerX - 200, 420);
-        subjectTitleLabel.setColor(SECTION_TITLE_COLOR);
+        clouds    = new CloudElement[3];
+        clouds[0] = new CloudElement(100,  screenHeight * 0.78f, 160, 50, 30f);
+        clouds[1] = new CloudElement(500,  screenHeight * 0.84f, 200, 60, 20f);
+        clouds[2] = new CloudElement(950,  screenHeight * 0.72f, 140, 45, 35f);
+        for (CloudElement cloud : clouds) addUI(cloud);
+
+        float grassY = screenHeight * 0.15f;
+        grassCar = new CarElement(100, grassY - 26, 110f, 0, 133, 64, 26, 128, 52);
+        addUI(grassCar);
+
+        // title with drop shadow and bouncing car
+        titleElement = new TitleElement("SELECT LEVEL", fontManager.getLargeFont(), Color.GREEN);
+        addUI(titleElement);
+
+        GlyphLayout layout = new GlyphLayout(fontManager.getLargeFont(), "SELECT LEVEL");
+        float titleRightEdge = (screenWidth + layout.width) / 2f;
+        titleCar = new TitleCarElement(titleRightEdge + 12, titleElement.getBaseY() - 35,
+                                       0, 296, 64, 24, 96, 36);
+        addUI(titleCar);
+
+        // selector rows — tighter vertical spacing, fixed column positions inside each button
+        float subjectRowY    = 430f;
+        float difficultyRowY = 350f;
+        float buttonX        = centerX - BUTTON_WIDTH / 2f;
+
+        // fixed x positions for each column within the button
+        // left arrow and value pushed further right so they don't clip the row title
+        float labelX      = buttonX + 14f;
+        float leftArrowX  = buttonX + BUTTON_WIDTH * 0.58f;
+        float valueX      = buttonX + BUTTON_WIDTH * 0.66f;
+        float rightArrowX = buttonX + BUTTON_WIDTH * 0.90f;
+
+        // subject button background
+        subjectButton = new MenuButtonElement(
+            buttonX, subjectRowY - BUTTON_HEIGHT + 10,
+            BUTTON_WIDTH, BUTTON_HEIGHT,
+            SUBJECT_COLOR, HIGHLIGHT_COLOR);
+        addUI(subjectButton);
+
+        subjectTitleLabel = new TextLabel("Subject:", labelX, subjectRowY,
+                                          fontManager.getMediumFont());
+        subjectTitleLabel.setColor(SECTION_COLOR);
         addUI(subjectTitleLabel);
 
-        subjectLeftArrow = new TextLabel("<", centerX - 30, 420);
-        subjectLeftArrow.setColor(ACTIVE_ROW_COLOR);
+        subjectLeftArrow = new TextLabel("<", leftArrowX, subjectRowY, fontManager.getMediumFont());
         addUI(subjectLeftArrow);
 
-        subjectValueLabel = new TextLabel(subjectOptions[selectedSubjectIndex], centerX + 20, 420);
-        subjectValueLabel.setColor(ACTIVE_ROW_COLOR);
+        subjectValueLabel = new TextLabel(subjectOptions[selectedSubjectIndex],
+                                          valueX, subjectRowY, fontManager.getMediumFont());
         addUI(subjectValueLabel);
 
-        subjectRightArrow = new TextLabel(">", centerX + 110, 420);
-        subjectRightArrow.setColor(ACTIVE_ROW_COLOR);
+        subjectRightArrow = new TextLabel(">", rightArrowX, subjectRowY, fontManager.getMediumFont());
         addUI(subjectRightArrow);
 
-        // difficulty row
-        difficultyTitleLabel = new TextLabel("Difficulty:", centerX - 200, 300);
-        difficultyTitleLabel.setColor(SECTION_TITLE_COLOR);
+        // difficulty button background
+        difficultyButton = new MenuButtonElement(
+            buttonX, difficultyRowY - BUTTON_HEIGHT + 10,
+            BUTTON_WIDTH, BUTTON_HEIGHT,
+            DIFFICULTY_COLOR, HIGHLIGHT_COLOR);
+        addUI(difficultyButton);
+
+        difficultyTitleLabel = new TextLabel("Difficulty:", labelX, difficultyRowY,
+                                              fontManager.getMediumFont());
+        difficultyTitleLabel.setColor(SECTION_COLOR);
         addUI(difficultyTitleLabel);
 
-        difficultyLeftArrow = new TextLabel("<", centerX - 30, 300);
-        difficultyLeftArrow.setColor(INACTIVE_ROW_COLOR);
+        difficultyLeftArrow = new TextLabel("<", leftArrowX, difficultyRowY,
+                                            fontManager.getMediumFont());
         addUI(difficultyLeftArrow);
 
-        difficultyValueLabel = new TextLabel(difficultyOptions[selectedDifficultyIndex], centerX + 20, 300);
-        difficultyValueLabel.setColor(INACTIVE_ROW_COLOR);
+        difficultyValueLabel = new TextLabel(difficultyOptions[selectedDifficultyIndex],
+                                             valueX, difficultyRowY,
+                                             fontManager.getMediumFont());
         addUI(difficultyValueLabel);
 
-        difficultyRightArrow = new TextLabel(">", centerX + 110, 300);
-        difficultyRightArrow.setColor(INACTIVE_ROW_COLOR);
+        difficultyRightArrow = new TextLabel(">", rightArrowX, difficultyRowY,
+                                             fontManager.getMediumFont());
         addUI(difficultyRightArrow);
 
-        // instructions split across two lines at the bottom
-        instructionLine1 = new TextLabel(
-            "UP/DOWN: switch row          LEFT/RIGHT: change value",
-            centerX - 240, 130,
-            fontManager.getSmallFont());
-        instructionLine1.setColor(Color.LIGHT_GRAY);
-        addUI(instructionLine1);
-
-        instructionLine2 = new TextLabel(
-            "ENTER: confirm          ESC: go back",
-            centerX - 165, 90,
-            fontManager.getSmallFont());
-        instructionLine2.setColor(Color.LIGHT_GRAY);
-        addUI(instructionLine2);
+        // instruction hint above the grass strip, using medium font so it's readable
+        instructionLabel = new TextLabel(
+            "UP/DOWN: row    LEFT/RIGHT: change    ENTER: confirm    ESC: back",
+            0, screenHeight * 0.10f, fontManager.getSmallFont());
+        instructionLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
+        layout.setText(fontManager.getSmallFont(),
+            "UP/DOWN: row    LEFT/RIGHT: change    ENTER: confirm    ESC: back");
+        instructionLabel.setPosition(centerX - layout.width / 2f, screenHeight * 0.10f);
+        addUI(instructionLabel);
 
         updateHighlight();
-
         System.out.println("SubjectSelectScene loaded");
     }
 
@@ -154,28 +214,41 @@ public class SubjectSelectScene extends Scene {
     @Override
     public void load() {
         super.load();
-        sceneLoadTime = 0;
-        selectedSubjectIndex = 0;
+        sceneLoadTime           = 0f;
+        titleBounceTimer        = 0f;
+        selectedSubjectIndex    = 0;
         selectedDifficultyIndex = 0;
-        activeRow = 0;
-        enterPressed = false;
-        escPressed = false;
+        activeRow               = 0;
+        upDownPressed           = false;
+        leftRightPressed        = false;
+        enterPressed            = false;
+        escPressed              = false;
     }
 
     @Override
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        float delta = Gdx.graphics.getDeltaTime();
+        sceneLoadTime    += delta;
+        titleBounceTimer += delta;
+
+        for (CloudElement cloud : clouds) cloud.update(delta);
+        grassCar.update(delta);
+
+        // bounce title and keep title car aligned
+        float bounceOffset = (float) Math.sin(titleBounceTimer * 2.5f) * 10f;
+        titleElement.setY(titleElement.getBaseY() + bounceOffset);
+        titleCar.setY(titleElement.getBaseY() + bounceOffset - 35);
 
         // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        // up/down to switch between the subject and difficulty rows, only triggers once per press
-        boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
-                               inputKeyCheckable.isKeyPressed(Keys.W);
+        // up/down to switch between subject and difficulty rows
+        boolean upKeyPressed   = inputKeyCheckable.isKeyPressed(Keys.UP)   ||
+                                 inputKeyCheckable.isKeyPressed(Keys.W);
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
                                  inputKeyCheckable.isKeyPressed(Keys.S);
 
@@ -195,9 +268,9 @@ public class SubjectSelectScene extends Scene {
             upDownPressed = false;
         }
 
-        // left/right to cycle the value in the active row, only triggers once per press
-        boolean leftKeyPressed = inputKeyCheckable.isKeyPressed(Keys.LEFT) ||
-                                 inputKeyCheckable.isKeyPressed(Keys.A);
+        // left/right to cycle the value in the active row
+        boolean leftKeyPressed  = inputKeyCheckable.isKeyPressed(Keys.LEFT)  ||
+                                  inputKeyCheckable.isKeyPressed(Keys.A);
         boolean rightKeyPressed = inputKeyCheckable.isKeyPressed(Keys.RIGHT) ||
                                   inputKeyCheckable.isKeyPressed(Keys.D);
 
@@ -218,7 +291,6 @@ public class SubjectSelectScene extends Scene {
                     if (selectedSubjectIndex >= subjectOptions.length) {
                         selectedSubjectIndex = 0;
                     }
-
                 } else {
                     // cycling through difficulties
                     if (rightKeyPressed) {
@@ -240,16 +312,15 @@ public class SubjectSelectScene extends Scene {
             leftRightPressed = false;
         }
 
-        // confirm selection and load the game
+        // confirm selection and start the game
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
 
-                String chosenSubject = subjectOptions[selectedSubjectIndex];
+                String chosenSubject    = subjectOptions[selectedSubjectIndex];
                 String chosenDifficulty = difficultyOptions[selectedDifficultyIndex];
 
                 questionManager.selectBank(chosenSubject, chosenDifficulty);
-
                 System.out.println("Starting: " + chosenSubject + " - " + chosenDifficulty);
                 sceneSwitchable.switchScene("GameScene");
             }
@@ -268,31 +339,35 @@ public class SubjectSelectScene extends Scene {
         }
     }
 
-    // updates arrow and label colors to show which row is active, and refreshes displayed values
+    // refreshes button highlights, arrow colors, and displayed values to match the active row
     private void updateHighlight() {
         if (activeRow == 0) {
-            subjectTitleLabel.setColor(SECTION_TITLE_COLOR);
-            subjectLeftArrow.setColor(ACTIVE_ROW_COLOR);
-            subjectValueLabel.setColor(ACTIVE_ROW_COLOR);
-            subjectRightArrow.setColor(ACTIVE_ROW_COLOR);
+            subjectButton.setHighlighted(true);
+            subjectTitleLabel.setColor(SECTION_COLOR);
+            subjectLeftArrow.setColor(ARROW_ACTIVE);
+            subjectValueLabel.setColor(ACTIVE_COLOR);
+            subjectRightArrow.setColor(ARROW_ACTIVE);
 
-            difficultyTitleLabel.setColor(INACTIVE_ROW_COLOR);
-            difficultyLeftArrow.setColor(INACTIVE_ROW_COLOR);
-            difficultyValueLabel.setColor(INACTIVE_ROW_COLOR);
-            difficultyRightArrow.setColor(INACTIVE_ROW_COLOR);
+            difficultyButton.setHighlighted(false);
+            difficultyTitleLabel.setColor(INACTIVE_COLOR);
+            difficultyLeftArrow.setColor(ARROW_INACTIVE);
+            difficultyValueLabel.setColor(INACTIVE_COLOR);
+            difficultyRightArrow.setColor(ARROW_INACTIVE);
         } else {
-            subjectTitleLabel.setColor(INACTIVE_ROW_COLOR);
-            subjectLeftArrow.setColor(INACTIVE_ROW_COLOR);
-            subjectValueLabel.setColor(INACTIVE_ROW_COLOR);
-            subjectRightArrow.setColor(INACTIVE_ROW_COLOR);
+            subjectButton.setHighlighted(false);
+            subjectTitleLabel.setColor(INACTIVE_COLOR);
+            subjectLeftArrow.setColor(ARROW_INACTIVE);
+            subjectValueLabel.setColor(INACTIVE_COLOR);
+            subjectRightArrow.setColor(ARROW_INACTIVE);
 
-            difficultyTitleLabel.setColor(SECTION_TITLE_COLOR);
-            difficultyLeftArrow.setColor(ACTIVE_ROW_COLOR);
-            difficultyValueLabel.setColor(ACTIVE_ROW_COLOR);
-            difficultyRightArrow.setColor(ACTIVE_ROW_COLOR);
+            difficultyButton.setHighlighted(true);
+            difficultyTitleLabel.setColor(SECTION_COLOR);
+            difficultyLeftArrow.setColor(ARROW_ACTIVE);
+            difficultyValueLabel.setColor(ACTIVE_COLOR);
+            difficultyRightArrow.setColor(ARROW_ACTIVE);
         }
 
-        // update the displayed text values
+        // refresh the displayed text values
         subjectValueLabel.setText(subjectOptions[selectedSubjectIndex]);
         difficultyValueLabel.setText(difficultyOptions[selectedDifficultyIndex]);
     }

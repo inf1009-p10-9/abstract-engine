@@ -27,12 +27,10 @@ public class SceneryCardElement extends UIElement {
         this.selected = false;
         this.zIndex = 50;
 
-        // Gdx.files.internal() looks in your assets/ folder —
-        // the same way CarElement loads "cars/cars.png"
+        // loads the preview image from assets, same pattern as CarElement
         this.previewTexture = new Texture(Gdx.files.internal(texturePath));
 
-        // LibGDX defaults to nearest-neighbour filtering, which looks pixelated
-        // when scaled. LINEAR gives smooth scaling for photos/screenshots.
+        // linear filtering keeps the preview smooth when scaled up
         this.previewTexture.setFilter(
             Texture.TextureFilter.Linear,
             Texture.TextureFilter.Linear
@@ -51,14 +49,12 @@ public class SceneryCardElement extends UIElement {
         // draw the preview image scaled to card size
         batch.draw(previewTexture, x, y, width, height);
 
-        // if not selected, draw a dark tinted rectangle over the image
-        // to make it look dimmed. We tint by setting the SpriteBatch color —
-        // it multiplies against whatever we draw next.
+        // dim unselected cards with a semi-transparent overlay
         if (!selected) {
-            Color prev = batch.getColor().cpy();        // save original tint
-            batch.setColor(0f, 0f, 0f, 0.45f);         // semi-transparent black
+            Color prev = batch.getColor().cpy();
+            batch.setColor(0f, 0f, 0f, 0.45f);
             batch.draw(previewTexture, x, y, width, height);
-            batch.setColor(prev);                       // restore
+            batch.setColor(prev);
         }
     }
 
@@ -76,8 +72,7 @@ public class SceneryCardElement extends UIElement {
         shapeRenderer.rectLine(x,         y + height, x,         y,          t); // left
     }
 
-    // IMPORTANT: always dispose textures you own, or you will leak GPU memory.
-    // Call this from LevelSelectScene.unload() or when done with the scene.
+    // call this from LevelSelectScene.unload() to avoid leaking GPU memory
     public void dispose() {
         if (previewTexture != null) {
             previewTexture.dispose();

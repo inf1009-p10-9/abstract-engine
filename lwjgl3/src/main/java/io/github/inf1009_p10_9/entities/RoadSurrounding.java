@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+// draws the green grass strips on either side of the road
 public class RoadSurrounding extends Entity implements IRenderable {
     private static final Color GRASS_GREEN = new Color(0.2f, 0.5f, 0.2f, 1f);
     

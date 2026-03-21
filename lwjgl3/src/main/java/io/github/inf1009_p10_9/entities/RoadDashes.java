@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
+// a single dashed white line in the centre of the road, scrolled downward each frame
 public class RoadDashes extends Entity implements IRenderable {
     private static final float SCROLL_SPEED = 60f;
     private static final float DASH_LENGTH  = 30f;

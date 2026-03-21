@@ -159,7 +159,7 @@ public class GameScene extends Scene {
         
             for (int i = 0; i < 4; i++) {
                 // left side
-                float lx = (float)(Math.random() * (roadLeftEdge - 50f));
+                float lx = (float)(Math.random() * (roadLeftEdge - 30f));
                 float ly = i * minGap + (float)(Math.random() * minGap);
                 Cactus cactusL = new Cactus(lx, ly);
                 addEntity(cactusL);

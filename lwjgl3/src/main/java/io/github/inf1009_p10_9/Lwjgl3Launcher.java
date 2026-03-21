@@ -69,11 +69,11 @@ public class Lwjgl3Launcher {
             // Register movement strategies
             float gameWidth  = Gdx.graphics.getWidth();
             float laneWidth = 200f;
-            
+
             float playerWidth = 52f;
             float LeftEdge  = gameWidth * 0.3f  - laneWidth / 2;
             float RightEdge = gameWidth * 0.70f + laneWidth / 2 - playerWidth;
-            
+
             movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge));
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
@@ -93,7 +93,7 @@ public class Lwjgl3Launcher {
 
                 fontManager
             ));
-            
+
             sceneManager.addScene(new LevelSelectScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable
@@ -160,8 +160,8 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager,
-                movementManager,                // as IMovementCalculatable
-                movementManager                 // as IMovementStrategyRegisterable
+                movementManager                // as IMovementCalculatable
+
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

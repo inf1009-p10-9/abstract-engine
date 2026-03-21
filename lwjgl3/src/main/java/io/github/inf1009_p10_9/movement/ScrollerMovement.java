@@ -15,11 +15,7 @@ public class ScrollerMovement implements IMovementStrategy {
 
         Vector2 currentPos = object.getPosition();
         Vector2 newPos = new Vector2(currentPos);
-        
-        if (object.getClass().getSimpleName() == "RoadDashes") {
-        	System.out.println(object.getPosition());
 
-        }
         newPos.y -= SPEED * Gdx.graphics.getDeltaTime(); //scroll downwards
         if(newPos.y < 0){
             newPos.y = Gdx.graphics.getHeight(); //wrap back to top

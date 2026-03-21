@@ -8,6 +8,7 @@ import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.LivesElement;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 // the main gameplay scene, sets up the road, player, gates, and question display
 public class GameScene extends Scene {
@@ -24,6 +25,7 @@ public class GameScene extends Scene {
     private final QuestionManager questionManager;
     private final FontManager fontManager;
     private final IMovementCalculatable movementCalculatable;
+    private final IScenerySelect scenerySelect;
 
     public GameScene(IEntityRegisterable entityRegisterable,
             IUIDisplayable uiDisplayable,
@@ -35,7 +37,8 @@ public class GameScene extends Scene {
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
             FontManager fontManager,
-            IMovementCalculatable movementCalculatable) {
+            IMovementCalculatable movementCalculatable,
+            IScenerySelect scenerySelect) {
 			super("GameScene",
 			     entityRegisterable,
 			     uiDisplayable,
@@ -48,6 +51,7 @@ public class GameScene extends Scene {
 			this.questionManager = questionManager;
 			this.fontManager = fontManager;
             this.movementCalculatable = movementCalculatable;
+            this.scenerySelect = scenerySelect;
 			}
 
     @Override
@@ -60,14 +64,23 @@ public class GameScene extends Scene {
         float gateHeight = 80f;
         float centerX = screenWidth / 2;
         float gap = 100f;
+        Color roadsurroundingColor = new Color(0.2f, 0.5f, 0.2f, 1f); // default green
 
+        String selectedScenery = scenerySelect.getSelectedScenery();
 
-    	RoadSurrounding roadsurroundingLeft= new RoadSurrounding("left");
+        if (selectedScenery.equals("City")) {
+        	roadsurroundingColor = new Color(0.2f, 0.5f, 0.2f, 1f); 
+        }
+        if (selectedScenery.equals("Desert")) {
+        	roadsurroundingColor = new Color(0.76f, 0.70f, 0.35f, 1f);
+        }
+       
+    	RoadSurrounding roadsurroundingLeft= new RoadSurrounding("left",roadsurroundingColor );
         addEntity(roadsurroundingLeft);
         renderRegisterable.registerRenderable(roadsurroundingLeft);
         collidableRegisterable.registerCollidable(roadsurroundingLeft);
 
-    	RoadSurrounding roadsurroundingRight = new RoadSurrounding("right");
+    	RoadSurrounding roadsurroundingRight = new RoadSurrounding("right",roadsurroundingColor);
         addEntity(roadsurroundingRight);
 
         renderRegisterable.registerRenderable(roadsurroundingRight);

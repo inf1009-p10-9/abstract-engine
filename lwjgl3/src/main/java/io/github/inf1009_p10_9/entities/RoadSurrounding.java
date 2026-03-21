@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class RoadSurrounding extends Entity implements IRenderable {
-    private static final Color GRASS_GREEN = new Color(0.2f, 0.5f, 0.2f, 1f);
+    private final Color color;
     
     private final float gameWidth;
     private final float gameHeight;
@@ -15,7 +15,9 @@ public class RoadSurrounding extends Entity implements IRenderable {
     private final float roadRightEdge;
     private final float laneWidth = 200f;
 
-    public RoadSurrounding(String side) {
+    public RoadSurrounding(String side, Color color) {
+    	this.color = color;
+    	
         this.gameWidth    = Gdx.graphics.getWidth();
         this.gameHeight   = Gdx.graphics.getHeight();
         
@@ -45,7 +47,7 @@ public class RoadSurrounding extends Entity implements IRenderable {
 
     @Override
     public void renderShapes(ShapeRenderer sr) {
-        sr.setColor(GRASS_GREEN);
+        sr.setColor(color);
         sr.rect(0, 0, roadLeftEdge, gameHeight);
         sr.rect(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
     }

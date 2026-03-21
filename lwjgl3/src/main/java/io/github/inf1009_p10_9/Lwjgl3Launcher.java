@@ -162,8 +162,8 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager,
-                movementManager                // as IMovementCalculatable
-
+                movementManager,                // as IMovementCalculatable
+                SettingsManager.getInstance() // TEMPORARY LINE
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

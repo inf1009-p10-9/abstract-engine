@@ -3,9 +3,10 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.interfaces.ISettingsControllable;
+import io.github.inf1009_p10_9.interfaces.IScenerySelect;
 
 // singleton that stores player preferences, volume levels and keybindings, across the session
-public class SettingsManager implements ISettingsControllable {
+public class SettingsManager implements ISettingsControllable, IScenerySelect {
     private static SettingsManager instance;
 
     // volume levels, clamped to 0.0 to 1.0 on write

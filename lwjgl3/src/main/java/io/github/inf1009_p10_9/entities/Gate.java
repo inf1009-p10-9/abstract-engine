@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9.entities;
 import io.github.inf1009_p10_9.interfaces.ICollidable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
+import io.github.inf1009_p10_9.interfaces.IUILives;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.questions.Question;
 
@@ -23,6 +24,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     private String option; // "A" or "B"
     private BitmapFont font;
     private ISFXPlayable sfxPlayable;
+    private IUILives livesCounter;
 
     // flash state after a collision
     private float flashTimer = 0;
@@ -39,7 +41,10 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     // the other gate, so both can be repositioned together after a collision
     private Gate partner;
 
-    public Gate(float x, float y, float width, float height, String option, QuestionManager questionManager, ISFXPlayable sfxPlayable) {
+    public Gate(float x, float y, float width, float height, String option,
+                QuestionManager questionManager,
+                ISFXPlayable sfxPlayable,
+                IUILives uiLivesCounter) {
         super(x, y, width, height, 5);
         this.option = option;
         this.font = new BitmapFont();
@@ -47,6 +52,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
         this.font.setColor(Color.WHITE);
         this.questionManager = questionManager;
         this.sfxPlayable = sfxPlayable;
+        this.livesCounter = uiLivesCounter;
     }
 
     @Override
@@ -119,6 +125,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
             } else {
                 color = Color.RED;
                 sfxPlayable.playSound("sound/wrong.mp3");
+                livesCounter.setLivesCounter(livesCounter.getLivesCounter()-1);
             }
 
             // hold the result color briefly before resetting

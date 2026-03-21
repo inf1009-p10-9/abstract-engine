@@ -5,12 +5,17 @@ import io.github.inf1009_p10_9.entities.*;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.ui.FontManager;
+import io.github.inf1009_p10_9.ui.LivesElement;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
 import com.badlogic.gdx.Gdx;
 
 // the main gameplay scene, sets up the road, player, gates, and question display
 public class GameScene extends Scene {
     private QuestionDisplay questionDisplay;
+    private LivesElement livesElement;
+    private float endDelay = 0f;
+    private final float END_DELAY_DURATION = 1.0f; // seconds
+    private boolean endStarted = false;
 
     // dependencies
     private final IInputKeyCheckable inputKeyCheckable;
@@ -18,7 +23,6 @@ public class GameScene extends Scene {
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
     private final FontManager fontManager;
-    private final IMovementStrategyRegisterable movementStrategyRegisterable;
     private final IMovementCalculatable movementCalculatable;
 
     public GameScene(IEntityRegisterable entityRegisterable,
@@ -31,7 +35,6 @@ public class GameScene extends Scene {
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
             FontManager fontManager,
-            IMovementStrategyRegisterable movementStrategyRegisterable,
             IMovementCalculatable movementCalculatable) {
 			super("GameScene",
 			     entityRegisterable,
@@ -45,13 +48,12 @@ public class GameScene extends Scene {
 			this.questionManager = questionManager;
 			this.fontManager = fontManager;
             this.movementCalculatable = movementCalculatable;
-            this.movementStrategyRegisterable = movementStrategyRegisterable;
 			}
 
     @Override
     protected void loadEntities() {
-    	
-    	
+
+
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float gateWidth = 150f;
@@ -59,23 +61,23 @@ public class GameScene extends Scene {
         float centerX = screenWidth / 2;
         float gap = 100f;
 
-        
+
     	RoadSurrounding roadsurroundingLeft= new RoadSurrounding("left");
         addEntity(roadsurroundingLeft);
         renderRegisterable.registerRenderable(roadsurroundingLeft);
         collidableRegisterable.registerCollidable(roadsurroundingLeft);
-        
+
     	RoadSurrounding roadsurroundingRight = new RoadSurrounding("right");
         addEntity(roadsurroundingRight);
-        
+
         renderRegisterable.registerRenderable(roadsurroundingRight);
         collidableRegisterable.registerCollidable(roadsurroundingRight);
-        
+
         // scrolling road background
         RoadAsphalt roadasphalt = new RoadAsphalt();
         addEntity(roadasphalt);
         renderRegisterable.registerRenderable(roadasphalt);
-        
+
 
         float dashCycle = 50f;
 
@@ -84,10 +86,17 @@ public class GameScene extends Scene {
             addEntity(roaddashes);
             renderRegisterable.registerRenderable(roaddashes);
         }
-        
+
         // question text shown at the top of the screen
         questionDisplay = new QuestionDisplay(0, 690, questionManager, fontManager.getLargeFont());
         addUI(questionDisplay);
+
+        //Lives sprites
+        livesElement = new LivesElement(90, 60, fontManager.getMediumFont());
+        addUI(livesElement);
+        int totalQuestions = questionManager.getTotalQuestions();
+        float livesQuestionsRatio = 0.65f;
+        livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
 
         // player centered horizontally at the bottom
         Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
@@ -96,12 +105,12 @@ public class GameScene extends Scene {
         collidableRegisterable.registerCollidable(player);
 
         // gate A on the left, gate B on the right, both positioned above center
-        Gate gateA = new Gate(centerX - gateWidth - gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager, sfxPlayable);
+        Gate gateA = new Gate(centerX - gateWidth - gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "A", questionManager, sfxPlayable, livesElement);
         addEntity(gateA);
         renderRegisterable.registerRenderable(gateA);
         collidableRegisterable.registerCollidable(gateA);
 
-        Gate gateB = new Gate(centerX + gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager, sfxPlayable);
+        Gate gateB = new Gate(centerX + gap/2, screenHeight * 0.65f, gateWidth, gateHeight, "B", questionManager, sfxPlayable, livesElement);
         addEntity(gateB);
         renderRegisterable.registerRenderable(gateB);
         collidableRegisterable.registerCollidable(gateB);
@@ -123,18 +132,30 @@ public class GameScene extends Scene {
             sceneSwitchable.switchScene("EndScene");
         }
 
+        // if no more lives -> delay -> end screen
+        if (livesElement.getLivesCounter() <= 0) {
+            if (!endStarted) {
+                endStarted = true;
+                endDelay = END_DELAY_DURATION;
+            }
+
+            endDelay -= Gdx.graphics.getDeltaTime();
+            if (endDelay <= 0f) {
+                endStarted = false;
+                sceneSwitchable.switchScene("EndScene");
+            }
+        }
+
         Array<Entity> entities = entityRegisterable.getEntities();
         //enable movement
         for (Entity entity : entities) {
             if (entity instanceof Gate) {
                 movementCalculatable.move(entity, 0);
             }
-            
+
             if (entity instanceof RoadDashes) {
             	movementCalculatable.move(entity, 0);
             }
         }
-        
-       
     }
 }

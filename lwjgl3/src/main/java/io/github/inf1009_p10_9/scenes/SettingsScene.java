@@ -1,10 +1,9 @@
 package io.github.inf1009_p10_9.scenes;
 
 import io.github.inf1009_p10_9.interfaces.*;
-import io.github.inf1009_p10_9.ui.BackgroundElement;
-import io.github.inf1009_p10_9.ui.CloudElement;
 import io.github.inf1009_p10_9.ui.FontManager;
-import io.github.inf1009_p10_9.ui.MenuButtonElement;
+import io.github.inf1009_p10_9.ui.SceneBackdrop;
+import io.github.inf1009_p10_9.ui.SettingsRow;
 import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.ui.TitleElement;
 
@@ -18,11 +17,8 @@ public class SettingsScene extends Scene {
     // ui elements
     private TitleElement titleElement;
     private TextLabel instructionLabel;
-    private TextLabel[] optionLabels;
-    private TextLabel[] valueLabels;
-    private TextLabel[] arrowIndicators;
-    private MenuButtonElement[] menuButtons;
-    private CloudElement[] clouds;
+    private SceneBackdrop backdrop;
+    private SettingsRow[] rows;
 
     // settings menu content
     private final String[] options = {
@@ -81,11 +77,11 @@ public class SettingsScene extends Scene {
 
     // external dependencies injected via constructor
     private final IInputKeyCheckable inputKeyCheckable;
+    private final IKeyPressConsumable keyPressConsumable;
     private final ISceneSwitchable sceneSwitchable;
     private final ISettingsControllable settingsControllable;
-    private final IKeyPressConsumable keyPressConsumable;
     private final IMusicPlayable musicPlayable;
-    private final ISFXVolume sfxVolume;
+    private final ISFXPlayable sfxPlayable;
     private final FontManager fontManager;
 
     public SettingsScene(IEntityRegisterable entityRegisterable,
@@ -93,13 +89,12 @@ public class SettingsScene extends Scene {
                          ICollidableRegisterable collidableRegisterable,
                          IRenderRegisterable renderRegisterable,
                          IMusicPlayable musicPlayable,
-                         ISFXVolume sfxVolume,
+                         ISFXPlayable sfxPlayable,
                          IInputKeyCheckable inputKeyCheckable,
                          IKeyPressConsumable keyPressConsumable,
                          ISceneSwitchable sceneSwitchable,
                          ISettingsControllable settingsControllable,
                          FontManager fontManager) {
-
         super("SettingsScene",
               entityRegisterable,
               uiDisplayable,
@@ -107,10 +102,10 @@ public class SettingsScene extends Scene {
               renderRegisterable,
               musicPlayable);
         this.musicPlayable = musicPlayable;
-        this.sfxVolume = sfxVolume;
+        this.sfxPlayable = sfxPlayable;
         this.inputKeyCheckable = inputKeyCheckable;
-        this.sceneSwitchable = sceneSwitchable;
         this.keyPressConsumable = keyPressConsumable;
+        this.sceneSwitchable = sceneSwitchable;
         this.settingsControllable = settingsControllable;
         this.fontManager = fontManager;
     }
@@ -119,21 +114,11 @@ public class SettingsScene extends Scene {
     @Override
     protected void loadEntities() {
         float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
         float centerX = screenWidth / 2f;
 
-        // background at z-index -100
-        BackgroundElement background = new BackgroundElement();
-        addUI(background);
-
-        // drifting clouds for a bit of motion in the otherwise cleaner settings page
-        clouds = new CloudElement[3];
-        clouds[0] = new CloudElement(80, screenHeight * 0.90f, 160, 50, 25f);
-        clouds[1] = new CloudElement(480, screenHeight * 0.94f, 200, 60, 18f);
-        clouds[2] = new CloudElement(980, screenHeight * 0.89f, 150, 46, 28f);
-        for (CloudElement cloud : clouds) {
-            addUI(cloud);
-        }
+        // shared decorative background
+        backdrop = new SceneBackdrop(false);
+        backdrop.addToScene(this);
 
         // title for the settings dashboard
         titleElement = new TitleElement("SETTINGS", fontManager.getLargeFont(), Color.CYAN);
@@ -146,11 +131,8 @@ public class SettingsScene extends Scene {
         instructionLabel.setColor(Color.WHITE);
         addUI(instructionLabel);
 
-        // create the dashboard rows
-        optionLabels = new TextLabel[options.length];
-        valueLabels = new TextLabel[options.length];
-        arrowIndicators = new TextLabel[options.length];
-        menuButtons = new MenuButtonElement[options.length];
+        // create the dashboard rows as reusable row objects instead of parallel arrays
+        rows = new SettingsRow[options.length];
 
         float startY = 430;
         float spacingY = 58;
@@ -169,30 +151,21 @@ public class SettingsScene extends Scene {
                 rowColor = BACK_ROW_COLOR;
             }
 
-            // row panel
-            menuButtons[i] = new MenuButtonElement(
-                rowX, rowY - ROW_HEIGHT + 10,
-                ROW_WIDTH, ROW_HEIGHT,
-                rowColor, ROW_HIGHLIGHT_COLOR
+            rows[i] = new SettingsRow(
+                options[i],
+                bindActions[i],
+                rowX,
+                rowY,
+                ROW_WIDTH,
+                ROW_HEIGHT,
+                rowColor,
+                ROW_HIGHLIGHT_COLOR,
+                NORMAL_COLOR,
+                VALUE_COLOR,
+                ARROW_COLOR,
+                fontManager
             );
-            addUI(menuButtons[i]);
-
-            // selection arrow to the left of the active row
-            float arrowX = rowX - 45;
-            arrowIndicators[i] = new TextLabel(">>", arrowX, rowY, fontManager.getMediumFont());
-            arrowIndicators[i].setColor(ARROW_COLOR);
-            arrowIndicators[i].setZIndex(200);
-            addUI(arrowIndicators[i]);
-
-            // setting name on the left side of each row
-            optionLabels[i] = new TextLabel(options[i], rowX + 22, rowY, fontManager.getMediumFont());
-            optionLabels[i].setColor(NORMAL_COLOR);
-            addUI(optionLabels[i]);
-
-            // current value on the right side of each row
-            valueLabels[i] = new TextLabel("", rowX + ROW_WIDTH - 150, rowY, fontManager.getMediumFont());
-            valueLabels[i].setColor(VALUE_COLOR);
-            addUI(valueLabels[i]);
+            rows[i].addToScene(this);
         }
 
         updateRows();
@@ -223,10 +196,8 @@ public class SettingsScene extends Scene {
         float delta = Gdx.graphics.getDeltaTime();
         sceneLoadTime += delta;
 
-        // animate background clouds
-        for (CloudElement cloud : clouds) {
-            cloud.update(delta);
-        }
+        // animate shared decorative background
+        backdrop.update(delta, 1f, 1f);
 
         // slight bounce for the title so the page still feels alive
         titleBounceTimer += delta;
@@ -241,6 +212,7 @@ public class SettingsScene extends Scene {
         // handle key-rebinding mode separately from normal navigation
         if (waitingForRebind) {
             handleRebindMode();
+            animateArrow(delta);
             return;
         }
 
@@ -262,9 +234,9 @@ public class SettingsScene extends Scene {
 
                 // wrap around at the top and bottom
                 if (selectedIndex < 0) {
-                    selectedIndex = options.length - 1;
+                    selectedIndex = rows.length - 1;
                 }
-                if (selectedIndex >= options.length) {
+                if (selectedIndex >= rows.length) {
                     selectedIndex = 0;
                 }
 
@@ -350,9 +322,9 @@ public class SettingsScene extends Scene {
         if (pressedKey != -1 &&
             pressedKey != Keys.ENTER &&
             pressedKey != Keys.ESCAPE &&
-            bindActions[selectedIndex] != null) {
+            rows[selectedIndex].getBindAction() != null) {
 
-            settingsControllable.rebindKey(bindActions[selectedIndex], pressedKey);
+            settingsControllable.rebindKey(rows[selectedIndex].getBindAction(), pressedKey);
             waitingForRebind = false;
             rebindReady = false;
             updateRows();
@@ -368,7 +340,7 @@ public class SettingsScene extends Scene {
     // changes sfx volume and immediately applies it to the sfx manager
     private void adjustSfxVolume(float delta) {
         settingsControllable.setSfxVolume(settingsControllable.getSfxVolume() + delta);
-        sfxVolume.setVolume(settingsControllable.getSfxVolume());
+        sfxPlayable.setVolume(settingsControllable.getSfxVolume());
     }
 
     // handles enter based on the currently selected row
@@ -386,46 +358,41 @@ public class SettingsScene extends Scene {
     // refreshes all row states, displayed values, and instruction text
     private void updateRows() {
         float rowX = Gdx.graphics.getWidth() / 2f - ROW_WIDTH / 2f;
-        float arrowX = rowX - 45;
+        float arrowBaseX = rowX - 45;
 
-        for (int i = 0; i < options.length; i++) {
-            if (i == selectedIndex) {
-                menuButtons[i].setHighlighted(true);
-                optionLabels[i].setColor(HIGHLIGHTED_COLOR);
-                valueLabels[i].setColor(VALUE_HIGHLIGHTED_COLOR);
-                arrowIndicators[i].setVisible(true);
-                arrowPulseTimer = 0;
-            } else {
-                menuButtons[i].setHighlighted(false);
-                optionLabels[i].setColor(NORMAL_COLOR);
-                valueLabels[i].setColor(VALUE_COLOR);
-                arrowIndicators[i].setVisible(false);
-                arrowIndicators[i].setPosition(arrowX, arrowIndicators[i].getY());
-            }
+        for (int i = 0; i < rows.length; i++) {
+            rows[i].setHighlighted(
+                i == selectedIndex,
+                NORMAL_COLOR,
+                HIGHLIGHTED_COLOR,
+                VALUE_COLOR,
+                VALUE_HIGHLIGHTED_COLOR,
+                arrowBaseX
+            );
         }
 
         // update the row values
-        valueLabels[0].setText((int) (settingsControllable.getMusicVolume() * 100) + "%");
-        valueLabels[1].setText((int) (settingsControllable.getSfxVolume() * 100) + "%");
+        rows[0].getValueLabel().setText((int) (settingsControllable.getMusicVolume() * 100) + "%");
+        rows[1].getValueLabel().setText((int) (settingsControllable.getSfxVolume() * 100) + "%");
 
-        valueLabels[2].setText(selectedIndex == 2 && waitingForRebind
+        rows[2].getValueLabel().setText(selectedIndex == 2 && waitingForRebind
             ? "Press key..."
             : Keys.toString(settingsControllable.getKeybind("MOVE_UP")));
-        valueLabels[3].setText(selectedIndex == 3 && waitingForRebind
+        rows[3].getValueLabel().setText(selectedIndex == 3 && waitingForRebind
             ? "Press key..."
             : Keys.toString(settingsControllable.getKeybind("MOVE_DOWN")));
-        valueLabels[4].setText(selectedIndex == 4 && waitingForRebind
+        rows[4].getValueLabel().setText(selectedIndex == 4 && waitingForRebind
             ? "Press key..."
             : Keys.toString(settingsControllable.getKeybind("MOVE_LEFT")));
-        valueLabels[5].setText(selectedIndex == 5 && waitingForRebind
+        rows[5].getValueLabel().setText(selectedIndex == 5 && waitingForRebind
             ? "Press key..."
             : Keys.toString(settingsControllable.getKeybind("MOVE_RIGHT")));
 
-        valueLabels[6].setText("Enter");
+        rows[6].getValueLabel().setText("Enter");
 
         // change the instruction line while waiting for a new keybind
         if (waitingForRebind) {
-            instructionLabel.setText("Press a new key for " + options[selectedIndex]);
+            instructionLabel.setText("Press a new key for " + rows[selectedIndex].getOptionText());
             instructionLabel.setColor(new Color(1f, 0.9f, 0.1f, 1f));
         } else {
             instructionLabel.setText("UP / DOWN to move   |   LEFT / RIGHT to adjust   |   ENTER to rebind   |   ESC to return");
@@ -441,10 +408,9 @@ public class SettingsScene extends Scene {
         arrowPulseTimer += delta;
         float arrowOffset = (float) Math.sin(arrowPulseTimer * 6f) * 5f;
 
-        for (int i = 0; i < arrowIndicators.length; i++) {
-            if (i == selectedIndex) {
-                arrowIndicators[i].setPosition(arrowBaseX + arrowOffset, arrowIndicators[i].getY());
-            }
-        }
+        rows[selectedIndex].getArrowLabel().setPosition(
+            arrowBaseX + arrowOffset,
+            rows[selectedIndex].getArrowLabel().getY()
+        );
     }
 }

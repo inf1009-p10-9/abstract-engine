@@ -114,6 +114,16 @@ public class StartScene extends MenuScene {
             menuOptionLabels[i].setColor(NORMAL_COLOR);
             addUI(menuOptionLabels[i]);
         }
+     // instruction hint in the grass strip at the bottom
+        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move");
+        TextLabel instructionLabel = new TextLabel(
+            "ENTER: select    UP/DOWN: move",
+            centerX - instrLayout.width / 2f,
+            Gdx.graphics.getHeight() * 0.10f,
+            fontManager.getSmallFont()
+        );
+        instructionLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
+        addUI(instructionLabel);
 
         updateHighlight();
         System.out.println("StartScene loaded");

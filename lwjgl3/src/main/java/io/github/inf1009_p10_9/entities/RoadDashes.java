@@ -22,7 +22,6 @@ public class RoadDashes extends Entity implements IRenderable {
     private final float laneLeft;
     private final float laneRight;
     
-    private float position_y;
     
     
 

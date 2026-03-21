@@ -57,6 +57,7 @@ public abstract class Scene implements Screen {
             System.out.println(">>> UNLOADING: " + name + " (Entities: " + entities.size + ", UI: " + uiElements.size + ")");
 
             for (Entity entity : entities) {
+            	System.out.println("DEBUG REMOVING:" + entity);
                 entityRegisterable.removeEntity(entity);
 
                 // also unregister from render and collision systems if applicable

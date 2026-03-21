@@ -15,18 +15,26 @@ public class RoadSurrounding extends Entity implements IRenderable {
     private final float roadRightEdge;
     private final float laneWidth = 200f;
 
-    public RoadSurrounding() {
+    public RoadSurrounding(String side) {
         this.gameWidth    = Gdx.graphics.getWidth();
         this.gameHeight   = Gdx.graphics.getHeight();
         
-
-
         this.roadLeftEdge  = gameWidth * 0.3f  - laneWidth / 2;
         this.roadRightEdge = gameWidth * 0.70f + laneWidth / 2;
         
+        if (side.equals("left")) {
+        	super.position.set(0, 0);
+        	super.bounds.set(0, 0, roadLeftEdge, gameHeight);
+        }
+        
+        else if (side.equals("right")) {
+        	super.position.set(roadRightEdge, 0);
+        	super.bounds.set(roadRightEdge, 0, gameWidth - roadRightEdge, gameHeight);
+        }
+        
 
-        super.position.set(0, 0);
-        super.bounds.set(0, 0, gameWidth, gameHeight);
+        
+        
     }
 
     @Override public void update() {
@@ -43,6 +51,11 @@ public class RoadSurrounding extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 2; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
+    @Override public void onCollision(ICollidable other) {
+    	 if (other instanceof Player) {
+             System.out.println("GRASS COLLIDED WITH: Player");
+         }
+    }
+    
+    @Override public int getCollisionLayer() { return 1; }
 }

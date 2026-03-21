@@ -8,9 +8,13 @@ import io.github.inf1009_p10_9.interfaces.IMovementStrategy;
 // movement strategy for player-controlled entities, maps a direction integer to positional movement
 public class UserMovement implements IMovementStrategy {
     private float speed;
+    private final float leftBoundary;
+    private final float rightBoundary;
 
-    public UserMovement(float speed) {
+    public UserMovement(float speed, float leftBoundary, float rightBoundary) {
         this.speed = speed;
+        this.leftBoundary = leftBoundary;
+        this.rightBoundary = rightBoundary;
     }
 
     // moveDirection: 0 = up, 1 = down, 2 = left, 3 = right
@@ -40,6 +44,7 @@ public class UserMovement implements IMovementStrategy {
                 newPos.x += moveDistance;
                 break;
         }
+        newPos.x = Math.max(leftBoundary, Math.min(newPos.x, rightBoundary));
 
         object.setPosition(newPos);
     }

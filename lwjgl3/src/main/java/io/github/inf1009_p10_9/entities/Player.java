@@ -14,7 +14,7 @@ public class Player extends Entity {
     private ISFXPlayable sfxPlayable;
 
     public Player(float x, float y, ISFXPlayable sfxPlayable) {
-        super(x, y, 32, 32, 10);
+        super(x, y, 52, 70, 10);
         this.color = Color.BLUE;
         this.sfxPlayable = sfxPlayable;
         loadTexture();

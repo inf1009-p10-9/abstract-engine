@@ -59,13 +59,21 @@ public class GameScene extends Scene {
         float centerX = screenWidth / 2;
         float gap = 100f;
 
-        // scrolling road background
-    	RoadSurrounding roadsurrounding = new RoadSurrounding();
-        addEntity(roadsurrounding);
-        renderRegisterable.registerRenderable(roadsurrounding);
         
+    	RoadSurrounding roadsurroundingLeft= new RoadSurrounding("left");
+        addEntity(roadsurroundingLeft);
+        renderRegisterable.registerRenderable(roadsurroundingLeft);
+        collidableRegisterable.registerCollidable(roadsurroundingLeft);
+        
+    	RoadSurrounding roadsurroundingRight = new RoadSurrounding("right");
+        addEntity(roadsurroundingRight);
+        
+        renderRegisterable.registerRenderable(roadsurroundingRight);
+        collidableRegisterable.registerCollidable(roadsurroundingRight);
+        
+        // scrolling road background
         RoadAsphalt roadasphalt = new RoadAsphalt();
-        addEntity(roadsurrounding);
+        addEntity(roadasphalt);
         renderRegisterable.registerRenderable(roadasphalt);
         
 

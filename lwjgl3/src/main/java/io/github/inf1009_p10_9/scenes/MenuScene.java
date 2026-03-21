@@ -1,0 +1,162 @@
+package io.github.inf1009_p10_9.scenes;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+
+import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
+import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
+import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
+import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
+import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
+import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
+import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
+import io.github.inf1009_p10_9.ui.MenuButtonElement;
+import io.github.inf1009_p10_9.ui.TextLabel;
+
+// shared base scene for menu-style screens with arrow navigation and highlighted buttons
+public abstract class MenuScene extends Scene {
+
+    // shared menu ui
+    protected TextLabel[] menuOptionLabels;
+    protected TextLabel[] arrowIndicators;
+    protected MenuButtonElement[] menuButtons;
+
+    // shared menu navigation state
+    protected int highlightedIndex = 0;
+    protected boolean upDownPressed = false;
+    protected boolean enterPressed = false;
+    protected boolean escPressed = false;
+    protected float sceneLoadTime = 0f;
+
+    // shared menu animation timer
+    protected float arrowPulseTimer = 0f;
+
+    // shared menu colors
+    protected static final Color NORMAL_COLOR = Color.WHITE;
+    protected static final Color HIGHLIGHTED_COLOR = new Color(0.08f, 0.08f, 0.08f, 1f);
+    protected static final Color ARROW_COLOR = new Color(1f, 0.9f, 0.1f, 1f);
+
+    // shared scene dependencies
+    protected final IInputKeyCheckable inputKeyCheckable;
+    protected final ISceneSwitchable sceneSwitchable;
+
+    public MenuScene(String name,
+                     IEntityRegisterable entityRegisterable,
+                     IUIDisplayable uiDisplayable,
+                     ICollidableRegisterable collidableRegisterable,
+                     IRenderRegisterable renderRegisterable,
+                     IMusicPlayable musicPlayable,
+                     IInputKeyCheckable inputKeyCheckable,
+                     ISceneSwitchable sceneSwitchable) {
+        super(name,
+              entityRegisterable,
+              uiDisplayable,
+              collidableRegisterable,
+              renderRegisterable,
+              musicPlayable);
+        this.inputKeyCheckable = inputKeyCheckable;
+        this.sceneSwitchable = sceneSwitchable;
+    }
+
+    // resets common menu navigation state each time the scene is opened
+    @Override
+    public void load() {
+        super.load();
+        sceneLoadTime = 0f;
+        highlightedIndex = 0;
+        upDownPressed = false;
+        enterPressed = false;
+        escPressed = false;
+        arrowPulseTimer = 0f;
+    }
+
+    // shared input logic for up/down menu navigation and enter confirm
+    protected void updateMenuNavigation(int optionCount) {
+        float delta = Gdx.graphics.getDeltaTime();
+        sceneLoadTime += delta;
+
+        // ignore input briefly after loading to avoid accidental presses
+        if (sceneLoadTime < 0.2f) {
+            return;
+        }
+
+        boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
+                               inputKeyCheckable.isKeyPressed(Keys.W);
+        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
+                                 inputKeyCheckable.isKeyPressed(Keys.S);
+
+        if (upKeyPressed || downKeyPressed) {
+            if (!upDownPressed) {
+                upDownPressed = true;
+
+                if (downKeyPressed) {
+                    highlightedIndex++;
+                } else {
+                    highlightedIndex--;
+                }
+
+                // wrap around at the top and bottom
+                if (highlightedIndex < 0) {
+                    highlightedIndex = optionCount - 1;
+                }
+                if (highlightedIndex >= optionCount) {
+                    highlightedIndex = 0;
+                }
+
+                updateHighlight();
+            }
+        } else {
+            upDownPressed = false;
+        }
+
+        // confirm selection on enter
+        if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
+            if (!enterPressed) {
+                enterPressed = true;
+                handleMenuSelection();
+            }
+        } else {
+            enterPressed = false;
+        }
+    }
+
+    // refreshes colors, arrow visibility, and button highlight state to match the current selection
+    protected void updateHighlight() {
+        float arrowBaseX = getArrowBaseX();
+
+        for (int i = 0; i < menuButtons.length; i++) {
+            if (i == highlightedIndex) {
+                menuButtons[i].setHighlighted(true);
+                menuOptionLabels[i].setColor(HIGHLIGHTED_COLOR);
+                arrowIndicators[i].setVisible(true);
+                arrowPulseTimer = 0f;
+            } else {
+                menuButtons[i].setHighlighted(false);
+                menuOptionLabels[i].setColor(NORMAL_COLOR);
+                arrowIndicators[i].setVisible(false);
+                arrowIndicators[i].setPosition(arrowBaseX, arrowIndicators[i].getY());
+            }
+        }
+    }
+
+    // adds a small pulsing motion to the visible selection arrow
+    protected void animateArrow(float delta) {
+        float arrowBaseX = getArrowBaseX();
+
+        arrowPulseTimer += delta;
+        float arrowOffset = (float) Math.sin(arrowPulseTimer * 6f) * 5f;
+
+        for (int i = 0; i < arrowIndicators.length; i++) {
+            if (i == highlightedIndex) {
+                arrowIndicators[i].setPosition(arrowBaseX + arrowOffset, arrowIndicators[i].getY());
+            }
+        }
+    }
+
+    // each subclass tells the base class where the left arrow should sit
+    protected abstract float getArrowBaseX();
+
+    // each subclass handles its own option action
+    protected abstract void handleMenuSelection();
+}

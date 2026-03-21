@@ -172,4 +172,10 @@ public class OutputManager implements IManager,
     public void playMusic(String musicFile) {
         playBackgroundMusic(musicFile);
     }
+
+	@Override
+	public void addUI(UIElement uiElement) {
+		// TODO Auto-generated method stub
+		
+	}
 }

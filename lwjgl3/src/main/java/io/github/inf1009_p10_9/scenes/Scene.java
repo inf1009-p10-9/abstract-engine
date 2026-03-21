@@ -7,7 +7,7 @@ import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.UIElement;
 
 // base class for all scenes, handles loading, unloading, and the lifecycle hooks LibGDX expects
-public abstract class Scene implements Screen {
+public abstract class Scene implements Screen, IUIDisplayable {
     private String name;
     private Array<Entity> entities = new Array<>();
     private Array<UIElement> uiElements = new Array<>();
@@ -79,6 +79,7 @@ public abstract class Scene implements Screen {
             loaded = false;
 
             System.out.println(">>> UNLOAD COMPLETE");
+            
         }
     }
 
@@ -106,8 +107,19 @@ public abstract class Scene implements Screen {
         entities.add(entity);
     }
 
-    protected void addUI(UIElement uiElement) {
+    @Override
+	public void addUI(UIElement uiElement) {
         uiElements.add(uiElement);
+    }
+    
+    @Override
+    public void displayUI(UIElement uiElement) {
+        // whatever your interface expects
+    }
+
+    @Override
+    public void removeUI(UIElement uiElement) {
+        // whatever your interface expects
     }
 
     // LibGDX screen lifecycle, mapped to our own load/update/unload methods

@@ -60,10 +60,10 @@ public class GameScene extends Scene {
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-        float gateWidth = 150f;
+        float gateWidth = 350f;
         float gateHeight = 80f;
         float centerX = screenWidth / 2;
-        float gap = 100f;
+        float gap = 0f;
         Color roadsurroundingColor = new Color(0.2f, 0.5f, 0.2f, 1f); // default green
 
         String selectedScenery = scenerySelect.getSelectedScenery();

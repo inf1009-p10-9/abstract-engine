@@ -53,11 +53,11 @@ public class SettingsRow {
     }
 
     // registers all row ui elements into the scene
-    public void addToScene(io.github.inf1009_p10_9.interfaces.IUIDisplayable uiDisplayable) {
-        uiDisplayable.addUI(button);
-        uiDisplayable.addUI(arrowLabel);
-        uiDisplayable.addUI(optionLabel);
-        uiDisplayable.addUI(valueLabel);
+    public void addToScene(io.github.inf1009_p10_9.interfaces.IUICollector uiCollector) {
+        uiCollector.addUI(button);
+        uiCollector.addUI(arrowLabel);
+        uiCollector.addUI(optionLabel);
+        uiCollector.addUI(valueLabel);
     }
 
     // updates the visual highlight state of the row

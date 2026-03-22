@@ -2,7 +2,7 @@ package io.github.inf1009_p10_9.ui;
 
 import com.badlogic.gdx.Gdx;
 
-import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
+import io.github.inf1009_p10_9.interfaces.IUICollector;
 
 // shared decorative background used by menu-style scenes
 public class SceneBackdrop {
@@ -40,15 +40,15 @@ public class SceneBackdrop {
     }
 
     // registers the background elements into the scene ui layer
-    public void addToScene(IUIDisplayable uiDisplayable) {
-        uiDisplayable.addUI(background);
+    public void addToScene(IUICollector uiCollector) {
+        uiCollector.addUI(background);
 
         for (CloudElement cloud : clouds) {
-            uiDisplayable.addUI(cloud);
+            uiCollector.addUI(cloud);
         }
 
         if (hasGrassCar && grassCar != null) {
-            uiDisplayable.addUI(grassCar);
+            uiCollector.addUI(grassCar);
         }
     }
 

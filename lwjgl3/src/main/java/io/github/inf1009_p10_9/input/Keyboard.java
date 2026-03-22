@@ -7,6 +7,7 @@ import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
 import io.github.inf1009_p10_9.interfaces.IMovementCalculatable;
 import io.github.inf1009_p10_9.managers.SettingsManager;
+import io.github.inf1009_p10_9.entities.Player;
 
 // polls held keys each frame and moves the player entity using the current keybindings
 public class Keyboard implements IInputListens {
@@ -27,53 +28,45 @@ public class Keyboard implements IInputListens {
     public void onInput(io.github.inf1009_p10_9.input.Input input) {
         // movement is handled in update() by polling, not by reacting to events
     }
-
+    
     // called every frame, finds the player and applies movement for any held movement keys
     public void update() {
-        com.badlogic.gdx.utils.Array<Entity> entities = entityQueryable.getEntities();
+        Player player = entityQueryable.getFirstOfType(Player.class);
+        if (player == null) return;
 
-        for (Entity entity : entities) {
-            if (entity.getClass().getSimpleName().equals("Player")) {
+        SettingsManager settings = SettingsManager.getInstance();
 
-                SettingsManager settings = SettingsManager.getInstance();
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"))) {
-                    movementCalculatable.move(entity, 0);
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"))) {
-                    movementCalculatable.move(entity, 1);
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_LEFT"))) {
-                    movementCalculatable.move(entity, 2);
-                }
-
-                if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_RIGHT"))) {
-                    movementCalculatable.move(entity, 3);
-                }
-
-                /*
-                // old hardcoded key checks, replaced by keybinding lookup above
-                if (inputKeyCheckable.isKeyPressed(Input.Keys.W) || inputKeyCheckable.isKeyPressed(Input.Keys.UP)) {
-                    movementCalculatable.move(entity, 0);
-                }
-                if (inputKeyCheckable.isKeyPressed(Input.Keys.S) || inputKeyCheckable.isKeyPressed(Input.Keys.DOWN)) {
-                    movementCalculatable.move(entity, 1);
-                }
-                if (inputKeyCheckable.isKeyPressed(Input.Keys.A) || inputKeyCheckable.isKeyPressed(Input.Keys.LEFT)) {
-                    movementCalculatable.move(entity, 2);
-                }
-                if (inputKeyCheckable.isKeyPressed(Input.Keys.D) || inputKeyCheckable.isKeyPressed(Input.Keys.RIGHT)) {
-                    movementCalculatable.move(entity, 3);
-                }
-                */
-
-                // action keys placeholder
-                //if (inputKeyCheckable.isKeyPressed(Input.Keys.SPACE)) {
-                //    // add action logic here
-                //}
-            }
+        if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"))) {
+            movementCalculatable.move(player, 0);
         }
+
+        if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"))) {
+            movementCalculatable.move(player, 1);
+        }
+
+        if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_LEFT"))) {
+            movementCalculatable.move(player, 2);
+        }
+
+        if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_RIGHT"))) {
+            movementCalculatable.move(player, 3);
+        }
+
+        /*
+        // old hardcoded key checks, replaced by keybinding lookup above
+        if (inputKeyCheckable.isKeyPressed(Input.Keys.W) || inputKeyCheckable.isKeyPressed(Input.Keys.UP)) {
+            movementCalculatable.move(player, 0);
+        }
+        if (inputKeyCheckable.isKeyPressed(Input.Keys.S) || inputKeyCheckable.isKeyPressed(Input.Keys.DOWN)) {
+            movementCalculatable.move(player, 1);
+        }
+        if (inputKeyCheckable.isKeyPressed(Input.Keys.A) || inputKeyCheckable.isKeyPressed(Input.Keys.LEFT)) {
+            movementCalculatable.move(player, 2);
+        }
+        if (inputKeyCheckable.isKeyPressed(Input.Keys.D) || inputKeyCheckable.isKeyPressed(Input.Keys.RIGHT)) {
+            movementCalculatable.move(player, 3);
+        }
+        */
     }
-}
+ }
+

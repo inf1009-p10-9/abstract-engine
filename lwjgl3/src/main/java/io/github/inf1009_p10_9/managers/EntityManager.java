@@ -72,7 +72,17 @@ public class EntityManager implements IManager,
         return entities;
     }
 
+    public <T extends Entity> T getFirstOfType(Class<T> type) {
+        for (Entity entity : entities) {
+            if (type.isInstance(entity)) {
+                return type.cast(entity);
+            }
+        }
+        return null;
+    }
+    
     public int getEntityCount() {
         return entities.size;
     }
+    
 }

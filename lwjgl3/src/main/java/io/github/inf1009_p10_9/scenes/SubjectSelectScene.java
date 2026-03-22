@@ -76,8 +76,8 @@ public class SubjectSelectScene extends Scene {
     private static final Color ACTIVE_COLOR     = new Color(0.1f, 0.1f, 0.1f, 1f);
     private static final Color INACTIVE_COLOR   = new Color(0.75f, 0.75f, 0.75f, 1f);
     private static final Color SECTION_COLOR    = Color.CYAN;
-    private static final Color ARROW_ACTIVE     = new Color(1f, 0.9f, 0.1f, 1f);
-    private static final Color ARROW_INACTIVE   = new Color(0.55f, 0.55f, 0.55f, 1f);
+    private static final Color ARROW_ACTIVE   = Color.WHITE;
+    private static final Color ARROW_INACTIVE = new Color(1f, 1f, 1f, 0.4f); // faded white for inactive row
 
     private static final Color SUBJECT_COLOR    = new Color(0.2f, 0.6f, 0.9f, 0.88f);
     private static final Color DIFFICULTY_COLOR = new Color(0.6f, 0.3f, 0.9f, 0.88f);
@@ -196,7 +196,7 @@ public class SubjectSelectScene extends Scene {
                                              fontManager.getMediumFont());
         addUI(difficultyRightArrow);
 
-        // instruction hint above the grass strip, using medium font so it's readable
+        // instruction hint in the grass area
         instructionLabel = new TextLabel(
             "UP/DOWN: row    LEFT/RIGHT: change    ENTER: confirm    ESC: back",
             0, screenHeight * 0.10f, fontManager.getSmallFont());

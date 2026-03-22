@@ -14,10 +14,8 @@ public class SceneryCardElement extends UIElement {
     private final float height;
     private boolean selected;
 
-    // border drawn by renderShapes() — one element can use BOTH passes
     private static final float BORDER_THICKNESS = 4f;
     private static final Color SELECTED_BORDER  = new Color(1f, 0.90f, 0.10f, 1f);
-    private static final Color UNSELECTED_TINT  = new Color(0f, 0f, 0f, 0.4f);
 
     public SceneryCardElement(float x, float y, float width, float height,
                               String texturePath) {
@@ -41,30 +39,41 @@ public class SceneryCardElement extends UIElement {
         this.selected = selected;
     }
 
-    // render() is called during the SpriteBatch pass — this is where images go
     @Override
     public void render(SpriteBatch batch) {
         if (!visible) return;
 
-        // draw the preview image scaled to card size
+        // draw the full card image
         batch.draw(previewTexture, x, y, width, height);
 
-        // dim unselected cards with a semi-transparent overlay
+        // dim the whole card more heavily when not selected
         if (!selected) {
             Color prev = batch.getColor().cpy();
-            batch.setColor(0f, 0f, 0f, 0.45f);
+            batch.setColor(0f, 0f, 0f, 0.55f);
             batch.draw(previewTexture, x, y, width, height);
             batch.setColor(prev);
         }
+
+     // scrim drawn only behind the text area in the middle of the card, not the full bottom
+        float textAreaY  = y + height * 0.35f; // where the hint text sits
+        float scrimHeight = height * 0.10f;    // tall enough to cover hint + name label
+        Color prev = batch.getColor().cpy();
+        batch.setColor(0f, 0f, 0f, 0.65f);
+        batch.draw(previewTexture, x, textAreaY, width, scrimHeight);
+        batch.setColor(prev);
     }
 
-    // renderShapes() is called during the ShapeRenderer pass — draw the border here
     @Override
     public void renderShapes(ShapeRenderer shapeRenderer) {
-        if (!visible || !selected) return;
+        if (!visible) return;
 
-        // draw a gold rectangle border around the selected card
-        shapeRenderer.setColor(SELECTED_BORDER);
+        // gold border for selected, dim gray for unselected
+        if (selected) {
+            shapeRenderer.setColor(SELECTED_BORDER);
+        } else {
+            shapeRenderer.setColor(0.4f, 0.4f, 0.4f, 0.6f);
+        }
+
         float t = BORDER_THICKNESS;
         shapeRenderer.rectLine(x,         y,          x + width, y,          t); // bottom
         shapeRenderer.rectLine(x + width, y,          x + width, y + height, t); // right

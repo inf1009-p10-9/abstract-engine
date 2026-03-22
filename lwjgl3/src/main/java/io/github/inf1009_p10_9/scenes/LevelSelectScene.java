@@ -45,8 +45,8 @@ public class LevelSelectScene extends Scene {
     // -------------------------------------------------------------------------
 
     private static final Color CARD_SELECTED_BORDER  = new Color(1f, 0.90f, 0.10f, 1f);
-    private static final Color LABEL_SELECTED_COLOR   = new Color(0.10f, 0.10f, 0.10f, 1f);
-    private static final Color LABEL_UNSELECTED_COLOR = Color.WHITE;
+    private static final Color LABEL_SELECTED_COLOR   = new Color(1f, 0.90f, 0.10f, 1f); // yellow, matches the border
+    private static final Color LABEL_UNSELECTED_COLOR = new Color(1f, 1f, 1f, 0.6f);     // dimmed white for unselected
 
     // -------------------------------------------------------------------------
     // UI element references
@@ -184,13 +184,14 @@ public class LevelSelectScene extends Scene {
 
         // --- instruction hint ------------------------------------------------
 
+        String instrText = "LEFT / RIGHT: choose    ENTER: confirm    ESC: back";
+        layout.setText(fontManager.getSmallFont(), instrText);
         instructionLabel = new TextLabel(
-            "LEFT / RIGHT: choose scenery          ENTER: confirm          ESC: back",
-            0, 105f, fontManager.getSmallFont());
-        instructionLabel.setColor(Color.LIGHT_GRAY);
-        layout.setText(fontManager.getSmallFont(),
-            "LEFT / RIGHT: choose scenery          ENTER: confirm          ESC: back");
-        instructionLabel.setPosition(screenWidth / 2 - layout.width / 2, 105f);
+            instrText,
+            screenWidth / 2f - layout.width / 2f,
+            screenHeight * 0.10f,
+            fontManager.getSmallFont());
+        instructionLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
         addUI(instructionLabel);
 
         updateCardVisuals();

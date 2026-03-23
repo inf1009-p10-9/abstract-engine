@@ -1,0 +1,44 @@
+{
+  "banks": [
+    {
+      "subject": "Math",
+      "difficulty": "Easy",
+      "questions": [
+        { "text": "1 + 1 = ?", "optionA": "2", "optionB": "3", "answer": "A" },
+        { "text": "2 + 2 = ?", "optionA": "5", "optionB": "4", "answer": "B" },
+        { "text": "3 + 1 = ?", "optionA": "4", "optionB": "5", "answer": "A" },
+        { "text": "5 - 2 = ?", "optionA": "2", "optionB": "3", "answer": "B" }
+      ]
+    },
+    {
+      "subject": "Math",
+      "difficulty": "Hard",
+      "questions": [
+        { "text": "12 + 15 = ?", "optionA": "27", "optionB": "25", "answer": "A" },
+        { "text": "6 x 7 = ?",   "optionA": "42", "optionB": "48", "answer": "A" },
+        { "text": "81 / 9 = ?",  "optionA": "8",  "optionB": "9",  "answer": "B" },
+        { "text": "15 - 8 = ?",  "optionA": "6",  "optionB": "7",  "answer": "B" }
+      ]
+    },
+    {
+      "subject": "English",
+      "difficulty": "Easy",
+      "questions": [
+        { "text": "Opposite of 'hot'?",   "optionA": "Cold",   "optionB": "Warm", "answer": "A" },
+        { "text": "One mouse, two __?",   "optionA": "Mouses", "optionB": "Mice", "answer": "B" },
+        { "text": "Which is correct?",    "optionA": "Freind", "optionB": "Friend", "answer": "B" },
+        { "text": "Opposite of 'big'?",   "optionA": "Small",  "optionB": "Tall", "answer": "A" }
+      ]
+    },
+    {
+      "subject": "English",
+      "difficulty": "Hard",
+      "questions": [
+        { "text": "She ___ to school",      "optionA": "Go",      "optionB": "Went",     "answer": "B" },
+        { "text": "Synonym of 'happy'?",    "optionA": "Joyful",  "optionB": "Angry",    "answer": "A" },
+        { "text": "Plural of 'child'?",     "optionA": "Childs",  "optionB": "Children", "answer": "B" },
+        { "text": "Opposite of 'ancient'?", "optionA": "Modern",  "optionB": "Old",      "answer": "A" }
+      ]
+    }
+  ]
+}

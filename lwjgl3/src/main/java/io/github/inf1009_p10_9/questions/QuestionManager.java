@@ -3,6 +3,9 @@ package io.github.inf1009_p10_9.questions;
 import java.util.Collections;
 import java.util.HashMap;
 import io.github.inf1009_p10_9.interfaces.IManagerMinimal;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
 // singleton that manages all question banks and tracks progress through the active one
 public class QuestionManager implements IManagerMinimal {
@@ -49,39 +52,39 @@ public class QuestionManager implements IManagerMinimal {
 
     // populates allBanks with hardcoded questions for each subject and difficulty
     private void loadAllBanks() {
-        // math easy
-        QuestionBank mathEasy = new QuestionBank("Math", "Easy");
-        mathEasy.addQuestion(new Question("1 + 1 = ?", "2", "3", "A"));
-        mathEasy.addQuestion(new Question("2 + 2 = ?", "5", "4", "B"));
-        mathEasy.addQuestion(new Question("3 + 1 = ?", "4", "5", "A"));
-        mathEasy.addQuestion(new Question("5 - 2 = ?", "2", "3", "B"));
-        allBanks.put("Math_Easy", mathEasy);
+        try {
+            String jsonText = Gdx.files.internal("questions/questions.json").readString();
+            JsonReader jsonReader = new JsonReader();
+            JsonValue root = jsonReader.parse(jsonText);
 
-        // math hard
-        QuestionBank mathHard = new QuestionBank("Math", "Hard");
-        mathHard.addQuestion(new Question("12 + 15 = ?", "27", "25", "A"));
-        mathHard.addQuestion(new Question("6 x 7 = ?", "42", "48", "A"));
-        mathHard.addQuestion(new Question("81 / 9 = ?", "8", "9", "B"));
-        mathHard.addQuestion(new Question("15 - 8 = ?", "6", "7", "B"));
-        allBanks.put("Math_Hard", mathHard);
+            for (JsonValue bankData : root.get("banks")) {
+                String subject    = bankData.getString("subject");
+                String difficulty = bankData.getString("difficulty");
 
-        // english easy
-        QuestionBank englishEasy = new QuestionBank("English", "Easy");
-        englishEasy.addQuestion(new Question("Opposite of 'hot'?", "Cold", "Warm", "A"));
-        englishEasy.addQuestion(new Question("One mouse, two __?", "Mouses", "Mice", "B"));
-        englishEasy.addQuestion(new Question("Which is correct?", "Freind", "Friend", "B"));
-        englishEasy.addQuestion(new Question("Opposite of 'big'?", "Small", "Tall", "A"));
-        allBanks.put("English_Easy", englishEasy);
+                QuestionBank bank = new QuestionBank(subject, difficulty);
 
-        // english hard
-        QuestionBank englishHard = new QuestionBank("English", "Hard");
-        englishHard.addQuestion(new Question("She ___ to school", "Go", "Went", "B"));
-        englishHard.addQuestion(new Question("Synonym of 'happy'?", "Joyful", "Angry", "A"));
-        englishHard.addQuestion(new Question("Plural of 'child'?", "Childs", "Children", "B"));
-        englishHard.addQuestion(new Question("Opposite of 'ancient'?", "Modern", "Old", "A"));
-        allBanks.put("English_Hard", englishHard);
+                for (JsonValue q : bankData.get("questions")) {
+                    String text    = q.getString("text");
+                    String optionA = q.getString("optionA");
+                    String optionB = q.getString("optionB");
+                    String answer  = q.getString("answer");
+                    bank.addQuestion(new Question(text, optionA, optionB, answer));
+                }
+
+                allBanks.put(subject + "_" + difficulty, bank);
+            }
+
+            System.out.println("Questions loaded from file");
+
+        } catch (Exception e) {
+            System.err.println("Failed to load questions.json: " + e.getMessage());
+        }
     }
+    
+    
 
+    
+    
     // sets the active bank by subject and difficulty, resets progress, and shuffles the questions
     public void selectBank(String subject, String difficulty) {
         String bankKey = subject + "_" + difficulty;

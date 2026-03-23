@@ -212,7 +212,6 @@ public class MapSelectScene extends Scene {
         leftRightPressed     = false;
         enterPressed         = false;
         escPressed           = false;
-        musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
     }
 
     // -------------------------------------------------------------------------

@@ -322,7 +322,7 @@ public class SubjectSelectScene extends Scene {
 
                 questionManager.selectBank(chosenSubject, chosenDifficulty);
                 System.out.println("Starting: " + chosenSubject + " - " + chosenDifficulty);
-                sceneSwitchable.switchScene("GameScene");
+                sceneSwitchable.switchScene("CustomisationScene");
             }
         } else {
             enterPressed = false;

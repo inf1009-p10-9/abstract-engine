@@ -2,6 +2,8 @@ package io.github.inf1009_p10_9.scenes;
 
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
+import io.github.inf1009_p10_9.PlayerState;
+import io.github.inf1009_p10_9.economy.concrete.CoinsWallet;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 // the results screen, showing performance feedback, animated background effects, and navigation buttons
 public class EndScene extends MenuScene {
+    private final PlayerState playerState;
 
     // result bands used to drive different animation intensity
     private enum ResultTier {
@@ -72,7 +75,8 @@ public class EndScene extends MenuScene {
                     IInputKeyCheckable inputKeyCheckable,
                     ISceneSwitchable sceneSwitchable,
                     QuestionManager questionManager,
-                    FontManager fontManager) {
+                    FontManager fontManager,
+                    PlayerState playerState) {
         super("EndScene",
               entityRegisterable,
               uiDisplayable,
@@ -83,6 +87,7 @@ public class EndScene extends MenuScene {
               sceneSwitchable);
         this.questionManager = questionManager;
         this.fontManager = fontManager;
+        this.playerState = playerState;
     }
 
     // builds and registers all visual elements for the scene
@@ -178,6 +183,8 @@ public class EndScene extends MenuScene {
         String difficulty = questionManager.getActiveDifficulty();
         int score = questionManager.getScore();
         int total = questionManager.getTotalQuestions();
+
+        playerState.getWalletBag().getWallets(CoinsWallet.class).get(0).creditBalance(score);
 
         subjectLabel.setText(subject + "  -  " + difficulty);
         scoreLabel.setText("Score: " + score + " / " + total);

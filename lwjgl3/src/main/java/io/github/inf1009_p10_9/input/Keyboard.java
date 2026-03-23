@@ -1,7 +1,10 @@
 package io.github.inf1009_p10_9.input;
 
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Array;
+
 import io.github.inf1009_p10_9.entities.Entity;
+import io.github.inf1009_p10_9.entities.Player;
+import io.github.inf1009_p10_9.input.Input;
 import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
 import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.interfaces.IInputListens;
@@ -25,10 +28,10 @@ public class Keyboard implements IInputListens {
     }
 
     @Override
-    public void onInput(io.github.inf1009_p10_9.input.Input input) {
+    public void onInput(Input input) {
         // movement is handled in update() by polling, not by reacting to events
     }
-    
+
     // called every frame, finds the player and applies movement for any held movement keys
     public void update() {
         Player player = entityQueryable.getFirstOfType(Player.class);
@@ -51,22 +54,5 @@ public class Keyboard implements IInputListens {
         if (inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_RIGHT"))) {
             movementCalculatable.move(player, 3);
         }
-
-        /*
-        // old hardcoded key checks, replaced by keybinding lookup above
-        if (inputKeyCheckable.isKeyPressed(Input.Keys.W) || inputKeyCheckable.isKeyPressed(Input.Keys.UP)) {
-            movementCalculatable.move(player, 0);
-        }
-        if (inputKeyCheckable.isKeyPressed(Input.Keys.S) || inputKeyCheckable.isKeyPressed(Input.Keys.DOWN)) {
-            movementCalculatable.move(player, 1);
-        }
-        if (inputKeyCheckable.isKeyPressed(Input.Keys.A) || inputKeyCheckable.isKeyPressed(Input.Keys.LEFT)) {
-            movementCalculatable.move(player, 2);
-        }
-        if (inputKeyCheckable.isKeyPressed(Input.Keys.D) || inputKeyCheckable.isKeyPressed(Input.Keys.RIGHT)) {
-            movementCalculatable.move(player, 3);
-        }
-        */
     }
  }
-

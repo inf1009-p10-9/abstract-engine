@@ -8,17 +8,23 @@ import com.badlogic.gdx.graphics.Texture;
 // the player entity, renders as a car sprite with a blue square fallback if the texture fails to load
 public class Player extends Entity {
     private Color color;
+    private final String texturePath;
 
     public Player(float x, float y) {
+        this(x, y, null);
+    }
+
+    public Player(float x, float y, String texturePath) {
         super(x, y, 52, 95, 10);
         this.color = Color.BLUE;
+        this.texturePath = texturePath;
         loadTexture();
     }
 
     // attempts to load the car sprite, falls back to a plain blue square if it fails
     private void loadTexture() {
         try {
-            this.texture = new Texture(Gdx.files.internal("cars/car1_stripe_racer.png"));
+            this.texture = new Texture(Gdx.files.internal(texturePath));
         } catch (Exception e) {
             System.err.println("Failed to load player texture: " + e.getMessage());
             this.texture = null;

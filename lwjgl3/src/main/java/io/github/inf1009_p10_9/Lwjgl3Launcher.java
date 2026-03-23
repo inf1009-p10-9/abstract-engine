@@ -1,8 +1,13 @@
 package io.github.inf1009_p10_9;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+
 import io.github.inf1009_p10_9.entities.*;
 import io.github.inf1009_p10_9.managers.*;
 import io.github.inf1009_p10_9.movement.*;
@@ -35,6 +40,7 @@ public class Lwjgl3Launcher {
     static class GameApplication extends GameMaster {
         private final QuestionManager questionManager;
         private final FontManager fontManager;
+        private final PlayerState playerState;
 
         // creates all managers and wires everything together
         public GameApplication() {
@@ -50,6 +56,7 @@ public class Lwjgl3Launcher {
             this.managersMinimal.add(this.questionManager);
             this.fontManager = FontManager.getInstance();
             this.managersMinimal.add(this.fontManager);
+            this.playerState = PlayerState.getInstance();
         }
 
         @Override
@@ -138,7 +145,8 @@ public class Lwjgl3Launcher {
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
-                fontManager
+                fontManager,
+                playerState
             ));
 
             sceneManager.addScene(new GameScene(
@@ -169,6 +177,17 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager
+            ));
+            sceneManager.addScene(new CustomisationScene(
+                entityManager,                  // as IEntityRegisterable
+                outputManager,                  // as IUIDisplayable
+                collisionManager,               // as ICollidableRegisterable
+                outputManager,                  // as IRenderRegisterable
+                outputManager.getBGManager(),   // as IMusicPlayable
+                inputManager,                   // as IKeyBindObserverTarget
+                sceneManager,                   // as ISceneSwitchable
+                fontManager,                     // as FontManager
+                playerState
             ));
 
             // kick off the game on the start screen

@@ -1,6 +1,11 @@
 package io.github.inf1009_p10_9.scenes;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.Color;
+
+import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.entities.*;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.questions.QuestionManager;
@@ -8,9 +13,7 @@ import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.LivesElement;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
 import io.github.inf1009_p10_9.ui.PauseOverlay;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
+
 
 // the main gameplay scene, sets up the road, player, gates, and question display
 public class GameScene extends Scene {
@@ -253,7 +256,8 @@ public class GameScene extends Scene {
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
 
         // player centered horizontally at the bottom
-        Player player = new Player(screenWidth / 2 - 16, 80);
+        PlayerState playerState = PlayerState.getInstance();
+        Player player = new Player(screenWidth / 2 - 16, 80, playerState.getActivePlayerSkin().getTexturePath());
         addEntity(player);
         renderRegisterable.registerRenderable(player);
         collidableRegisterable.registerCollidable(player);

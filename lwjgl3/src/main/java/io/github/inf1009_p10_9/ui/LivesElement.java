@@ -16,7 +16,7 @@ public class LivesElement extends UIElement implements IUILives {
 
     public LivesElement(float x, float y, BitmapFont sharedFont){
         super(x,y);
-        this.zIndex = 100;
+        this.zIndex = 2;
         this.font = sharedFont;
 
         this.sheet = new Texture(Gdx.files.internal("gameScene/heart.png"));

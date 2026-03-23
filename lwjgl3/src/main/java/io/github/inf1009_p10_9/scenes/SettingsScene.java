@@ -228,15 +228,17 @@ public class SettingsScene extends Scene {
 
                 if (downKeyPressed) {
                     selectedIndex++;
+                    System.out.println(selectedIndex);
                 } else {
                     selectedIndex--;
+                    System.out.println(selectedIndex);
                 }
 
                 // wrap around at the top and bottom
                 if (selectedIndex < 0) {
                     selectedIndex = rows.length - 1;
                 }
-                if (selectedIndex >= rows.length) {
+                if (selectedIndex >= rows.length -1) {
                     selectedIndex = 0;
                 }
 

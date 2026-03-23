@@ -7,12 +7,14 @@ import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.LivesElement;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
+import io.github.inf1009_p10_9.ui.PauseOverlay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
 // the main gameplay scene, sets up the road, player, gates, and question display
 public class GameScene extends Scene {
+	private PauseOverlay pauseOverlay;
     private QuestionDisplay questionDisplay;
     private LivesElement livesElement;
     private float endDelay = 0f;
@@ -225,9 +227,8 @@ public class GameScene extends Scene {
         
 
         
-        
-        
-
+        pauseOverlay = new PauseOverlay(screenWidth, screenHeight, fontManager.getLargeFont());
+        addUI(pauseOverlay);
         
         
         // question text shown at the top of the screen
@@ -273,8 +274,9 @@ public class GameScene extends Scene {
         if (EscKeyPressed && !escWasPressed) {
             pauseState = !pauseState;
         }
-        escWasPressed = EscKeyPressed; // prevent esc key spam, checks from previous game frame
         
+        escWasPressed = EscKeyPressed; // prevent esc key spam, checks from previous game frame
+        pauseOverlay.setVisible(pauseState);
         
         if (!pauseState) {
 	        // move to the end screen once all questions have been answered

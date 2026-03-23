@@ -20,7 +20,7 @@ public class QuestionDisplay extends UIElement {
     public QuestionDisplay(float x, float y, QuestionManager questionManager, BitmapFont sharedFont) {
         super(x, y);
         this.font = sharedFont;
-        this.zIndex = 100;
+        this.zIndex = 20;
         this.questionManager = questionManager;
     }
 

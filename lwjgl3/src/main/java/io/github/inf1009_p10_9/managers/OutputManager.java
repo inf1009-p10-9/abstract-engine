@@ -138,6 +138,8 @@ public class OutputManager implements IManager,
 
         Gdx.gl.glClearColor(bgR, bgG, bgB, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         // merge entities and ui into one list and sort by z-index
         Array<IRenderable> allRenderables = new Array<>();
@@ -145,17 +147,32 @@ public class OutputManager implements IManager,
         allRenderables.addAll(uiElements);
         allRenderables.sort((a, b) -> Integer.compare(a.getZIndex(), b.getZIndex()));
 
-        // first pass: shapes (walls, colored rectangles)
+     // below pause overlay (zIndex < 200)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        for (IRenderable renderable : allRenderables) {
-            renderable.renderShapes(shapeRenderer);
+        for (IRenderable r : allRenderables) {
+            if (r.getZIndex() < 100) r.renderShapes(shapeRenderer);
         }
         shapeRenderer.end();
 
-        // second pass: textures and text drawn on top of shapes
         batch.begin();
-        for (IRenderable renderable : allRenderables) {
-            renderable.render(batch);
+        for (IRenderable r : allRenderables) {
+            if (r.getZIndex() < 100) r.render(batch);
+        }
+        batch.end();
+
+        // pause overlay and above (zIndex >= 200)
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        for (IRenderable r : allRenderables) {
+            if (r.getZIndex() >= 100) r.renderShapes(shapeRenderer);
+        }
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        batch.begin();
+        for (IRenderable r : allRenderables) {
+            if (r.getZIndex() >= 100) r.render(batch);
         }
         batch.end();
     }

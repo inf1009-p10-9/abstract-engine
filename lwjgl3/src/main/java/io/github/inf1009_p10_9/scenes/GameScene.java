@@ -72,7 +72,7 @@ public class GameScene extends Scene {
     	float roadLeftEdge  = screenWidth * 0.3f - 100f;
         float roadRightEdge = screenWidth * 0.70f + 100f;
         
-        float minGap = 150f;
+        
         
         // Map Loading
         Color roadsurroundingColor = new Color(0.2f, 0.5f, 0.2f, 1f); // default green
@@ -101,8 +101,13 @@ public class GameScene extends Scene {
             };
             
             float minBuildingGap = 300f;
+            float minTreeGap = 250f;
             
             for (int i = 0; i < 2; i++) {
+            	
+            	
+            	
+            	
                 float ly = i * minBuildingGap + (float)(Math.random() * minBuildingGap * 0.5f);
                 Building buildingL = new Building(leftBuildingZone, ly, leftWidths[i], leftHeights[i], leftColors[i]);
                 addEntity(buildingL);
@@ -126,15 +131,14 @@ public class GameScene extends Scene {
 
             // left trees - fixed X zone, spaced Y
             for (int i = 0; i < 3; i++) {
-                float ly = i * minGap + (float)(Math.random() * minGap);
+                float ly = i * minTreeGap + (float)(Math.random() * 80f);
                 Tree treeL = new Tree(leftTreeZone, ly);
                 addEntity(treeL);
                 renderRegisterable.registerRenderable(treeL);
             }
 
-            // right trees - fixed X zone, spaced Y
             for (int i = 0; i < 3; i++) {
-                float ry = i * minGap + (float)(Math.random() * minGap);
+                float ry = i * minTreeGap + (float)(Math.random() * 80f);
                 Tree treeR = new Tree(rightTreeZone, ry);
                 addEntity(treeR);
                 renderRegisterable.registerRenderable(treeR);
@@ -155,7 +159,7 @@ public class GameScene extends Scene {
         
         if (selectedScenery.equals("Desert")) {
         	roadsurroundingColor = new Color(0.76f, 0.70f, 0.35f, 1f);
-        	
+        	float minGap = 150f;
         
             for (int i = 0; i < 4; i++) {
                 // left side

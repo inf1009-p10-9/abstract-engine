@@ -101,7 +101,7 @@ public class Lwjgl3Launcher {
                 fontManager
             ));
 
-            sceneManager.addScene(new LevelSelectScene(
+            sceneManager.addScene(new MapSelectScene(
                 entityManager,                  // as IEntityRegisterable
                 outputManager,                  // as IUIDisplayable
                 collisionManager,               // as ICollidableRegisterable

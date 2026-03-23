@@ -16,7 +16,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 // screen where the player picks a scenery theme before moving on to difficulty selection
-public class LevelSelectScene extends Scene {
+public class MapSelectScene extends Scene {
 
     // -------------------------------------------------------------------------
     // scenery options
@@ -87,7 +87,7 @@ public class LevelSelectScene extends Scene {
     // constructor
     // -------------------------------------------------------------------------
 
-    public LevelSelectScene(IEntityRegisterable entityRegisterable,
+    public MapSelectScene(IEntityRegisterable entityRegisterable,
                             IUIDisplayable uiDisplayable,
                             ICollidableRegisterable collidableRegisterable,
                             IRenderRegisterable renderRegisterable,

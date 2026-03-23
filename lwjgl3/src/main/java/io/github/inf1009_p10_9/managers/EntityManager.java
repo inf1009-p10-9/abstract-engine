@@ -3,13 +3,11 @@ package io.github.inf1009_p10_9.managers;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import io.github.inf1009_p10_9.entities.Entity;
-import io.github.inf1009_p10_9.interfaces.IEntityQueryable;
 import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.interfaces.IManager;
 
 // singleton that maintains the list of active entities and processes additions, removals, and updates each frame
 public class EntityManager implements IManager,
-                                      IEntityQueryable,
                                       IEntityRegisterable {
     private static EntityManager instance;
 

@@ -72,7 +72,7 @@ public class MidScene extends Scene {
 
         // player, enemy, boundary walls, and a few interior obstacles
         Entity[] entities = {
-            new Player(400, 300, sfxPlayable),
+            new Player(400, 300, sfxPlayable, ""),
             new Enemy(500, 300, sfxPlayable),
             new Wall(0, 568, 800, 32),
             new Wall(0, 0, 800, 32),

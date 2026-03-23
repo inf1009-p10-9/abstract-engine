@@ -12,18 +12,20 @@ import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 public class Player extends Entity {
     private Color color;
     private ISFXPlayable sfxPlayable;
+    private final String texturePath;
 
-    public Player(float x, float y, ISFXPlayable sfxPlayable) {
+    public Player(float x, float y, ISFXPlayable sfxPlayable, String texturePath) {
         super(x, y, 32, 32, 10);
         this.color = Color.BLUE;
         this.sfxPlayable = sfxPlayable;
+        this.texturePath = texturePath;
         loadTexture();
     }
 
     // attempts to load the car sprite, falls back to a plain blue square if it fails
     private void loadTexture() {
         try {
-            this.texture = new Texture(Gdx.files.internal("cars/car1_stripe_racer.png"));
+            this.texture = new Texture(Gdx.files.internal(texturePath));
         } catch (Exception e) {
             System.err.println("Failed to load player texture: " + e.getMessage());
             this.texture = null;

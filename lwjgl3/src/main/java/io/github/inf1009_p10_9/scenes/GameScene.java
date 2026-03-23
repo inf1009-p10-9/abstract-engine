@@ -1,5 +1,6 @@
 package io.github.inf1009_p10_9.scenes;
 
+import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.entities.Gate;
 import io.github.inf1009_p10_9.entities.Road;
 import io.github.inf1009_p10_9.entities.Player;
@@ -62,8 +63,9 @@ public class GameScene extends Scene {
         float centerX = screenWidth / 2;
         float gap = 100f;
 
+        PlayerState playerState = PlayerState.getInstance();
         // player centered horizontally at the bottom
-        Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
+        Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable, playerState.getActivePlayerSkin().getTexturePath());
         addEntity(player);
         renderRegisterable.registerRenderable(player);
         collidableRegisterable.registerCollidable(player);

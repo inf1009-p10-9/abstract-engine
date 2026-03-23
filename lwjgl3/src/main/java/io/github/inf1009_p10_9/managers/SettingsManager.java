@@ -1,5 +1,8 @@
 package io.github.inf1009_p10_9.managers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.interfaces.ISettingsControllable;
@@ -14,6 +17,7 @@ public class SettingsManager implements ISettingsControllable {
 
     // keybindings keyed by action name, e.g. "MOVE_UP", "CONFIRM"
     private final ObjectMap<String, Integer> keybinds = new ObjectMap<>();
+    private final Map<Integer, String> keybindsInverse = new HashMap<>();
 
     private SettingsManager() {
         setDefaultKeybinds();
@@ -28,18 +32,18 @@ public class SettingsManager implements ISettingsControllable {
 
     // sets up the default keyboard layout used on first launch
     private void setDefaultKeybinds() {
-        keybinds.put("MOVE_UP", Keys.W);
-        keybinds.put("MOVE_DOWN", Keys.S);
-        keybinds.put("MOVE_LEFT", Keys.A);
-        keybinds.put("MOVE_RIGHT", Keys.D);
+        rebindKey("MOVE_UP", Keys.W);
+        rebindKey("MOVE_DOWN", Keys.S);
+        rebindKey("MOVE_LEFT", Keys.A);
+        rebindKey("MOVE_RIGHT", Keys.D);
 
-        keybinds.put("MENU_UP", Keys.UP);
-        keybinds.put("MENU_DOWN", Keys.DOWN);
-        keybinds.put("MENU_LEFT", Keys.LEFT);
-        keybinds.put("MENU_RIGHT", Keys.RIGHT);
+        rebindKey("MENU_UP", Keys.UP);
+        rebindKey("MENU_DOWN", Keys.DOWN);
+        rebindKey("MENU_LEFT", Keys.LEFT);
+        rebindKey("MENU_RIGHT", Keys.RIGHT);
 
-        keybinds.put("CONFIRM", Keys.ENTER);
-        keybinds.put("BACK", Keys.ESCAPE);
+        rebindKey("CONFIRM", Keys.ENTER);
+        rebindKey("BACK", Keys.ESCAPE);
     }
 
     // getters and setters for volume, setters clamp the value to a valid range
@@ -64,8 +68,13 @@ public class SettingsManager implements ISettingsControllable {
         return keybinds.get(action, Keys.UNKNOWN);
     }
 
+    public String getKeybind(int keycode) {
+        return keybindsInverse.get(keycode);
+    }
+
     public void rebindKey(String action, int keycode) {
         keybinds.put(action, keycode);
+        keybindsInverse.put(keycode, action);
     }
 
     public ObjectMap<String, Integer> getAllKeybinds() {

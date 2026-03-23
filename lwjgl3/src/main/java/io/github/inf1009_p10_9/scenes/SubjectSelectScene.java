@@ -166,7 +166,7 @@ public class SubjectSelectScene extends Scene {
     public void update() {
         super.update();
 
-        sceneLoadTime += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        sceneLoadTime += Gdx.graphics.getDeltaTime();
 
         // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
@@ -251,7 +251,7 @@ public class SubjectSelectScene extends Scene {
                 questionManager.selectBank(chosenSubject, chosenDifficulty);
 
                 System.out.println("Starting: " + chosenSubject + " - " + chosenDifficulty);
-                sceneSwitchable.switchScene("GameScene");
+                sceneSwitchable.switchScene("CustomisationScene");
             }
         } else {
             enterPressed = false;

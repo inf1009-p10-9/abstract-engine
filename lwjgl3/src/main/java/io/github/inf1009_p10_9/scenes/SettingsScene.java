@@ -238,7 +238,7 @@ public class SettingsScene extends Scene {
                 if (selectedIndex < 0) {
                     selectedIndex = rows.length - 1;
                 }
-                if (selectedIndex >= rows.length -1) {
+                if (selectedIndex >= rows.length) {
                     selectedIndex = 0;
                 }
 

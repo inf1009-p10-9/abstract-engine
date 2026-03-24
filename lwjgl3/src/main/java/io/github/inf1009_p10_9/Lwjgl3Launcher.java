@@ -82,6 +82,7 @@ public class Lwjgl3Launcher {
             movementManager.registerMovementStrategy("Rock", new ScrollerMovement());
             movementManager.registerMovementStrategy("Tree", new ScrollerMovement());
             movementManager.registerMovementStrategy("StreetLamp", new ScrollerMovement());
+            movementManager.registerMovementStrategy("Bones", new ScrollerMovement());         
 //            movementManager.registerMovementStrategy("Enemy",
 //                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
             movementManager.registerMovementStrategy("Gate", new ScrollerMovement());

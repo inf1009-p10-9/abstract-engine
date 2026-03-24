@@ -29,18 +29,49 @@ public class Cactus extends Entity implements IRenderable {
 
     @Override
     public void renderShapes(ShapeRenderer sr) {
-        sr.setColor(CACTUS_GREEN);
+        // shadow color
+        Color shadowGreen    = new Color(0.08f, 0.25f, 0.08f, 1f);
+        Color highlightGreen = new Color(0.28f, 0.60f, 0.28f, 1f);
 
-        // trunk
+        // trunk shadow
+        sr.setColor(shadowGreen);
+        sr.rect(position.x + TRUNK_WIDTH * 0.6f, position.y, TRUNK_WIDTH * 0.4f, TRUNK_HEIGHT);
+
+        // trunk main
+        sr.setColor(CACTUS_GREEN);
         sr.rect(position.x, position.y, TRUNK_WIDTH, TRUNK_HEIGHT);
 
-        // left arm
+        // trunk highlight strip
+        sr.setColor(highlightGreen);
+        sr.rect(position.x + 1f, position.y, TRUNK_WIDTH * 0.25f, TRUNK_HEIGHT);
+
+        // left arm shadow
+        sr.setColor(shadowGreen);
+        sr.rect(position.x - ARM_WIDTH + 2f, position.y + TRUNK_HEIGHT * 0.4f - 2f, ARM_WIDTH * 0.8f, ARM_HEIGHT * 0.4f);
+        sr.rect(position.x - ARM_WIDTH + 2f, position.y + TRUNK_HEIGHT * 0.4f - 2f, ARM_WIDTH * 0.6f, ARM_HEIGHT);
+
+        // left arm main
+        sr.setColor(CACTUS_GREEN);
         sr.rect(position.x - ARM_WIDTH, position.y + TRUNK_HEIGHT * 0.4f, ARM_WIDTH, ARM_HEIGHT * 0.4f);
         sr.rect(position.x - ARM_WIDTH, position.y + TRUNK_HEIGHT * 0.4f, ARM_WIDTH * 0.8f, ARM_HEIGHT);
 
-        // right arm
+        // left arm highlight
+        sr.setColor(highlightGreen);
+        sr.rect(position.x - ARM_WIDTH + 1f, position.y + TRUNK_HEIGHT * 0.4f, ARM_WIDTH * 0.2f, ARM_HEIGHT);
+
+        // right arm shadow
+        sr.setColor(shadowGreen);
+        sr.rect(position.x + TRUNK_WIDTH + ARM_WIDTH * 0.6f, position.y + TRUNK_HEIGHT * 0.55f - 2f, ARM_WIDTH * 0.4f, ARM_HEIGHT * 0.4f);
+        sr.rect(position.x + TRUNK_WIDTH + ARM_WIDTH * 0.6f, position.y + TRUNK_HEIGHT * 0.55f - 2f, ARM_WIDTH * 0.4f, ARM_HEIGHT);
+
+        // right arm main
+        sr.setColor(CACTUS_GREEN);
         sr.rect(position.x + TRUNK_WIDTH, position.y + TRUNK_HEIGHT * 0.55f, ARM_WIDTH, ARM_HEIGHT * 0.4f);
         sr.rect(position.x + TRUNK_WIDTH, position.y + TRUNK_HEIGHT * 0.55f, ARM_WIDTH * 0.8f, ARM_HEIGHT);
+
+        // right arm highlight
+        sr.setColor(highlightGreen);
+        sr.rect(position.x + TRUNK_WIDTH + 1f, position.y + TRUNK_HEIGHT * 0.55f, ARM_WIDTH * 0.2f, ARM_HEIGHT);
     }
 
     @Override public int getZIndex() { return 4; }

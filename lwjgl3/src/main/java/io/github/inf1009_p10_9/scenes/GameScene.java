@@ -196,6 +196,25 @@ public class GameScene extends Scene {
                 addEntity(rockR);
                 renderRegisterable.registerRenderable(rockR);
             }
+            
+            // bones - 3 on each side
+            for (int i = 0; i < 3; i++) {
+                float boneSize = 8f + (float)(Math.random() * 6f); // random size between 8 and 14
+
+                // left side
+                float lx = (float)(Math.random() * (roadLeftEdge - 60f));
+                float ly = i * minGap + (float)(Math.random() * minGap);
+                Bones boneL = new Bones(lx, ly, boneSize);
+                addEntity(boneL);
+                renderRegisterable.registerRenderable(boneL);
+
+                // right side
+                float rx = roadRightEdge + 60f + (float)(Math.random() * (screenWidth - roadRightEdge - 60f));
+                float ry = i * minGap + (float)(Math.random() * minGap);
+                Bones boneR = new Bones(rx, ry, boneSize);
+                addEntity(boneR);
+                renderRegisterable.registerRenderable(boneR);
+            }
         }
         
         // Road loading
@@ -326,6 +345,10 @@ public class GameScene extends Scene {
 	            }
 	            
 	            if (entity instanceof Building) {
+	            	movementCalculatable.move(entity, 0);
+	            }
+	            
+	            if (entity instanceof Bones) {
 	            	movementCalculatable.move(entity, 0);
 	            }
 	        }

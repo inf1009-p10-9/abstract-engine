@@ -131,7 +131,7 @@ public class MidScene extends Scene {
 
                 for (Entity entity : entities) {
                     if (entity instanceof Enemy) {
-                        IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy("Enemy");
+                        IMovementStrategy strategy = movementStrategyRegisterable.getMovementStrategy(Enemy.class);
 
                         if (strategy instanceof AIMovement) {
                             ((AIMovement)strategy).setTargetPosition(playerPos);

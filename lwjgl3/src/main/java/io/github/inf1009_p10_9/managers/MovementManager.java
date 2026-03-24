@@ -1,6 +1,7 @@
 package io.github.inf1009_p10_9.managers;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import io.github.inf1009_p10_9.entities.Entity;
 import io.github.inf1009_p10_9.interfaces.*;
 
 // singleton that holds a movement strategy per entity type and applies the right one when move() is called
@@ -9,8 +10,8 @@ public class MovementManager implements IManagerMinimal,
                                         IMovementStrategyRegisterable {
     private static MovementManager instance;
 
-    // keyed by entity class name, e.g. "Player", "Enemy"
-    private ObjectMap<String, IMovementStrategy> movementStrategies = new ObjectMap<>();
+    // keyed by entity .class types
+    private final ObjectMap<Class<?>, IMovementStrategy> movementStrategies = new ObjectMap<>();
 
     private MovementManager() {}
 
@@ -32,20 +33,20 @@ public class MovementManager implements IManagerMinimal,
     }
 
     @Override
-    public void registerMovementStrategy(String objectType, IMovementStrategy strategy) {
-        movementStrategies.put(objectType, strategy);
+    public <T extends Entity> void registerMovementStrategy(Class<T> entityType, IMovementStrategy strategy) {
+        movementStrategies.put(entityType, strategy);
     }
 
     @Override
-    public IMovementStrategy getMovementStrategy(String objectType) {
-        return movementStrategies.get(objectType);
+    public IMovementStrategy getMovementStrategy(Class<?> objectClass) {
+        return movementStrategies.get(objectClass);
     }
 
     // looks up the strategy by the entity's class name and delegates movement calculation to it
     @Override
     public void move(IPositionable object, int moveDirection) {
-        String entityType = object.getClass().getSimpleName();
-        IMovementStrategy strategy = movementStrategies.get(entityType);
+        Class<?> objectClass = object.getClass();
+        IMovementStrategy strategy = getMovementStrategy(objectClass);
 
         if (strategy != null) {
             strategy.calculateMovement(object, moveDirection);

@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import io.github.inf1009_p10_9.entities.*;
 import io.github.inf1009_p10_9.managers.*;
 import io.github.inf1009_p10_9.movement.*;
 import io.github.inf1009_p10_9.input.*;
@@ -75,18 +76,16 @@ public class Lwjgl3Launcher {
             float RightEdge = gameWidth * 0.70f + laneWidth / 2 - playerWidth;
 
             //UserMovement parameters : float speed, float leftBoundary, float rightBoundary, boolean enableVerticalMovement
-            movementManager.registerMovementStrategy("Player", new UserMovement(250f, LeftEdge, RightEdge, false));
-            
-            movementManager.registerMovementStrategy("Building", new ScrollerMovement());
-            movementManager.registerMovementStrategy("Cactus", new ScrollerMovement());
-            movementManager.registerMovementStrategy("Rock", new ScrollerMovement());
-            movementManager.registerMovementStrategy("Tree", new ScrollerMovement());
-            movementManager.registerMovementStrategy("StreetLamp", new ScrollerMovement());
-            movementManager.registerMovementStrategy("Bones", new ScrollerMovement());         
-//            movementManager.registerMovementStrategy("Enemy",
-//                                                     new AIMovement(200f, AIMovement.AIMovementPattern.FLEE));
-            movementManager.registerMovementStrategy("Gate", new ScrollerMovement());
-            movementManager.registerMovementStrategy("RoadDashes", new ScrollerMovement());
+            movementManager.registerMovementStrategy(Player.class, new UserMovement(250f, LeftEdge, RightEdge, false));
+
+            movementManager.registerMovementStrategy(Building.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(Cactus.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(Rock.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(Tree.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(StreetLamp.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(Bones.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(Gate.class, new ScrollerMovement());
+            movementManager.registerMovementStrategy(RoadDashes.class, new ScrollerMovement());
 
             // Create scenes with interfaces
             sceneManager.addScene(new StartScene(

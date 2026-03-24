@@ -18,7 +18,6 @@ public class GameScene extends Scene {
     private QuestionDisplay questionDisplay;
     private LivesElement livesElement;
     private float endDelay = 0f;
-    private final float END_DELAY_DURATION = 1.0f; // seconds
     private boolean endStarted = false;
     private boolean pauseState = false; // to check if game is set to pause
     private boolean escWasPressed = false; // to prevent spam Escape
@@ -65,17 +64,17 @@ public class GameScene extends Scene {
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-        
+
         float gateWidth = 350f;
         float gateHeight = 80f;
         float centerX = screenWidth / 2;
         float gap = 0f;
-        
+
     	float roadLeftEdge  = screenWidth * 0.3f - 100f;
         float roadRightEdge = screenWidth * 0.70f + 100f;
-        
-        
-        
+
+
+
         // Map Loading
         Color roadsurroundingColor = new Color(0.2f, 0.5f, 0.2f, 1f); // default green
         String selectedScenery = scenerySelect.getSelectedScenery();
@@ -101,20 +100,6 @@ public class GameScene extends Scene {
                 new Color(0.65f, 0.50f, 0.40f, 1f),
 
             };
-            
-            float minBuildingGap = 300f;
-            float minTreeGap = 250f;
-            
-            for (int i = 0; i < 2; i++) {
-            	
-            	
-            	
-            	
-                float ly = i * minBuildingGap + (float)(Math.random() * minBuildingGap * 0.5f);
-                Building buildingL = new Building(leftBuildingZone, ly, leftWidths[i], leftHeights[i], leftColors[i]);
-                addEntity(buildingL);
-                renderRegisterable.registerRenderable(buildingL);
-            }
 
             // right buildings - fixed X zone, spaced Y
             float[] rightWidths  = {80f, 70f, 85f};
@@ -123,23 +108,29 @@ public class GameScene extends Scene {
                 new Color(0.65f, 0.50f, 0.40f, 1f),
                 new Color(0.45f, 0.50f, 0.60f, 1f)
             };
-            
+
+            float minBuildingGap = 300f;
+            float minTreeGap = 250f;
+
             for (int i = 0; i < 2; i++) {
+                float ly = i * minBuildingGap + (float)(Math.random() * minBuildingGap * 0.5f);
+                Building buildingL = new Building(leftBuildingZone, ly, leftWidths[i], leftHeights[i], leftColors[i]);
+                addEntity(buildingL);
+                renderRegisterable.registerRenderable(buildingL);
+
                 float ry = i * minBuildingGap + (float)(Math.random() * minBuildingGap * 0.5f);
                 Building buildingR = new Building(rightBuildingZone, ry, rightWidths[i], rightHeights[i], rightColors[i]);
                 addEntity(buildingR);
                 renderRegisterable.registerRenderable(buildingR);
             }
 
-            // left trees - fixed X zone, spaced Y
+            // left & right trees - fixed X zone, spaced Y
             for (int i = 0; i < 3; i++) {
                 float ly = i * minTreeGap + (float)(Math.random() * 80f);
                 Tree treeL = new Tree(leftTreeZone, ly);
                 addEntity(treeL);
                 renderRegisterable.registerRenderable(treeL);
-            }
 
-            for (int i = 0; i < 3; i++) {
                 float ry = i * minTreeGap + (float)(Math.random() * 80f);
                 Tree treeR = new Tree(rightTreeZone, ry);
                 addEntity(treeR);
@@ -158,11 +149,11 @@ public class GameScene extends Scene {
                 renderRegisterable.registerRenderable(lampR);
             }
         }
-        
+
         if (selectedScenery.equals("Desert")) {
         	roadsurroundingColor = new Color(0.76f, 0.70f, 0.35f, 1f);
         	float minGap = 150f;
-        
+
             for (int i = 0; i < 4; i++) {
                 // left side
                 float lx = (float)(Math.random() * (roadLeftEdge - 30f));
@@ -178,7 +169,7 @@ public class GameScene extends Scene {
                 addEntity(cactusR);
                 renderRegisterable.registerRenderable(cactusR);
             }
-            
+
             for (int i = 0; i < 4; i++) {
                 // left side
                 float lx = (float)(Math.random() * (roadLeftEdge - 60f));
@@ -196,7 +187,7 @@ public class GameScene extends Scene {
                 addEntity(rockR);
                 renderRegisterable.registerRenderable(rockR);
             }
-            
+
             // bones - 3 on each side
             for (int i = 0; i < 3; i++) {
                 float boneSize = 8f + (float)(Math.random() * 6f); // random size between 8 and 14
@@ -216,9 +207,9 @@ public class GameScene extends Scene {
                 renderRegisterable.registerRenderable(boneR);
             }
         }
-        
+
         // Road loading
-       
+
     	RoadSurrounding roadsurroundingLeft= new RoadSurrounding("left",roadsurroundingColor );
         addEntity(roadsurroundingLeft);
         renderRegisterable.registerRenderable(roadsurroundingLeft);
@@ -243,13 +234,13 @@ public class GameScene extends Scene {
             addEntity(roaddashes);
             renderRegisterable.registerRenderable(roaddashes);
         }
-        
 
-        
+
+
         pauseOverlay = new PauseOverlay(screenWidth, screenHeight, fontManager.getLargeFont());
         addUI(pauseOverlay);
-        
-        
+
+
         // question text shown at the top of the screen
         questionDisplay = new QuestionDisplay(0, 690, questionManager, fontManager.getLargeFont());
         addUI(questionDisplay);
@@ -262,7 +253,7 @@ public class GameScene extends Scene {
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
 
         // player centered horizontally at the bottom
-        Player player = new Player(screenWidth / 2 - 16, 80, sfxPlayable);
+        Player player = new Player(screenWidth / 2 - 16, 80);
         addEntity(player);
         renderRegisterable.registerRenderable(player);
         collidableRegisterable.registerCollidable(player);
@@ -288,66 +279,67 @@ public class GameScene extends Scene {
     @Override
     public void update() {
         super.update();
-        
+
         boolean EscKeyPressed = inputKeyCheckable.isKeyPressed(Keys.ESCAPE);
         if (EscKeyPressed && !escWasPressed) {
             pauseState = !pauseState;
         }
-        
+
         escWasPressed = EscKeyPressed; // prevent esc key spam, checks from previous game frame
         pauseOverlay.setVisible(pauseState);
-        
+
         if (!pauseState) {
 	        // move to the end screen once all questions have been answered
 	        if (questionManager.isBankFinished()) {
 	            System.out.println("All questions done, going to EndScene...");
 	            sceneSwitchable.switchScene("EndScene");
 	        }
-	
+
 	        // if no more lives -> delay -> end screen
 	        if (livesElement.getLivesCounter() <= 0) {
 	            if (!endStarted) {
 	                endStarted = true;
-	                endDelay = END_DELAY_DURATION;
+                    // seconds
+                    endDelay = 1.0f;
 	            }
-	
+
 	            endDelay -= Gdx.graphics.getDeltaTime();
 	            if (endDelay <= 0f) {
 	                endStarted = false;
 	                sceneSwitchable.switchScene("EndScene");
 	            }
 	        }
-	
+
 	        Array<Entity> entities = entityRegisterable.getEntities();
 	        //enable movement
 	        for (Entity entity : entities) {
 	            if (entity instanceof Gate) {
 	                movementCalculatable.move(entity, 0);
 	            }
-	
+
 	            if (entity instanceof RoadDashes) {
 	            	movementCalculatable.move(entity, 0);
 	            }
-	            
+
 	            if (entity instanceof Cactus) {
 	            	movementCalculatable.move(entity, 0);
 	            }
-	            
+
 	            if (entity instanceof Rock) {
 	            	movementCalculatable.move(entity, 0);
 	            }
 	            if (entity instanceof Tree) {
 	            	movementCalculatable.move(entity, 0);
 	            }
-	            
+
 	            if (entity instanceof StreetLamp) {
 	            	movementCalculatable.move(entity, 0);
 	            }
-	            
+
 	            if (entity instanceof Building) {
 	            	movementCalculatable.move(entity, 0);
 	            }
-	            
+
 	            if (entity instanceof Bones) {
 	            	movementCalculatable.move(entity, 0);
 	            }

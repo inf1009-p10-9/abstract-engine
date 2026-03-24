@@ -6,17 +6,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
 
 import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
 // the player entity, renders as a car sprite with a blue square fallback if the texture fails to load
 public class Player extends Entity {
     private Color color;
-    private ISFXPlayable sfxPlayable;
 
-    public Player(float x, float y, ISFXPlayable sfxPlayable) {
-        super(x, y, 52, 70, 10);
+    public Player(float x, float y) {
+        super(x, y, 52, 95, 10);
         this.color = Color.BLUE;
-        this.sfxPlayable = sfxPlayable;
         loadTexture();
     }
 

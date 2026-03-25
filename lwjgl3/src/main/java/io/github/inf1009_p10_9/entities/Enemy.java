@@ -2,9 +2,8 @@ package io.github.inf1009_p10_9.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 
-import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.ICollidableDetectable;
 import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
 
 // a red enemy entity that briefly flashes orange when hit
@@ -30,24 +29,6 @@ public class Enemy extends Entity {
             shapeRenderer.setColor(color);
             shapeRenderer.rect(position.x, position.y, width, height);
         }
-    }
-
-    @Override
-    public void onCollision(ICollidable other) {
-        System.out.println("ENEMY COLLIDED WITH: " + other.getClass().getSimpleName());
-        sfxPlayable.playSound("sound/jump.mp3");
-
-        // flash orange briefly on hit, then return to red
-        // note: uses a raw thread as a quick timer, replace with a delta-based timer for production
-        color = Color.ORANGE;
-        new Thread(() -> {
-            try {
-                Thread.sleep(200);
-                color = Color.RED;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 
     @Override

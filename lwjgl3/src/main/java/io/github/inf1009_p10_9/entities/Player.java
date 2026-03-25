@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
 
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-
 // the player entity, renders as a car sprite with a blue square fallback if the texture fails to load
 public class Player extends Entity {
     private Color color;
@@ -40,13 +38,7 @@ public class Player extends Entity {
         }
     }
 
-    @Override
-    public void onCollision(ICollidable other) {
-        //System.out.println("Player collided with: " + other.getClass().getSimpleName());
-    }
-
-    @Override
-    public int getCollisionLayer() {
+    @Override public int getCollisionLayer() {
         return 1;
     }
 

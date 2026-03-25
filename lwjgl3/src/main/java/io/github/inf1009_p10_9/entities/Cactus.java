@@ -4,10 +4,8 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Cactus extends Entity implements IRenderable {
+public class Cactus extends Entity {
     private static final Color CACTUS_GREEN = new Color(0.18f, 0.45f, 0.18f, 1f);
     private static final float TRUNK_WIDTH  = 14f;
     private static final float TRUNK_HEIGHT = 60f;
@@ -75,6 +73,4 @@ public class Cactus extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 4; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

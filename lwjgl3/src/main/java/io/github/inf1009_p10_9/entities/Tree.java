@@ -3,12 +3,10 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Tree extends Entity implements IRenderable {
+public class Tree extends Entity {
     private static final Color TRUNK_COLOR  = new Color(0.40f, 0.25f, 0.10f, 1f);
-    private static final Color LEAVES_COLOR = new Color(0.15f, 0.40f, 0.15f, 1f);
+    //private static final Color LEAVES_COLOR = new Color(0.15f, 0.40f, 0.15f, 1f);
     private static final Color LEAVES_DARK  = new Color(0.10f, 0.30f, 0.10f, 1f);
 
     private static final float TRUNK_WIDTH  = 12f;
@@ -59,6 +57,4 @@ public class Tree extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 4; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

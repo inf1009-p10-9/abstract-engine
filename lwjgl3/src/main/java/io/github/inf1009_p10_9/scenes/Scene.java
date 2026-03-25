@@ -65,7 +65,7 @@ public abstract class Scene implements Screen, IUICollector {
                     renderRegisterable.unregisterRenderable(entity);
                 }
 
-                if (entity instanceof ICollidable) {
+                if (entity instanceof ICollidableDetectable) {
                     collidableRegisterable.unregisterCollidable(entity);
                 }
             }
@@ -79,7 +79,7 @@ public abstract class Scene implements Screen, IUICollector {
             loaded = false;
 
             System.out.println(">>> UNLOAD COMPLETE");
-            
+
         }
     }
 
@@ -95,14 +95,6 @@ public abstract class Scene implements Screen, IUICollector {
         return name;
     }
 
-    public boolean isLoaded() {
-        return loaded;
-    }
-
-    protected Array<Entity> getEntities() {
-        return entities;
-    }
-
     protected void addEntity(Entity entity) {
         entities.add(entity);
     }
@@ -111,7 +103,7 @@ public abstract class Scene implements Screen, IUICollector {
     public void addUI(UIElement uiElement) {
         uiElements.add(uiElement);
     }
-    
+
 
     // LibGDX screen lifecycle, mapped to our own load/update/unload methods
     @Override

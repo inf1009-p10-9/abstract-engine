@@ -3,10 +3,8 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Bones extends Entity implements IRenderable {
+public class Bones extends Entity {
     private static final Color BONE_COLOR      = new Color(0.92f, 0.90f, 0.82f, 1f);
     private static final Color BONE_SHADOW     = new Color(0.60f, 0.58f, 0.50f, 1f);
     private static final Color BONE_HIGHLIGHT  = new Color(1.00f, 0.98f, 0.93f, 1f);
@@ -121,6 +119,4 @@ public class Bones extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 4; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

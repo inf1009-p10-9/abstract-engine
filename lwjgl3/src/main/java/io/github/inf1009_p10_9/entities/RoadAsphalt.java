@@ -1,16 +1,14 @@
 package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 // draws the asphalt slab and yellow edge lines that form the road surface
-public class RoadAsphalt extends Entity implements IRenderable {
+public class RoadAsphalt extends Entity {
     private static final Color ASPHALT_GRAY  = new Color(0.2f, 0.2f, 0.22f, 1f);
     private static final Color LINE_YELLOW   = new Color(1f, 0.9f, 0.1f, 1f);
-    
+
     private final float gameWidth;
     private final float gameHeight;
     private final float roadLeftEdge;
@@ -45,6 +43,4 @@ public class RoadAsphalt extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 0; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

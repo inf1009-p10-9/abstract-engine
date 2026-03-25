@@ -3,12 +3,10 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Rock extends Entity implements IRenderable {
+public class Rock extends Entity {
     private static final Color ROCK_COLOR  = new Color(0.55f, 0.50f, 0.42f, 1f);
-    private static final Color ROCK_SHADOW = new Color(0.35f, 0.30f, 0.25f, 1f);
+    //private static final Color ROCK_SHADOW = new Color(0.35f, 0.30f, 0.25f, 1f);
 
     private final float size;
 
@@ -59,6 +57,4 @@ public class Rock extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 3; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

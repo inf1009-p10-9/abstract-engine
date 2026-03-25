@@ -3,7 +3,7 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.ICollidableDetectable;
 
 // a static boundary wall that flashes yellow briefly when the player touches it
 public class Wall extends Entity {
@@ -40,14 +40,6 @@ public class Wall extends Entity {
         }
     }
 
-    @Override
-    public void onCollision(ICollidable other) {
-        if (other instanceof Player) {
-            System.out.println("WALL COLLIDED WITH: Player");
-            currentColor = collisionColor;
-            collisionTimer = COLLISION_FLASH_DURATION;
-        }
-    }
 
     @Override
     public int getCollisionLayer() {

@@ -1,9 +1,6 @@
 package io.github.inf1009_p10_9.entities;
 
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
-import io.github.inf1009_p10_9.interfaces.ISFXPlayable;
-import io.github.inf1009_p10_9.interfaces.IUILives;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.questions.Question;
 
@@ -13,13 +10,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 
 // a gate that scrolls down the screen displaying one answer option (A or B).
 // when the player collides with it, it checks the answer, flashes a result color, then resets.
 // collisions are ignored briefly after spawning to prevent instant triggers when gates reappear at the top.
 // #TODO: refactor QuestionManager reference to use an interface
-public class Gate extends Entity implements IRenderable, ICollidable {
+public class Gate extends Entity implements ICollidableResolvable {
     private final QuestionManager questionManager;
     private String option; // "A" or "B"
     private BitmapFont font;
@@ -98,7 +94,7 @@ public class Gate extends Entity implements IRenderable, ICollidable {
     	// fill
         shapeRenderer.setColor(color);
         shapeRenderer.rect(position.x, position.y, bounds.width, bounds.height);
-        
+
         // border
         shapeRenderer.setColor(new Color(0.4f, 0.25f, 0.1f, 1f));
         shapeRenderer.rectLine(position.x, position.y, position.x + bounds.width, position.y, 3); // bottom
@@ -107,8 +103,14 @@ public class Gate extends Entity implements IRenderable, ICollidable {
         shapeRenderer.rectLine(position.x + bounds.width, position.y, position.x + bounds.width, position.y + bounds.height, 3); // right
     }
 
+    // return as ICollidableResolvable
     @Override
-    public void onCollision(ICollidable other) {
+    public ICollidableResolvable asResolvable() {
+        return this;
+    }
+
+    @Override
+    public void onCollision(ICollidableDetectable other) {
         if (other instanceof Player) {
             // ignore collision while gate is still spawning in from the top
             if (spawnImmunityTimer > 0) {
@@ -173,11 +175,6 @@ public class Gate extends Entity implements IRenderable, ICollidable {
 
     public boolean isNeedsReset() {
         return needsReset;
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return bounds;
     }
 
     @Override

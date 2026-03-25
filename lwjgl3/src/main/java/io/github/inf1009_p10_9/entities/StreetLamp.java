@@ -3,13 +3,11 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class StreetLamp extends Entity implements IRenderable {
+public class StreetLamp extends Entity {
     private static final Color POLE_COLOR  = new Color(0.55f, 0.55f, 0.55f, 1f);
     private static final Color LIGHT_COLOR = new Color(1.0f,  0.95f, 0.60f, 1f);
-    private static final Color GLOW_COLOR  = new Color(1.0f,  0.95f, 0.60f, 0.3f);
+//    private static final Color GLOW_COLOR  = new Color(1.0f,  0.95f, 0.60f, 0.3f);
 
     private static final float POLE_WIDTH   = 6f;
     private static final float POLE_HEIGHT  = 70f;
@@ -58,8 +56,8 @@ public class StreetLamp extends Entity implements IRenderable {
         sr.setColor(POLE_COLOR);
         sr.rect(armX, poleY + POLE_HEIGHT - POLE_WIDTH, ARM_LENGTH, POLE_WIDTH);
 
-        
-        
+
+
         // light position
         float lightX = facingRight ? poleX + POLE_WIDTH + ARM_LENGTH : poleX - ARM_LENGTH;
         float lightY  = poleY + POLE_HEIGHT;
@@ -86,6 +84,4 @@ public class StreetLamp extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 4; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

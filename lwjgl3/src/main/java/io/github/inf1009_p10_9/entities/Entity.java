@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.UUID;
 
-import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.ICollidableDetectable;
 import io.github.inf1009_p10_9.interfaces.IPositionable;
 import io.github.inf1009_p10_9.interfaces.IRenderable;
 
 // base class for all game entities, handles position, bounds, texture, and z-ordering
 public abstract class Entity implements IPositionable,
                                         IRenderable,
-                                        ICollidable {
+                                        ICollidableDetectable {
 
     protected String id;
     protected Vector2 position;
@@ -61,10 +61,6 @@ public abstract class Entity implements IPositionable,
     }
 
     // getters and setters
-    public String getId() {
-        return id;
-    }
-
     public Vector2 getPosition() {
         return position;
     }
@@ -77,31 +73,16 @@ public abstract class Entity implements IPositionable,
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
-
     public Rectangle getBounds() {
         return bounds;
     }
 
-    public void setBounds(Rectangle bounds) {
-        this.bounds = bounds;
+    @Override
+    public int getCollisionLayer() {
+        return 0; //default collision layer 0
     }
 
     public int getZIndex() {
         return zIndex;
-    }
-
-    public void setZIndex(int zIndex) {
-        this.zIndex = zIndex;
     }
 }

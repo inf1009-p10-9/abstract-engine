@@ -1,7 +1,8 @@
 package io.github.inf1009_p10_9.managers;
 
 import com.badlogic.gdx.utils.Array;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
+import io.github.inf1009_p10_9.interfaces.ICollidableDetectable;
+import io.github.inf1009_p10_9.interfaces.ICollidableResolvable;
 import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.interfaces.ICollisionStrategy;
 import io.github.inf1009_p10_9.interfaces.IManager;
@@ -11,7 +12,7 @@ public class CollisionManager implements IManager,
                                          ICollidableRegisterable {
     private static CollisionManager instance;
 
-    private Array<ICollidable> collidables = new Array<>();
+    private Array<ICollidableDetectable> collidables = new Array<>();
 
     // the strategy determines how collision bounds are tested, swappable at runtime
     private ICollisionStrategy collisionStrategy;
@@ -19,9 +20,12 @@ public class CollisionManager implements IManager,
     private CollisionManager() {}
 
     // notifies both objects when a collision is detected
-    protected void resolveCollision(ICollidable a, ICollidable b) {
-        a.onCollision(b);
-        b.onCollision(a);
+    protected void resolveCollision(ICollidableDetectable a, ICollidableDetectable b) {
+        ICollidableResolvable resA = a.asResolvable();
+        ICollidableResolvable resB = b.asResolvable();
+
+        if (resA != null) resA.onCollision(b);
+        if (resB != null) resB.onCollision(a);
     }
 
     public static synchronized CollisionManager getInstance() {
@@ -47,14 +51,14 @@ public class CollisionManager implements IManager,
 
     // registering and unregistering collidables
     @Override
-    public void registerCollidable(ICollidable obj) {
+    public void registerCollidable(ICollidableDetectable obj) {
         if (!collidables.contains(obj, true)) {
             collidables.add(obj);
         }
     }
 
     @Override
-    public void unregisterCollidable(ICollidable obj) {
+    public void unregisterCollidable(ICollidableDetectable obj) {
         collidables.removeValue(obj, true);
     }
 
@@ -69,9 +73,9 @@ public class CollisionManager implements IManager,
         }
 
         for (int i = 0; i < collidables.size; i++) {
-            ICollidable a = collidables.get(i);
+            ICollidableDetectable a = collidables.get(i);
             for (int j = i+1; j < collidables.size; j++) {
-                ICollidable b = collidables.get(j);
+                ICollidableDetectable b = collidables.get(j);
 
                 // objects on different layers do not collide with each other
                 if (a.getCollisionLayer() != b.getCollisionLayer()) {

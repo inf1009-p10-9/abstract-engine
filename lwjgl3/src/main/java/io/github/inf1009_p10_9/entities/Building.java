@@ -3,10 +3,8 @@ package io.github.inf1009_p10_9.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import io.github.inf1009_p10_9.interfaces.ICollidable;
-import io.github.inf1009_p10_9.interfaces.IRenderable;
 
-public class Building extends Entity implements IRenderable {
+public class Building extends Entity {
 
     private final float buildingWidth;
     private final float buildingHeight;
@@ -70,6 +68,4 @@ public class Building extends Entity implements IRenderable {
     }
 
     @Override public int getZIndex() { return 3; }
-    @Override public void onCollision(ICollidable other) {}
-    @Override public int getCollisionLayer() { return 0; }
 }

@@ -2,6 +2,7 @@ package io.github.inf1009_p10_9.scenes;
 
 import com.badlogic.gdx.utils.Array;
 import io.github.inf1009_p10_9.entities.*;
+import io.github.inf1009_p10_9.gameplay.RockObstacleController;
 import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.ui.FontManager;
@@ -21,6 +22,12 @@ public class GameScene extends Scene {
     private boolean endStarted = false;
     private boolean pauseState = false; // to check if game is set to pause
     private boolean escWasPressed = false; // to prevent spam Escape
+
+    // stored so the obstacle controller can reference them
+    private Player player;
+    private float roadLeftEdge;
+    private float roadRightEdge;
+    private RockObstacleController rockObstacleController;
 
     // dependencies
     private final IInputKeyCheckable inputKeyCheckable;
@@ -70,8 +77,8 @@ public class GameScene extends Scene {
         float centerX = screenWidth / 2;
         float gap = 0f;
 
-    	float roadLeftEdge  = screenWidth * 0.3f - 100f;
-        float roadRightEdge = screenWidth * 0.70f + 100f;
+    	roadLeftEdge  = screenWidth * 0.3f - 100f;
+        roadRightEdge = screenWidth * 0.70f + 100f;
 
 
 
@@ -253,7 +260,7 @@ public class GameScene extends Scene {
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
 
         // player centered horizontally at the bottom
-        Player player = new Player(screenWidth / 2 - 16, 80);
+        player = new Player(screenWidth / 2 - 16, 30);
         addEntity(player);
         renderRegisterable.registerRenderable(player);
         collidableRegisterable.registerCollidable(player);
@@ -272,6 +279,23 @@ public class GameScene extends Scene {
         // link gates so both reset together when either is hit
         gateA.setPartner(gateB);
         gateB.setPartner(gateA);
+
+        // Gameplay Obstacle Rock
+        rockObstacleController = new RockObstacleController(
+                player,
+                livesElement,
+                sfxPlayable,
+                roadLeftEdge,
+                roadRightEdge
+        );
+        rockObstacleController.setGate(gateA);
+        rockObstacleController.createRocks();
+
+        for (Rock rock : rockObstacleController.getRocks()) {
+            addEntity(rock);
+            renderRegisterable.registerRenderable(rock);
+            collidableRegisterable.registerCollidable(rock);
+        }
 
         System.out.println("GameScene loaded");
     }
@@ -310,7 +334,11 @@ public class GameScene extends Scene {
 	            }
 	        }
 
+	        // let the obstacle controller handle collisions and cooldowns
+	        rockObstacleController.update();
+
 	        Array<Entity> entities = entityRegisterable.getEntities();
+
 	        //enable movement
 	        for (Entity entity : entities) {
 	            if (entity instanceof Gate) {

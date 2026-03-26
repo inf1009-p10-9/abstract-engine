@@ -1,0 +1,13 @@
+package io.github.inf1009_p10_9.engine.collision;
+
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import io.github.inf1009_p10_9.engine.interfaces.ICollisionStrategy;
+
+// axis-aligned bounding box collision check, delegates to LibGDX's built-in rectangle overlap test
+public class AABBCollisionStrategy implements ICollisionStrategy {
+    @Override
+    public boolean checkCollision(Rectangle a, Rectangle b) {
+        return Intersector.overlaps(a, b);
+    }
+}

@@ -6,9 +6,14 @@ import java.util.Arrays;
 
 import com.badlogic.gdx.ApplicationAdapter;
 
-import io.github.inf1009_p10_9.interfaces.IManagerMinimal;
-import io.github.inf1009_p10_9.interfaces.IManager;
-import io.github.inf1009_p10_9.managers.*;
+import io.github.inf1009_p10_9.engine.interfaces.IManager;
+import io.github.inf1009_p10_9.engine.interfaces.IManagerMinimal;
+import io.github.inf1009_p10_9.engine.managers.CollisionManager;
+import io.github.inf1009_p10_9.engine.managers.EntityManager;
+import io.github.inf1009_p10_9.engine.managers.InputManager;
+import io.github.inf1009_p10_9.engine.managers.MovementManager;
+import io.github.inf1009_p10_9.engine.managers.OutputManager;
+import io.github.inf1009_p10_9.engine.managers.SceneManager;
 
 public class GameMaster extends ApplicationAdapter {
 

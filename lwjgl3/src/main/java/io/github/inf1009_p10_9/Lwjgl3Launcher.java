@@ -8,14 +8,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import io.github.inf1009_p10_9.entities.*;
-import io.github.inf1009_p10_9.managers.*;
-import io.github.inf1009_p10_9.movement.*;
-import io.github.inf1009_p10_9.input.*;
-import io.github.inf1009_p10_9.scenes.*;
-import io.github.inf1009_p10_9.collision.*;
-import io.github.inf1009_p10_9.questions.QuestionManager;
-import io.github.inf1009_p10_9.ui.FontManager;
+
+import io.github.inf1009_p10_9.game.entities.*;
+import io.github.inf1009_p10_9.engine.managers.*;
+import io.github.inf1009_p10_9.game.movement.*;
+import io.github.inf1009_p10_9.engine.movement.ScrollerMovement;
+import io.github.inf1009_p10_9.engine.input.*;
+import io.github.inf1009_p10_9.game.scenes.*;
+import io.github.inf1009_p10_9.engine.collision.*;
+import io.github.inf1009_p10_9.game.questions.QuestionManager;
+import io.github.inf1009_p10_9.game.ui.FontManager;
+
 
 public class Lwjgl3Launcher {
     public static void main(String[] args) {

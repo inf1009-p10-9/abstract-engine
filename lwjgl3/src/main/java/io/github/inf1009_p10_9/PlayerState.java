@@ -1,11 +1,11 @@
 package io.github.inf1009_p10_9;
 
-import io.github.inf1009_p10_9.economy.IWalletBag;
-import io.github.inf1009_p10_9.economy.IWalletBagImmutableOwnership;
-import io.github.inf1009_p10_9.economy.WalletBag;
-import io.github.inf1009_p10_9.economy.concrete.CoinsWallet;
-import io.github.inf1009_p10_9.economy.concrete.PlayerSkin;
-import io.github.inf1009_p10_9.economy.concrete.PlayerSkinsWallet;
+import io.github.inf1009_p10_9.game.economy.IWalletBag;
+import io.github.inf1009_p10_9.game.economy.IWalletBagImmutableOwnership;
+import io.github.inf1009_p10_9.game.economy.WalletBag;
+import io.github.inf1009_p10_9.game.economy.concrete.CoinsWallet;
+import io.github.inf1009_p10_9.game.economy.concrete.PlayerSkin;
+import io.github.inf1009_p10_9.game.economy.concrete.PlayerSkinsWallet;
 
 public class PlayerState {
     private static PlayerState instance;

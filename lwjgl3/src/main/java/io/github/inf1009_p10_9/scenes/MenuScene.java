@@ -80,10 +80,11 @@ public abstract class MenuScene extends Scene {
         if (sceneLoadTime < 0.2f) {
             return;
         }
+        
         boolean upKeyPressed   = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_UP")) || inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"));
         boolean downKeyPressed = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_DOWN")) || inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"));
         
-        
+
         if (upKeyPressed || downKeyPressed) {
             System.out.println("KEY PRESSED: up=" + upKeyPressed + " down=" + downKeyPressed + " upDownPressed=" + upDownPressed + " t=" + sceneLoadTime);
         }

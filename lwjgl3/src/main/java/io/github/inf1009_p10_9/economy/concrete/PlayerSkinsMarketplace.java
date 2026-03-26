@@ -1,15 +1,15 @@
 package io.github.inf1009_p10_9.economy.concrete;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import io.github.inf1009_p10_9.economy.CurrencyToPreinitialisedItemOffer;
 import io.github.inf1009_p10_9.economy.StaticMarketplace;
 
 public class PlayerSkinsMarketplace extends StaticMarketplace {
+    // This is a POJO that holds enough information to create the Offers for the marketplace.
+    // We use this to simplify data definition, and use a mapper pipelines to create the actual Offer, which is a bit more verbose due to the generics and reference types during construction.
     private static class PlayerSkinOfferDefinition {
         private final String name;
         private final String texturePath;
@@ -38,6 +38,10 @@ public class PlayerSkinsMarketplace extends StaticMarketplace {
               .stream()
               .map(definition -> {
                       PlayerSkin playerSkin = new PlayerSkin(definition.name, definition.texturePath);
+                      // We're using PlayerSkin as both the ItemDescriptor and the purchasable item itself because:
+                      // 1. It's creation is idempotent
+                      // 2. There isn't any dynamic state
+                      // 3. Displaying the skin in the marketplace requires the same data as the actual PlayerSkin
                       return new CurrencyToPreinitialisedItemOffer<PlayerSkin,
                                                                    PlayerSkin,
                                                                    CoinsWallet,

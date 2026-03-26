@@ -11,6 +11,8 @@ public class PlayerState {
     private static PlayerState instance;
 
     private final IWalletBag wallets = new WalletBag();
+    // Create an identical PlayerSkin from the Marketplace to demonstrate ItemWallet's enforcement of item uniqueness.
+    // We can create a new instance here due to PlayerSkin's equality check supporting fungibility.
     private PlayerSkin activePlayerSkin = new PlayerSkin("Stripe Racer","cars/car1_stripe_racer.png");
 
     private PlayerState() {
@@ -40,5 +42,4 @@ public class PlayerState {
     public void setActivePlayerSkin(PlayerSkin playerSkin) {
         activePlayerSkin = playerSkin;
     }
-
 }

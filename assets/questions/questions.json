@@ -4,41 +4,745 @@
       "subject": "Math",
       "difficulty": "Easy",
       "questions": [
-        { "text": "1 + 1 = ?", "optionA": "2", "optionB": "3", "answer": "A" },
-        { "text": "2 + 2 = ?", "optionA": "5", "optionB": "4", "answer": "B" },
-        { "text": "3 + 1 = ?", "optionA": "4", "optionB": "5", "answer": "A" },
-        { "text": "5 - 2 = ?", "optionA": "2", "optionB": "3", "answer": "B" }
+        {
+          "text": "1 + 1 = ?",
+          "optionA": "2",
+          "optionB": "3",
+          "answer": "A"
+        },
+        {
+          "text": "2 + 2 = ?",
+          "optionA": "5",
+          "optionB": "4",
+          "answer": "B"
+        },
+        {
+          "text": "3 + 1 = ?",
+          "optionA": "4",
+          "optionB": "5",
+          "answer": "A"
+        },
+        {
+          "text": "5 - 2 = ?",
+          "optionA": "2",
+          "optionB": "3",
+          "answer": "B"
+        },
+        {
+          "text": "4 + 3 = ?",
+          "optionA": "7",
+          "optionB": "8",
+          "answer": "A"
+        },
+        {
+          "text": "6 - 4 = ?",
+          "optionA": "3",
+          "optionB": "2",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 3 = ?",
+          "optionA": "6",
+          "optionB": "5",
+          "answer": "A"
+        },
+        {
+          "text": "8 / 2 = ?",
+          "optionA": "3",
+          "optionB": "4",
+          "answer": "B"
+        },
+        {
+          "text": "5 + 5 = ?",
+          "optionA": "10",
+          "optionB": "9",
+          "answer": "A"
+        },
+        {
+          "text": "9 - 3 = ?",
+          "optionA": "5",
+          "optionB": "6",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 3 = ?",
+          "optionA": "9",
+          "optionB": "8",
+          "answer": "A"
+        },
+        {
+          "text": "10 / 2 = ?",
+          "optionA": "6",
+          "optionB": "5",
+          "answer": "B"
+        },
+        {
+          "text": "7 + 2 = ?",
+          "optionA": "9",
+          "optionB": "8",
+          "answer": "A"
+        },
+        {
+          "text": "6 - 3 = ?",
+          "optionA": "2",
+          "optionB": "3",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 2 = ?",
+          "optionA": "8",
+          "optionB": "7",
+          "answer": "A"
+        },
+        {
+          "text": "9 / 3 = ?",
+          "optionA": "4",
+          "optionB": "3",
+          "answer": "B"
+        },
+        {
+          "text": "5 + 3 = ?",
+          "optionA": "8",
+          "optionB": "9",
+          "answer": "A"
+        },
+        {
+          "text": "7 - 4 = ?",
+          "optionA": "4",
+          "optionB": "3",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 5 = ?",
+          "optionA": "10",
+          "optionB": "12",
+          "answer": "A"
+        },
+        {
+          "text": "12 / 3 = ?",
+          "optionA": "5",
+          "optionB": "4",
+          "answer": "B"
+        },
+        {
+          "text": "6 + 4 = ?",
+          "optionA": "10",
+          "optionB": "11",
+          "answer": "A"
+        },
+        {
+          "text": "8 - 5 = ?",
+          "optionA": "2",
+          "optionB": "3",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 4 = ?",
+          "optionA": "12",
+          "optionB": "11",
+          "answer": "A"
+        },
+        {
+          "text": "15 / 3 = ?",
+          "optionA": "6",
+          "optionB": "5",
+          "answer": "B"
+        },
+        {
+          "text": "4 + 6 = ?",
+          "optionA": "10",
+          "optionB": "9",
+          "answer": "A"
+        },
+        {
+          "text": "10 - 4 = ?",
+          "optionA": "5",
+          "optionB": "6",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 4 = ?",
+          "optionA": "8",
+          "optionB": "6",
+          "answer": "A"
+        },
+        {
+          "text": "16 / 4 = ?",
+          "optionA": "5",
+          "optionB": "4",
+          "answer": "B"
+        },
+        {
+          "text": "7 + 3 = ?",
+          "optionA": "10",
+          "optionB": "11",
+          "answer": "A"
+        },
+        {
+          "text": "9 - 6 = ?",
+          "optionA": "2",
+          "optionB": "3",
+          "answer": "B"
+        }
       ]
     },
     {
       "subject": "Math",
       "difficulty": "Hard",
       "questions": [
-        { "text": "12 + 15 = ?", "optionA": "27", "optionB": "25", "answer": "A" },
-        { "text": "6 x 7 = ?",   "optionA": "42", "optionB": "48", "answer": "A" },
-        { "text": "81 / 9 = ?",  "optionA": "8",  "optionB": "9",  "answer": "B" },
-        { "text": "15 - 8 = ?",  "optionA": "6",  "optionB": "7",  "answer": "B" }
+        {
+          "text": "12 + 15 = ?",
+          "optionA": "27",
+          "optionB": "25",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 7 = ?",
+          "optionA": "42",
+          "optionB": "48",
+          "answer": "A"
+        },
+        {
+          "text": "81 / 9 = ?",
+          "optionA": "8",
+          "optionB": "9",
+          "answer": "B"
+        },
+        {
+          "text": "15 - 8 = ?",
+          "optionA": "6",
+          "optionB": "7",
+          "answer": "B"
+        },
+        {
+          "text": "13 x 4 = ?",
+          "optionA": "52",
+          "optionB": "48",
+          "answer": "A"
+        },
+        {
+          "text": "144 / 12 = ?",
+          "optionA": "13",
+          "optionB": "12",
+          "answer": "B"
+        },
+        {
+          "text": "25 + 37 = ?",
+          "optionA": "62",
+          "optionB": "61",
+          "answer": "A"
+        },
+        {
+          "text": "100 - 43 = ?",
+          "optionA": "57",
+          "optionB": "67",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 9 = ?",
+          "optionA": "63",
+          "optionB": "72",
+          "answer": "B"
+        },
+        {
+          "text": "121 / 11 = ?",
+          "optionA": "11",
+          "optionB": "12",
+          "answer": "A"
+        },
+        {
+          "text": "56 + 28 = ?",
+          "optionA": "84",
+          "optionB": "86",
+          "answer": "A"
+        },
+        {
+          "text": "72 - 35 = ?",
+          "optionA": "37",
+          "optionB": "38",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 11 = ?",
+          "optionA": "121",
+          "optionB": "111",
+          "answer": "A"
+        },
+        {
+          "text": "96 / 8 = ?",
+          "optionA": "13",
+          "optionB": "12",
+          "answer": "B"
+        },
+        {
+          "text": "45 + 55 = ?",
+          "optionA": "100",
+          "optionB": "110",
+          "answer": "A"
+        },
+        {
+          "text": "200 - 75 = ?",
+          "optionA": "125",
+          "optionB": "135",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 13 = ?",
+          "optionA": "91",
+          "optionB": "84",
+          "answer": "A"
+        },
+        {
+          "text": "169 / 13 = ?",
+          "optionA": "12",
+          "optionB": "13",
+          "answer": "B"
+        },
+        {
+          "text": "34 + 48 = ?",
+          "optionA": "82",
+          "optionB": "84",
+          "answer": "A"
+        },
+        {
+          "text": "150 - 67 = ?",
+          "optionA": "83",
+          "optionB": "93",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 12 = ?",
+          "optionA": "108",
+          "optionB": "98",
+          "answer": "A"
+        },
+        {
+          "text": "256 / 16 = ?",
+          "optionA": "16",
+          "optionB": "14",
+          "answer": "A"
+        },
+        {
+          "text": "63 + 29 = ?",
+          "optionA": "91",
+          "optionB": "92",
+          "answer": "B"
+        },
+        {
+          "text": "300 - 128 = ?",
+          "optionA": "172",
+          "optionB": "162",
+          "answer": "A"
+        },
+        {
+          "text": "14 x 7 = ?",
+          "optionA": "98",
+          "optionB": "96",
+          "answer": "A"
+        },
+        {
+          "text": "225 / 15 = ?",
+          "optionA": "16",
+          "optionB": "15",
+          "answer": "B"
+        },
+        {
+          "text": "88 + 44 = ?",
+          "optionA": "132",
+          "optionB": "122",
+          "answer": "A"
+        },
+        {
+          "text": "500 - 234 = ?",
+          "optionA": "276",
+          "optionB": "266",
+          "answer": "B"
+        },
+        {
+          "text": "15 x 8 = ?",
+          "optionA": "120",
+          "optionB": "110",
+          "answer": "A"
+        },
+        {
+          "text": "324 / 18 = ?",
+          "optionA": "18",
+          "optionB": "16",
+          "answer": "A"
+        }
       ]
     },
     {
       "subject": "English",
       "difficulty": "Easy",
       "questions": [
-        { "text": "Opposite of 'hot'?",   "optionA": "Cold",   "optionB": "Warm", "answer": "A" },
-        { "text": "One mouse, two __?",   "optionA": "Mouses", "optionB": "Mice", "answer": "B" },
-        { "text": "Which is correct?",    "optionA": "Freind", "optionB": "Friend", "answer": "B" },
-        { "text": "Opposite of 'big'?",   "optionA": "Small",  "optionB": "Tall", "answer": "A" }
+        {
+          "text": "Opposite of 'hot'?",
+          "optionA": "Cold",
+          "optionB": "Warm",
+          "answer": "A"
+        },
+        {
+          "text": "One mouse, two __?",
+          "optionA": "Mouses",
+          "optionB": "Mice",
+          "answer": "B"
+        },
+        {
+          "text": "Which is correct?",
+          "optionA": "Freind",
+          "optionB": "Friend",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'big'?",
+          "optionA": "Small",
+          "optionB": "Tall",
+          "answer": "A"
+        },
+        {
+          "text": "Plural of 'box'?",
+          "optionA": "Boxs",
+          "optionB": "Boxes",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'day'?",
+          "optionA": "Night",
+          "optionB": "Dusk",
+          "answer": "A"
+        },
+        {
+          "text": "Which is spelled right?",
+          "optionA": "Recieve",
+          "optionB": "Receive",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'fast'?",
+          "optionA": "Slow",
+          "optionB": "Quick",
+          "answer": "A"
+        },
+        {
+          "text": "One child, two __?",
+          "optionA": "Childs",
+          "optionB": "Children",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'open'?",
+          "optionA": "Closed",
+          "optionB": "Wide",
+          "answer": "A"
+        },
+        {
+          "text": "Which is correct?",
+          "optionA": "Beleive",
+          "optionB": "Believe",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'happy'?",
+          "optionA": "Sad",
+          "optionB": "Glad",
+          "answer": "A"
+        },
+        {
+          "text": "Plural of 'tooth'?",
+          "optionA": "Tooths",
+          "optionB": "Teeth",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'old'?",
+          "optionA": "Young",
+          "optionB": "Aged",
+          "answer": "A"
+        },
+        {
+          "text": "Which is spelled right?",
+          "optionA": "Tommorow",
+          "optionB": "Tomorrow",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'up'?",
+          "optionA": "Down",
+          "optionB": "Side",
+          "answer": "A"
+        },
+        {
+          "text": "One foot, two __?",
+          "optionA": "Foots",
+          "optionB": "Feet",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'light'?",
+          "optionA": "Dark",
+          "optionB": "Bright",
+          "answer": "A"
+        },
+        {
+          "text": "Which is correct?",
+          "optionA": "Seperate",
+          "optionB": "Separate",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'in'?",
+          "optionA": "Out",
+          "optionB": "Through",
+          "answer": "A"
+        },
+        {
+          "text": "Plural of 'leaf'?",
+          "optionA": "Leafs",
+          "optionB": "Leaves",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'right'?",
+          "optionA": "Wrong",
+          "optionB": "Correct",
+          "answer": "A"
+        },
+        {
+          "text": "Which is spelled right?",
+          "optionA": "Definately",
+          "optionB": "Definitely",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'full'?",
+          "optionA": "Empty",
+          "optionB": "Half",
+          "answer": "A"
+        },
+        {
+          "text": "One man, two __?",
+          "optionA": "Mans",
+          "optionB": "Men",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'start'?",
+          "optionA": "End",
+          "optionB": "Begin",
+          "answer": "A"
+        },
+        {
+          "text": "Which is correct?",
+          "optionA": "Occured",
+          "optionB": "Occurred",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'wet'?",
+          "optionA": "Dry",
+          "optionB": "Damp",
+          "answer": "A"
+        },
+        {
+          "text": "Plural of 'goose'?",
+          "optionA": "Gooses",
+          "optionB": "Geese",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'love'?",
+          "optionA": "Hate",
+          "optionB": "Like",
+          "answer": "A"
+        }
       ]
     },
     {
       "subject": "English",
       "difficulty": "Hard",
       "questions": [
-        { "text": "She ___ to school",      "optionA": "Go",      "optionB": "Went",     "answer": "B" },
-        { "text": "Synonym of 'happy'?",    "optionA": "Joyful",  "optionB": "Angry",    "answer": "A" },
-        { "text": "Plural of 'child'?",     "optionA": "Childs",  "optionB": "Children", "answer": "B" },
-        { "text": "Opposite of 'ancient'?", "optionA": "Modern",  "optionB": "Old",      "answer": "A" }
-      ]
-    }
-  ]
-}
+        {
+          "text": "She ___ to school",
+          "optionA": "Go",
+          "optionB": "Went",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'happy'?",
+          "optionA": "Joyful",
+          "optionB": "Angry",
+          "answer": "A"
+        },
+        {
+          "text": "Plural of 'child'?",
+          "optionA": "Childs",
+          "optionB": "Children",
+          "answer": "B"
+        },
+        {
+          "text": "Opposite of 'ancient'?",
+          "optionA": "Modern",
+          "optionB": "Old",
+          "answer": "A"
+        },
+        {
+          "text": "They ___ playing now",
+          "optionA": "Is",
+          "optionB": "Are",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'brave'?",
+          "optionA": "Courageous",
+          "optionB": "Fearful",
+          "answer": "A"
+        },
+        {
+          "text": "He ___ finished his work",
+          "optionA": "Has",
+          "optionB": "Have",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'difficult'?",
+          "optionA": "Challenging",
+          "optionB": "Simple",
+          "answer": "A"
+        },
+        {
+          "text": "I ___ to the store yesterday",
+          "optionA": "Goed",
+          "optionB": "Went",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'angry'?",
+          "optionA": "Furious",
+          "optionB": "Calm",
+          "answer": "A"
+        },
+        {
+          "text": "She ___ been waiting long",
+          "optionA": "Has",
+          "optionB": "Have",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'small'?",
+          "optionA": "Tiny",
+          "optionB": "Large",
+          "answer": "A"
+        },
+        {
+          "text": "We ___ go tomorrow",
+          "optionA": "Will",
+          "optionB": "Wills",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'tired'?",
+          "optionA": "Exhausted",
+          "optionB": "Energetic",
+          "answer": "A"
+        },
+        {
+          "text": "The cat ___ on the mat",
+          "optionA": "Sits",
+          "optionB": "Sit",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'begin'?",
+          "optionA": "Commence",
+          "optionB": "Finish",
+          "answer": "A"
+        },
+        {
+          "text": "They ___ not here yesterday",
+          "optionA": "Was",
+          "optionB": "Were",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'cold'?",
+          "optionA": "Frigid",
+          "optionB": "Warm",
+          "answer": "A"
+        },
+        {
+          "text": "He ___ running every day",
+          "optionA": "Is",
+          "optionB": "Are",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'fast'?",
+          "optionA": "Swift",
+          "optionB": "Slow",
+          "answer": "A"
+        },
+        {
+          "text": "She ___ the book yesterday",
+          "optionA": "Readed",
+          "optionB": "Read",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'big'?",
+          "optionA": "Enormous",
+          "optionB": "Tiny",
+          "answer": "A"
+        },
+        {
+          "text": "We ___ eating dinner now",
+          "optionA": "Are",
+          "optionB": "Is",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'smart'?",
+          "optionA": "Intelligent",
+          "optionB": "Dull",
+          "answer": "A"
+        },
+        {
+          "text": "He ___ never been there",
+          "optionA": "Has",
+          "optionB": "Have",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'scared'?",
+          "optionA": "Terrified",
+          "optionB": "Brave",
+          "answer": "A"
+        },
+        {
+          "text": "The dogs ___ barking loudly",
+          "optionA": "Is",
+          "optionB": "Are",
+          "answer": "B"
+        },
+        {
+          "text": "Synonym of 'beautiful'?",
+          "optionA": "Gorgeous",
+          "optionB": "Ugly",
+          "answer": "A"
+        },
+        {
+          "text": "I ___ seen that movie before",
+          "optionA": "Have",
+          "optionB": "Has",
+          "answer": "A"
+        },
+        {
+          "text": "Synonym of 'old'?",
+          "optionA": "Ancient",
+          "optionB": "New",
+          "answer": "A"
+		          }
+		        ]
+		      }
+		    ]
+		  }

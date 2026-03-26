@@ -252,8 +252,7 @@ public class GameScene extends Scene {
         livesElement = new LivesElement(90, 60, fontManager.getMediumFont());
         addUI(livesElement);
         int totalQuestions = questionManager.getTotalQuestions();
-        float livesQuestionsRatio = 0.65f;
-        livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
+        livesElement.setLivesCounter(5);
 
         // player centered horizontally at the bottom
         PlayerState playerState = PlayerState.getInstance();
@@ -321,6 +320,7 @@ public class GameScene extends Scene {
             if(scrollerStrategy instanceof IMovementScrollAdjustable) {
                 ((IMovementScrollAdjustable) scrollerStrategy).adjustScrollSpeed(targetSpeed);
             }
+            
 
 	        //enable movement for non-player entities
             Array<Entity> entities = entityRegisterable.getEntities();

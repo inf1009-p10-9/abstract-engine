@@ -60,7 +60,6 @@ public class QuestionManager implements IManagerMinimal {
             for (JsonValue bankData : root.get("banks")) {
                 String subject    = bankData.getString("subject");
                 String difficulty = bankData.getString("difficulty");
-
                 QuestionBank bank = new QuestionBank(subject, difficulty);
 
                 for (JsonValue q : bankData.get("questions")) {
@@ -71,6 +70,7 @@ public class QuestionManager implements IManagerMinimal {
                     bank.addQuestion(new Question(text, optionA, optionB, answer));
                 }
 
+                
                 allBanks.put(subject + "_" + difficulty, bank);
             }
 
@@ -88,8 +88,8 @@ public class QuestionManager implements IManagerMinimal {
     // sets the active bank by subject and difficulty, resets progress, and shuffles the questions
     public void selectBank(String subject, String difficulty) {
         String bankKey = subject + "_" + difficulty;
+        
         QuestionBank selectedBank = allBanks.get(bankKey);
-
         if (selectedBank != null) {
             activeBank = selectedBank;
             currentIndex = 0;

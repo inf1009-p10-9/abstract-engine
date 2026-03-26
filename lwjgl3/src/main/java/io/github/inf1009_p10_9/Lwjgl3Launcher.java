@@ -41,6 +41,8 @@ public class Lwjgl3Launcher {
         private final QuestionManager questionManager;
         private final FontManager fontManager;
         private final PlayerState playerState;
+        private final SettingsManager settingsManager;
+
 
         // creates all managers and wires everything together
         public GameApplication() {
@@ -57,6 +59,8 @@ public class Lwjgl3Launcher {
             this.fontManager = FontManager.getInstance();
             this.managersMinimal.add(this.fontManager);
             this.playerState = PlayerState.getInstance();
+            this.settingsManager = SettingsManager.getInstance();
+            
         }
 
         @Override
@@ -131,7 +135,7 @@ public class Lwjgl3Launcher {
             	    inputManager,                 // IInputKeyCheckable
             	    inputManager,                 // IKeyPressConsumable
             	    sceneManager,
-            	    SettingsManager.getInstance(),
+            	    settingsManager,
             	    fontManager
             	));
 
@@ -163,7 +167,7 @@ public class Lwjgl3Launcher {
                 fontManager,
                 movementManager,                // as IMovementCalculatable
                 movementManager,                // as IMovementStrategyRegisterable
-                SettingsManager.getInstance() // TEMPORARY LINE
+                settingsManager// TEMPORARY LINE
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

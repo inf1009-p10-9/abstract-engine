@@ -27,6 +27,7 @@ import io.github.inf1009_p10_9.economy.IOfferReadOnly;
 import io.github.inf1009_p10_9.economy.ISourceCurrencyOfferReadOnly;
 import io.github.inf1009_p10_9.economy.ITargetItemOfferReadOnly;
 import io.github.inf1009_p10_9.economy.IWalletBagImmutableOwnership;
+import io.github.inf1009_p10_9.economy.ItemsWallet;
 import io.github.inf1009_p10_9.economy.concrete.CoinsWallet;
 import io.github.inf1009_p10_9.economy.concrete.PlayerSkin;
 import io.github.inf1009_p10_9.economy.concrete.PlayerSkinsMarketplace;
@@ -49,6 +50,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
     private IKeyBindObserverTarget keyBindObserverTarget;
 
     private int selectionId = 0;
+    private int playerSkinsPurchasedQty;
     private final PlayerSkinsMarketplace playerSkinsMarketplace = new PlayerSkinsMarketplace();
     private final List<PlayerSkinResource> playerSkinResources = new ArrayList<>();
     private final float playerSkinWidth = 52;
@@ -313,7 +315,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    PlayerSkinsWallet playerSkinsWallet = playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0);
 
 	    List<PlayerSkin> playerSkinsPurchased = playerSkinsWallet.getItems();
-	    int playerSkinsPurchasedQty = playerSkinsPurchased.size();
+	    playerSkinsPurchasedQty = playerSkinsPurchased.size();
 	    int playerSkinsPurchasableQty = playerSkinOffers.size();
 	    int playerSkinsQty = playerSkinsPurchasedQty + playerSkinsPurchasableQty;
 
@@ -366,17 +368,17 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 
         // update price or purchased status
         PlayerSkinResourcePurchasable highlightedSkinResourcePurchasable;
+        String priceLabelText = "";
         if (highlightedSkinResource instanceof PlayerSkinResourcePurchasable) {
             highlightedSkinResourcePurchasable = (PlayerSkinResourcePurchasable)highlightedSkinResource;
-            if (highlightedSkinResourcePurchasable.isTransactionViable)
-                priceLabel.setText(String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
-                                                  highlightedSkinResourcePurchasable.offerRequest.getQty()));
-            else
-                priceLabel.setText(String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
-                                                  highlightedSkinResourcePurchasable.offerRequest.getQty()) + " (not enough money)");
+            priceLabelText += String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
+                                                   highlightedSkinResourcePurchasable.offerRequest.getQty());
+            if (!highlightedSkinResourcePurchasable.isTransactionViable)
+                priceLabelText +=  " (not enough money)";
         } else {
-            priceLabel.setText("Already purchased.");;
+            priceLabelText += "Already purchased.";
         }
+        priceLabel.setText(priceLabelText);
 
         nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
 
@@ -453,6 +455,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
                     PlayerSkinResourcePurchasable playerSkinResourcePurchasable = (PlayerSkinResourcePurchasable)playerSkinResource;
                     playerSkinsMarketplace.redeemOffer(playerState.getWalletBag(),
                                                        playerSkinResourcePurchasable.offerRequest);
+                    selectionId = playerSkinsPurchasedQty;
                     sceneSwitchable.switchScene(CustomisationScene.class.getSimpleName());
 
                 } else {

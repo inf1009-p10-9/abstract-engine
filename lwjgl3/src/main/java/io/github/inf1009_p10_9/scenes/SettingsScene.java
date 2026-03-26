@@ -374,8 +374,8 @@ public class SettingsScene extends Scene {
         }
 
         // update the row values
-        rows[0].getValueLabel().setText((int) (settingsControllable.getMusicVolume() * 100) + "%");
-        rows[1].getValueLabel().setText((int) (settingsControllable.getSfxVolume() * 100) + "%");
+        rows[0].getValueLabel().setText(Math.round(settingsControllable.getMusicVolume() * 100) + "%");
+        rows[1].getValueLabel().setText(Math.round(settingsControllable.getSfxVolume() * 100) + "%");
 
         rows[2].getValueLabel().setText(selectedIndex == 2 && waitingForRebind
             ? "Press key..."

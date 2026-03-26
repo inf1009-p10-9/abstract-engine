@@ -20,7 +20,6 @@ import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.ui.TitleElement;
 import io.github.inf1009_p10_9.ui.TextLabel;
-import io.github.inf1009_p10_9.ui.TitleCarElement;
 import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.economy.IItemOfferRequest;
 import io.github.inf1009_p10_9.economy.IOfferCurrencyDescriptor;
@@ -100,6 +99,11 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         inputDebounceDelay = 500;
         activeKeybindEvent = null;
         registerKeyBindObserverTarget(this.keyBindObserverTarget);
+        if (selectionId < 0)
+            selectionId = 0;
+        int playerSkinResourcesQty = playerSkinResources.size();
+        if (selectionId >= playerSkinResourcesQty)
+            selectionId = playerSkinResourcesQty - 1;
     }
 
     @Override
@@ -120,13 +124,16 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         private final IItemOfferRequest<?> offerRequest;
         private final IOfferCurrencyDescriptor currencyDescriptor;
         private final PlayerSkin skinDescriptor;
+        private final boolean isTransactionViable;
 
         public PlayerSkinOffer(IItemOfferRequest<?> offerRequest,
                                IOfferCurrencyDescriptor currencyDescriptor,
-                               PlayerSkin skinDescriptor) {
+                               PlayerSkin skinDescriptor,
+                               boolean isTransactionViable) {
             this.offerRequest = offerRequest;
             this.currencyDescriptor = currencyDescriptor;
             this.skinDescriptor = skinDescriptor;
+            this.isTransactionViable = isTransactionViable;
         }
     }
 
@@ -148,6 +155,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
     private class PlayerSkinResourcePurchasable extends PlayerSkinResource {
         protected final IOfferCurrencyDescriptor currencyDescriptor;
         private final IItemOfferRequest<?> offerRequest;
+        private final boolean isTransactionViable;
 
         public PlayerSkinResourcePurchasable(PlayerSkinOffer offer,
                                              PlayerSkinEntity entity) {
@@ -155,6 +163,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
                   entity);
             this.currencyDescriptor = offer.currencyDescriptor;
             this.offerRequest = offer.offerRequest;
+            this.isTransactionViable = offer.isTransactionViable;
         }
     }
 
@@ -247,13 +256,16 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
             skinDescriptor = (PlayerSkin)targetItemDescriptor;
 
             // Create an offer request and test if it's viable based on user's balance/s.
+            // We allow non-viable transactions to pass through so that we can display them to the user as such.
             IItemOfferRequest<?> offerRequest = targetItemOffer.createOfferRequest(1);
-            if (!targetItemOffer.isTransactionViable(wallets, offerRequest))
-                continue;
-            System.out.println("[CustomisationScene] Offer is viable with player's wallet.");
+            boolean isTransactionViable = targetItemOffer.isTransactionViable(wallets, offerRequest);
+            System.out.printf("[CustomisationScene] Offer is viable with player's wallet? %b\n", isTransactionViable);
 
             // Compile valid offers
-            playerSkinOffers.add(new PlayerSkinOffer(offerRequest, sourceCurrencyDescriptor, skinDescriptor));
+            playerSkinOffers.add(new PlayerSkinOffer(offerRequest,
+                                                     sourceCurrencyDescriptor,
+                                                     skinDescriptor,
+                                                     isTransactionViable));
             System.out.println("[CustomisationScene] Offer accepted!");
         }
 
@@ -266,48 +278,45 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    float centerX = screenWidth / 2;
 	    float screenHeight = Gdx.graphics.getHeight();
 	    float centerY = screenHeight / 2;
-	
+
 	    // shared decorative background
 	    backdrop = new SceneBackdrop(true);
 	    backdrop.addToScene(this);
-	
+
 	    // title - top left
 	    titleElement = new TitleElement("SELECT SKIN", fontManager.getLargeFont(), Color.GREEN);
 	    addUI(titleElement);
-	
+
 	    // balance - top right
 	    PlayerState playerState = PlayerState.getInstance();
 	    String balanceText = "Balance: " + playerState.getWalletBag().getWallets(CoinsWallet.class).get(0).getBalance();
 	    balanceLabel = new TextLabel(balanceText, screenWidth - 250, screenHeight - 40, fontManager.getMediumFont());
 	    balanceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(balanceLabel);
-	
+
 	    // car name - centered below cars
 	    nameLabel = new TextLabel("", centerX - 150, centerY - 110, fontManager.getMediumFont());
 	    nameLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(nameLabel);
-	
+
 	    // price or purchased status - below name
 	    priceLabel = new TextLabel("", centerX - 150, centerY - 155, fontManager.getMediumFont());
 	    priceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(priceLabel);
-	
+
 	    // navigation hint - bottom center
 	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select", centerX, 60, fontManager.getSmallFont());
 	    hintLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
 	    addUI(hintLabel);
-	
-	    // remove Label - not needed anymore
-	    // valueLabel was showing selection index which is meaningless to user
-	
+
 	    List<PlayerSkinOffer> playerSkinOffers = loadMarketplace();
 	    PlayerSkinsWallet playerSkinsWallet = playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0);
-	
+
 	    List<PlayerSkin> playerSkinsPurchased = playerSkinsWallet.getItems();
 	    int playerSkinsPurchasedQty = playerSkinsPurchased.size();
 	    int playerSkinsPurchasableQty = playerSkinOffers.size();
 	    int playerSkinsQty = playerSkinsPurchasedQty + playerSkinsPurchasableQty;
-	
+
 	    for (int i = 0; i < playerSkinsPurchasedQty; i++) {
 	        PlayerSkin playerSkin = playerSkinsPurchased.get(i);
 	        String skinPath = playerSkin.getTexturePath();
@@ -318,7 +327,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        renderRegisterable.registerRenderable(playerSkinEntity);
 	        playerSkinResources.add(new PlayerSkinResourcePurchased(playerSkin, playerSkinEntity));
 	    }
-	
+
 	    for (int i = 0; i < playerSkinsPurchasableQty; i++) {
 	        PlayerSkinOffer playerSkinOffer = playerSkinOffers.get(i);
 	        PlayerSkin playerSkinDescriptor = playerSkinOffer.skinDescriptor;
@@ -326,26 +335,28 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(
 	            centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i),
 	            centerY - 16, skinPath);
-	        addEntity(playerSkinEntity);
-	        renderRegisterable.registerRenderable(playerSkinEntity);
-	        playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
+            if (playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0).isItemAcceptable(playerSkinDescriptor)) {
+                addEntity(playerSkinEntity);
+                renderRegisterable.registerRenderable(playerSkinEntity);
+                playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
+            }
 	    }
-	
+
 	    System.out.println("CustomisationScene loaded");
 	}
 
     @Override
     public void update() {
         handleNavigation();
-        updateHighlight();
+        handleDescriptorDisplay();
         handleRender();
         float delta = Gdx.graphics.getDeltaTime();
-        
+
         backdrop.update(delta, 1f, 1f);
     }
 
     // updates arrow and label colors to show which row is active, and refreshes displayed values
-    private void updateHighlight() {
+    private void handleDescriptorDisplay() {
         PlayerSkinResource highlightedSkinResource;
         try {
             highlightedSkinResource = playerSkinResources.get(selectionId);
@@ -353,19 +364,21 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
             return;
         }
 
-        // update name
-        nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
-
         // update price or purchased status
+        PlayerSkinResourcePurchasable highlightedSkinResourcePurchasable;
         if (highlightedSkinResource instanceof PlayerSkinResourcePurchasable) {
-            PlayerSkinResourcePurchasable purchasable = (PlayerSkinResourcePurchasable) highlightedSkinResource;
-            float price = purchasable.currencyDescriptor.getAmount() * purchasable.offerRequest.getQty();
-            priceLabel.setText("Price: " + price + " coins");
-            priceLabel.setColor(ACTIVE_ROW_COLOR);
+            highlightedSkinResourcePurchasable = (PlayerSkinResourcePurchasable)highlightedSkinResource;
+            if (highlightedSkinResourcePurchasable.isTransactionViable)
+                priceLabel.setText(String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
+                                                  highlightedSkinResourcePurchasable.offerRequest.getQty()));
+            else
+                priceLabel.setText(String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
+                                                  highlightedSkinResourcePurchasable.offerRequest.getQty()) + " (not enough money)");
         } else {
-            priceLabel.setText("Already purchased");
-            priceLabel.setColor(Color.GREEN); // green for owned
+            priceLabel.setText("Already purchased.");;
         }
+
+        nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
 
         // update balance
         balanceLabel.setText("Balance: " + playerState.getWalletBag()
@@ -377,7 +390,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         if (observerTarget != null)
             keyBindObserverTarget.deregisterKeyBindObserver(this);
         Arrays
-            .asList("MENU_LEFT", "MOVE_LEFT", "MENU_RIGHT", "MOVE_RIGHT", "CONFIRM")
+            .asList("MENU_LEFT", "MOVE_LEFT", "MENU_RIGHT", "MOVE_RIGHT", "CONFIRM", "BACK")
             .forEach(keyBind -> {
                     observerTarget.registerKeyBindObserver(this, new KeyBindEvent(keyBind, "KEY_UP"));
                     observerTarget.registerKeyBindObserver(this, new KeyBindEvent(keyBind, "KEY_DOWN"));
@@ -447,7 +460,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
                 }
                 break;
             case "BACK":
-                // #TODO(RIFA): Do something
+                sceneSwitchable.switchScene("StartScene");
                 break;
             }
             inputDebounce = System.currentTimeMillis();

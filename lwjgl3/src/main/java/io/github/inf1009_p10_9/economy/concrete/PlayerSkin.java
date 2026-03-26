@@ -17,6 +17,10 @@ public class PlayerSkin {
         return texturePath;
     }
 
+    /*
+      Allow two different instances with identical contents to equal.
+      This allows PlayerSkins to be treated as fungible.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PlayerSkin))

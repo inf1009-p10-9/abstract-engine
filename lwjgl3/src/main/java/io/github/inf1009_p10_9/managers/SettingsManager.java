@@ -87,7 +87,9 @@ public class SettingsManager implements ISettingsControllable, IScenerySelect {
     }
     
     // scenery selection persists for the whole session until overwritten
-    public String getSelectedScenery() { return selectedScenery; }
+    public String getSelectedScenery() { 
+        return selectedScenery; 
+    }
  
     public void setSelectedScenery(String scenery) {
         this.selectedScenery = scenery;

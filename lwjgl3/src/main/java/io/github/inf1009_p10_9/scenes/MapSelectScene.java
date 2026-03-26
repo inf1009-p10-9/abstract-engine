@@ -18,40 +18,25 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 // screen where the player picks a scenery theme before moving on to difficulty selection
 public class MapSelectScene extends Scene {
 
-    // -------------------------------------------------------------------------
     // scenery options
-    // -------------------------------------------------------------------------
-
     private static final String[] SCENERY_OPTIONS = { "City", "Desert" };
     private static final String[] TEXTURE_PATHS   = { "scenery/scenery_city.png", "scenery/scenery_desert.png" };
     private static final String[] HINT_TEXTS      = { "Urban streets & skyscrapers", "Sandy dunes & open roads" };
-
     private int selectedSceneryIndex = 0;
 
-    // -------------------------------------------------------------------------
     // card layout constants
-    // -------------------------------------------------------------------------
-
     private static final float CARD_WIDTH  = 300f;
     private static final float CARD_HEIGHT = 260f;
-
     private static final float CARD_LEFT_CENTER_X  = 320f;
     private static final float CARD_RIGHT_CENTER_X = 960f;
-
     private static final float CARD_TOP_Y = 460f;
 
-    // -------------------------------------------------------------------------
     // colors
-    // -------------------------------------------------------------------------
-
     private static final Color CARD_SELECTED_BORDER  = new Color(1f, 0.90f, 0.10f, 1f);
     private static final Color LABEL_SELECTED_COLOR   = new Color(1f, 0.90f, 0.10f, 1f); // yellow, matches the border
     private static final Color LABEL_UNSELECTED_COLOR = new Color(1f, 1f, 1f, 0.6f);     // dimmed white for unselected
 
-    // -------------------------------------------------------------------------
     // UI element references
-    // -------------------------------------------------------------------------
-
     private TitleElement    titleElement;
     private TitleCarElement titleCar;
     private CloudElement[]  clouds;
@@ -64,10 +49,7 @@ public class MapSelectScene extends Scene {
     private TextLabel selectionIndicator;
     private TextLabel instructionLabel;
 
-    // -------------------------------------------------------------------------
     // animation / input state
-    // -------------------------------------------------------------------------
-
     private float titleBounceTimer = 0f;
     private float sceneLoadTime    = 0f;
 
@@ -75,18 +57,12 @@ public class MapSelectScene extends Scene {
     private boolean enterPressed     = false;
     private boolean escPressed       = false;
 
-    // -------------------------------------------------------------------------
     // dependencies
-    // -------------------------------------------------------------------------
-
     private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable   sceneSwitchable;
     private final FontManager        fontManager;
 
-    // -------------------------------------------------------------------------
     // constructor
-    // -------------------------------------------------------------------------
-
     public MapSelectScene(IEntityRegisterable entityRegisterable,
                             IUIDisplayable uiDisplayable,
                             ICollidableRegisterable collidableRegisterable,
@@ -106,17 +82,13 @@ public class MapSelectScene extends Scene {
         this.fontManager       = fontManager;
     }
 
-    // -------------------------------------------------------------------------
     // loadEntities — build all UI once
-    // -------------------------------------------------------------------------
-
     @Override
     protected void loadEntities() {
         float screenWidth  = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        // --- background & decorations ----------------------------------------
-
+        //  background & decorations 
         addUI(new BackgroundElement());
 
         clouds    = new CloudElement[3];
@@ -129,8 +101,7 @@ public class MapSelectScene extends Scene {
         grassCar = new CarElement(100, grassY - 26, 110f, 0, 133, 64, 26, 128, 52);
         addUI(grassCar);
 
-        // --- title -----------------------------------------------------------
-
+        //  title 
         titleElement = new TitleElement("DRIVE AND LEARN", fontManager.getLargeFont(), Color.GREEN);
         addUI(titleElement);
 
@@ -140,8 +111,7 @@ public class MapSelectScene extends Scene {
                                        0, 296, 64, 24, 96, 36);
         addUI(titleCar);
 
-        // --- scenery cards ---------------------------------------------------
-
+        //  scenery cards 
         sceneryCards   = new SceneryCardElement[2];
         cardNameLabels = new TextLabel[2];
         cardHintLabels = new TextLabel[2];
@@ -182,8 +152,7 @@ public class MapSelectScene extends Scene {
         selectionIndicator.setColor(CARD_SELECTED_BORDER);
         addUI(selectionIndicator);
 
-        // --- instruction hint ------------------------------------------------
-
+        //  instruction hint 
         String instrText = "LEFT / RIGHT: choose    ENTER: confirm    ESC: back";
         layout.setText(fontManager.getSmallFont(), instrText);
         instructionLabel = new TextLabel(
@@ -199,10 +168,7 @@ public class MapSelectScene extends Scene {
         System.out.println("LevelSelectScene loaded");
     }
 
-    // -------------------------------------------------------------------------
     // load — reset state on every visit
-    // -------------------------------------------------------------------------
-
     @Override
     public void load() {
         super.load();
@@ -214,10 +180,7 @@ public class MapSelectScene extends Scene {
         escPressed           = false;
     }
 
-    // -------------------------------------------------------------------------
     // unload — dispose textures owned by the cards
-    // -------------------------------------------------------------------------
-
     @Override
     public void unload() {
         if (sceneryCards != null) {
@@ -228,10 +191,7 @@ public class MapSelectScene extends Scene {
         super.unload();
     }
 
-    // -------------------------------------------------------------------------
     // update — animate + handle input
-    // -------------------------------------------------------------------------
-
     @Override
     public void update() {
         super.update();
@@ -249,8 +209,7 @@ public class MapSelectScene extends Scene {
 
         if (sceneLoadTime < 0.2f) return;
 
-        // --- LEFT / RIGHT to switch scenery ----------------------------------
-
+        //  LEFT / RIGHT to switch scenery 
         boolean leftPressed  = inputKeyCheckable.isKeyPressed(Keys.LEFT) ||
                                inputKeyCheckable.isKeyPressed(Keys.A);
         boolean rightPressed = inputKeyCheckable.isKeyPressed(Keys.RIGHT) ||
@@ -271,8 +230,7 @@ public class MapSelectScene extends Scene {
             leftRightPressed = false;
         }
 
-        // --- ENTER to confirm ------------------------------------------------
-
+        //  ENTER to confirm 
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -282,8 +240,7 @@ public class MapSelectScene extends Scene {
             enterPressed = false;
         }
 
-        // --- ESC to go back --------------------------------------------------
-
+        //  ESC to go back 
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             if (!escPressed) {
                 escPressed = true;
@@ -294,10 +251,7 @@ public class MapSelectScene extends Scene {
         }
     }
 
-    // -------------------------------------------------------------------------
     // updateCardVisuals — highlights the chosen card, dims the other
-    // -------------------------------------------------------------------------
-
     private void updateCardVisuals() {
         float[] cardCenterXs = { CARD_LEFT_CENTER_X, CARD_RIGHT_CENTER_X };
 
@@ -313,10 +267,7 @@ public class MapSelectScene extends Scene {
         selectionIndicator.setPosition(indicatorX, CARD_TOP_Y - CARD_HEIGHT - 28);
     }
 
-    // -------------------------------------------------------------------------
     // confirmSelection — store choice and advance to difficulty selection
-    // -------------------------------------------------------------------------
-
     private void confirmSelection() {
         String chosen = SCENERY_OPTIONS[selectedSceneryIndex];
         System.out.println("Scenery chosen: " + chosen);

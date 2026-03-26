@@ -1,22 +1,19 @@
 package io.github.inf1009_p10_9;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 
 import io.github.inf1009_p10_9.game.entities.*;
+import io.github.inf1009_p10_9.game.managers.QuestionManager;
+import io.github.inf1009_p10_9.game.managers.SettingsManager;
 import io.github.inf1009_p10_9.engine.managers.*;
-import io.github.inf1009_p10_9.game.movement.*;
 import io.github.inf1009_p10_9.engine.movement.ScrollerMovement;
+import io.github.inf1009_p10_9.engine.movement.UserMovement;
 import io.github.inf1009_p10_9.engine.input.*;
 import io.github.inf1009_p10_9.game.scenes.*;
 import io.github.inf1009_p10_9.engine.collision.*;
-import io.github.inf1009_p10_9.game.questions.QuestionManager;
 import io.github.inf1009_p10_9.game.ui.FontManager;
 
 
@@ -63,7 +60,7 @@ public class Lwjgl3Launcher {
             this.managersMinimal.add(this.fontManager);
             this.playerState = PlayerState.getInstance();
             this.settingsManager = SettingsManager.getInstance();
-            
+
         }
 
         @Override
@@ -73,7 +70,8 @@ public class Lwjgl3Launcher {
             Keyboard keyboard = new Keyboard(
                 movementManager,      // as IMovementCalculatable
                 inputManager,     // as IInputKeyCheckable
-                entityManager     // as IEntityQueryable
+                entityManager,     // as IEntityQueryable
+                settingsManager   // as ISettingsKBRetrievable
             );
             inputManager.registerPeripheral(keyboard);
 
@@ -112,7 +110,8 @@ public class Lwjgl3Launcher {
                 inputManager,                   // as IInputKeyCheckable
                 sceneManager,                    // as ISceneSwitchable
 
-                fontManager
+                fontManager,
+                settingsManager                 // as ISettingsKBRetrievable
             ));
 
             sceneManager.addScene(new MapSelectScene(
@@ -123,23 +122,25 @@ public class Lwjgl3Launcher {
                 outputManager.getBGManager(),   // as IMusicPlayable
 
                 inputManager,                   // as IInputKeyCheckable
-                sceneManager,                    // as ISceneSwitchable
+                sceneManager,                   // as ISceneSwitchable
 
-                fontManager
+                fontManager,
+                settingsManager
             ));
 
             sceneManager.addScene(new SettingsScene(
-            	    entityManager,
-            	    outputManager,
-            	    collisionManager,
-            	    outputManager,
-            	    outputManager.getBGManager(),
-            	    outputManager.getSFXManager(),
+            	    entityManager,                // as IEntityRegisterable
+            	    outputManager,                // as IUIDisplayable
+            	    collisionManager,             // as ICollidableRegisterable
+            	    outputManager,                // as IRenderRegisterable
+            	    outputManager.getBGManager(), // as IMusicPlayable
+            	    outputManager.getSFXManager(),// as ISFXPlayable
             	    inputManager,                 // IInputKeyCheckable
             	    inputManager,                 // IKeyPressConsumable
-            	    sceneManager,
-            	    settingsManager,
-            	    fontManager
+            	    sceneManager,                 // as ISceneSwitchable
+            	    settingsManager,              // as ISettingsControllable
+            	    fontManager,
+                    settingsManager               // as ISettingsKBRetrievable
             	));
 
             sceneManager.addScene(new EndScene(
@@ -153,7 +154,8 @@ public class Lwjgl3Launcher {
                 sceneManager,                   // as ISceneSwitchable
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager,
-                playerState
+                playerState,
+                settingsManager                 // as ISettingsKBRetrievable
             ));
 
             sceneManager.addScene(new GameScene(
@@ -170,7 +172,7 @@ public class Lwjgl3Launcher {
                 fontManager,
                 movementManager,                // as IMovementCalculatable
                 movementManager,                // as IMovementStrategyRegisterable
-                settingsManager// TEMPORARY LINE
+                settingsManager                 // as IScenerySelect
             ));
 
             sceneManager.addScene(new SubjectSelectScene(

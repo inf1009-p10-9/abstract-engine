@@ -2,8 +2,8 @@ package io.github.inf1009_p10_9.game.entities;
 
 import io.github.inf1009_p10_9.engine.core.Entity;
 import io.github.inf1009_p10_9.engine.interfaces.*;
-import io.github.inf1009_p10_9.game.questions.QuestionManager;
 import io.github.inf1009_p10_9.game.interfaces.IUILives;
+import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.game.questions.Question;
 
 import com.badlogic.gdx.Gdx;

@@ -9,7 +9,7 @@ import io.github.inf1009_p10_9.engine.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.engine.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.engine.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.game.questions.QuestionManager;
+import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.game.ui.BackgroundElement;
 import io.github.inf1009_p10_9.game.ui.CarElement;
 import io.github.inf1009_p10_9.game.ui.CloudElement;

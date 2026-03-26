@@ -115,20 +115,6 @@ public class OutputManager implements IManager,
         bgManager.playMusic(musicFile);
     }
 
-    public void stopBackgroundMusic() {
-        bgManager.stopMusic();
-    }
-
-    public void playSoundEffect(String soundFile) {
-        sfxManager.playSound(soundFile);
-    }
-
-    public void setBackgroundColor(float r, float g, float b) {
-        bgR = r;
-        bgG = g;
-        bgB = b;
-    }
-
     // clears the screen, then draws all renderables and ui sorted by z-index.
     // shapes are drawn first, then textures and text on top.
     public void render() {
@@ -147,7 +133,7 @@ public class OutputManager implements IManager,
         allRenderables.addAll(uiElements);
         allRenderables.sort((a, b) -> Integer.compare(a.getZIndex(), b.getZIndex()));
 
-     // below pause overlay (zIndex < 200)
+        // below pause overlay (zIndex < 100)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for (IRenderable r : allRenderables) {
             if (r.getZIndex() <= 100) r.renderShapes(shapeRenderer);
@@ -160,7 +146,7 @@ public class OutputManager implements IManager,
         }
         batch.end();
 
-        // pause overlay and above (zIndex >= 200)
+        // pause overlay and above (zIndex >= 100)
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

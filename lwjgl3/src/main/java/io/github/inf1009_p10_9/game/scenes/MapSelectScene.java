@@ -3,7 +3,6 @@ package io.github.inf1009_p10_9.game.scenes;
 import io.github.inf1009_p10_9.engine.core.Scene;
 
 import io.github.inf1009_p10_9.engine.interfaces.*;
-import io.github.inf1009_p10_9.engine.managers.SettingsManager;
 import io.github.inf1009_p10_9.game.ui.BackgroundElement;
 import io.github.inf1009_p10_9.game.ui.CarElement;
 import io.github.inf1009_p10_9.game.ui.CloudElement;
@@ -12,6 +11,9 @@ import io.github.inf1009_p10_9.game.ui.SceneryCardElement;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
 import io.github.inf1009_p10_9.game.ui.TitleCarElement;
 import io.github.inf1009_p10_9.game.ui.TitleElement;
+import io.github.inf1009_p10_9.game.interfaces.IScenerySelect;
+import io.github.inf1009_p10_9.game.managers.SettingsManager;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -64,6 +66,7 @@ public class MapSelectScene extends Scene {
     private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable   sceneSwitchable;
     private final FontManager        fontManager;
+    private final IScenerySelect     scenerySelectable;
 
     // constructor
     public MapSelectScene(IEntityRegisterable entityRegisterable,
@@ -73,7 +76,8 @@ public class MapSelectScene extends Scene {
                             IMusicPlayable musicPlayable,
                             IInputKeyCheckable inputKeyCheckable,
                             ISceneSwitchable sceneSwitchable,
-                            FontManager fontManager) {
+                            FontManager fontManager,
+                            IScenerySelect scenerySelectable) {
         super("LevelSelectScene",
               entityRegisterable,
               uiDisplayable,
@@ -83,6 +87,7 @@ public class MapSelectScene extends Scene {
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable   = sceneSwitchable;
         this.fontManager       = fontManager;
+        this.scenerySelectable = scenerySelectable;
     }
 
     // loadEntities — build all UI once
@@ -91,7 +96,7 @@ public class MapSelectScene extends Scene {
         float screenWidth  = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        //  background & decorations 
+        //  background & decorations
         addUI(new BackgroundElement());
 
         clouds    = new CloudElement[3];
@@ -104,7 +109,7 @@ public class MapSelectScene extends Scene {
         grassCar = new CarElement(100, grassY - 26, 110f, 0, 133, 64, 26, 128, 52);
         addUI(grassCar);
 
-        //  title 
+        //  title
         titleElement = new TitleElement("DRIVE AND LEARN", fontManager.getLargeFont(), Color.GREEN);
         addUI(titleElement);
 
@@ -114,7 +119,7 @@ public class MapSelectScene extends Scene {
                                        0, 296, 64, 24, 96, 36);
         addUI(titleCar);
 
-        //  scenery cards 
+        //  scenery cards
         sceneryCards   = new SceneryCardElement[2];
         cardNameLabels = new TextLabel[2];
         cardHintLabels = new TextLabel[2];
@@ -155,7 +160,7 @@ public class MapSelectScene extends Scene {
         selectionIndicator.setColor(CARD_SELECTED_BORDER);
         addUI(selectionIndicator);
 
-        //  instruction hint 
+        //  instruction hint
         String instrText = "LEFT / RIGHT: choose    ENTER: confirm    ESC: back";
         layout.setText(fontManager.getSmallFont(), instrText);
         instructionLabel = new TextLabel(
@@ -212,7 +217,7 @@ public class MapSelectScene extends Scene {
 
         if (sceneLoadTime < 0.2f) return;
 
-        //  LEFT / RIGHT to switch scenery 
+        //  LEFT / RIGHT to switch scenery
         boolean leftPressed  = inputKeyCheckable.isKeyPressed(Keys.LEFT) ||
                                inputKeyCheckable.isKeyPressed(Keys.A);
         boolean rightPressed = inputKeyCheckable.isKeyPressed(Keys.RIGHT) ||
@@ -233,7 +238,7 @@ public class MapSelectScene extends Scene {
             leftRightPressed = false;
         }
 
-        //  ENTER to confirm 
+        //  ENTER to confirm
         if (inputKeyCheckable.isKeyPressed(Keys.ENTER)) {
             if (!enterPressed) {
                 enterPressed = true;
@@ -243,7 +248,7 @@ public class MapSelectScene extends Scene {
             enterPressed = false;
         }
 
-        //  ESC to go back 
+        //  ESC to go back
         if (inputKeyCheckable.isKeyPressed(Keys.ESCAPE)) {
             if (!escPressed) {
                 escPressed = true;
@@ -274,7 +279,7 @@ public class MapSelectScene extends Scene {
     private void confirmSelection() {
         String chosen = SCENERY_OPTIONS[selectedSceneryIndex];
         System.out.println("Scenery chosen: " + chosen);
-        SettingsManager.getInstance().setSelectedScenery(chosen);
+        scenerySelectable.setSelectedScenery(chosen);
         sceneSwitchable.switchScene("SubjectSelectScene");
     }
 }

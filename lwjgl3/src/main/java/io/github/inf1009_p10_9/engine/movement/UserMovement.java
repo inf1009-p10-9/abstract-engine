@@ -1,4 +1,4 @@
-package io.github.inf1009_p10_9.game.movement;
+package io.github.inf1009_p10_9.engine.movement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;

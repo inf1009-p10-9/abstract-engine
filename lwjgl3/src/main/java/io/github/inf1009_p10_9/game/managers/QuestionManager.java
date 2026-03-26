@@ -1,8 +1,11 @@
-package io.github.inf1009_p10_9.game.questions;
+package io.github.inf1009_p10_9.game.managers;
 
 import java.util.Collections;
 import java.util.HashMap;
 import io.github.inf1009_p10_9.engine.interfaces.IManagerMinimal;
+import io.github.inf1009_p10_9.game.questions.Question;
+import io.github.inf1009_p10_9.game.questions.QuestionBank;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;

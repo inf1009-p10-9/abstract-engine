@@ -1,4 +1,4 @@
-package io.github.inf1009_p10_9.engine.managers;
+package io.github.inf1009_p10_9.game.managers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,9 +7,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.inf1009_p10_9.engine.interfaces.ISettingsControllable;
 import io.github.inf1009_p10_9.game.interfaces.IScenerySelect;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsKBRetrievable;
+
 
 // singleton that stores player preferences, volume levels and keybindings, across the session
-public class SettingsManager implements ISettingsControllable, IScenerySelect {
+public class SettingsManager implements ISettingsControllable,
+                                        IScenerySelect,
+                                        ISettingsKBRetrievable{
     private static SettingsManager instance;
 
     // volume levels, clamped to 0.0 to 1.0 on write
@@ -82,15 +86,11 @@ public class SettingsManager implements ISettingsControllable, IScenerySelect {
         keybindsInverse.put(keycode, action);
     }
 
-    public ObjectMap<String, Integer> getAllKeybinds() {
-        return keybinds;
-    }
-    
     // scenery selection persists for the whole session until overwritten
-    public String getSelectedScenery() { 
-        return selectedScenery; 
+    public String getSelectedScenery() {
+        return selectedScenery;
     }
- 
+
     public void setSelectedScenery(String scenery) {
         this.selectedScenery = scenery;
     }

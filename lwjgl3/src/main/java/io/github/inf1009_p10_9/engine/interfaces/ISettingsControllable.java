@@ -7,6 +7,5 @@ public interface ISettingsControllable {
     float getSfxVolume();
     void setSfxVolume(float volume);
 
-    int getKeybind(String action);
     void rebindKey(String action, int keycode);
 }

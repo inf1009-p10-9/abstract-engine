@@ -1,7 +1,6 @@
 package io.github.inf1009_p10_9.game.ui;
 import io.github.inf1009_p10_9.engine.core.UIElement;
-
-import io.github.inf1009_p10_9.game.questions.QuestionManager;
+import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.game.questions.Question;
 
 import com.badlogic.gdx.graphics.Color;

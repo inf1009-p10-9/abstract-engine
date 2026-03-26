@@ -12,6 +12,7 @@ import io.github.inf1009_p10_9.game.ui.TitleElement;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsKBRetrievable;
 
 // the main menu screen, showing the title, animated background elements, and navigation buttons
 public class StartScene extends MenuScene {
@@ -47,7 +48,8 @@ public class StartScene extends MenuScene {
                       IMusicPlayable musicPlayable,
                       IInputKeyCheckable inputKeyCheckable,
                       ISceneSwitchable sceneSwitchable,
-                      FontManager fontManager) {
+                      FontManager fontManager,
+                      ISettingsKBRetrievable settingsKBRetrievable) {
         super("StartScene",
               entityRegisterable,
               uiDisplayable,
@@ -55,7 +57,8 @@ public class StartScene extends MenuScene {
               renderRegisterable,
               musicPlayable,
               inputKeyCheckable,
-              sceneSwitchable);
+              sceneSwitchable,
+              settingsKBRetrievable);
         this.fontManager = fontManager;
     }
 
@@ -172,16 +175,20 @@ public class StartScene extends MenuScene {
     @Override
     protected void handleMenuSelection() {
         String selectedOption = menuOptions[highlightedIndex];
-        if (selectedOption.equals("Play")) {
-            System.out.println("Going to LevelSelectScene...");
-            sceneSwitchable.switchScene("LevelSelectScene");
+        switch (selectedOption) {
+            case "Play":
+                System.out.println("Going to LevelSelectScene...");
+                sceneSwitchable.switchScene("LevelSelectScene");
 
-        } else if (selectedOption.equals("Settings")) {
-            sceneSwitchable.switchScene("SettingsScene");
+                break;
+            case "Settings":
+                sceneSwitchable.switchScene("SettingsScene");
 
-        } else if (selectedOption.equals("Quit Game")) {
-            System.out.println("Quitting game...");
-            Gdx.app.exit();
+                break;
+            case "Quit Game":
+                System.out.println("Quitting game...");
+                Gdx.app.exit();
+                break;
         }
     }
 }

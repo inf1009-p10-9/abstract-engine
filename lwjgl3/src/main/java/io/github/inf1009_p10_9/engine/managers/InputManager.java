@@ -17,6 +17,7 @@ import io.github.inf1009_p10_9.engine.interfaces.IInputListens;
 import io.github.inf1009_p10_9.engine.interfaces.IKeyBindEvent;
 import io.github.inf1009_p10_9.engine.interfaces.IKeyPressConsumable;
 import io.github.inf1009_p10_9.engine.interfaces.IManager;
+import io.github.inf1009_p10_9.game.managers.SettingsManager;
 import io.github.inf1009_p10_9.engine.interfaces.IKeyBindObserverTarget;
 import io.github.inf1009_p10_9.engine.interfaces.IKeyBindObserves;
 // singleton that handles keyboard input, tracks key states, and notifies registered listeners each frame

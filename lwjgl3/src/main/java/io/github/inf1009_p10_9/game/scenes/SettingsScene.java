@@ -8,6 +8,7 @@ import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.SettingsRow;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
 import io.github.inf1009_p10_9.game.ui.TitleElement;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsKBRetrievable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -85,6 +86,7 @@ public class SettingsScene extends Scene {
     private final IMusicPlayable musicPlayable;
     private final ISFXPlayable sfxPlayable;
     private final FontManager fontManager;
+    private final ISettingsKBRetrievable settingsKBRetrievable;
 
     public SettingsScene(IEntityRegisterable entityRegisterable,
                          IUIDisplayable uiDisplayable,
@@ -96,7 +98,8 @@ public class SettingsScene extends Scene {
                          IKeyPressConsumable keyPressConsumable,
                          ISceneSwitchable sceneSwitchable,
                          ISettingsControllable settingsControllable,
-                         FontManager fontManager) {
+                         FontManager fontManager,
+                         ISettingsKBRetrievable settingsKBRetrievable) {
         super("SettingsScene",
               entityRegisterable,
               uiDisplayable,
@@ -110,6 +113,7 @@ public class SettingsScene extends Scene {
         this.sceneSwitchable = sceneSwitchable;
         this.settingsControllable = settingsControllable;
         this.fontManager = fontManager;
+        this.settingsKBRetrievable = settingsKBRetrievable;
     }
 
     // builds and registers all visual elements for the scene
@@ -381,16 +385,16 @@ public class SettingsScene extends Scene {
 
         rows[2].getValueLabel().setText(selectedIndex == 2 && waitingForRebind
             ? "Press key..."
-            : Keys.toString(settingsControllable.getKeybind("MOVE_UP")));
+            : Keys.toString(settingsKBRetrievable.getKeybind("MOVE_UP")));
         rows[3].getValueLabel().setText(selectedIndex == 3 && waitingForRebind
             ? "Press key..."
-            : Keys.toString(settingsControllable.getKeybind("MOVE_DOWN")));
+            : Keys.toString(settingsKBRetrievable.getKeybind("MOVE_DOWN")));
         rows[4].getValueLabel().setText(selectedIndex == 4 && waitingForRebind
             ? "Press key..."
-            : Keys.toString(settingsControllable.getKeybind("MOVE_LEFT")));
+            : Keys.toString(settingsKBRetrievable.getKeybind("MOVE_LEFT")));
         rows[5].getValueLabel().setText(selectedIndex == 5 && waitingForRebind
             ? "Press key..."
-            : Keys.toString(settingsControllable.getKeybind("MOVE_RIGHT")));
+            : Keys.toString(settingsKBRetrievable.getKeybind("MOVE_RIGHT")));
 
         rows[6].getValueLabel().setText("Enter");
 

@@ -6,17 +6,20 @@ import io.github.inf1009_p10_9.engine.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.engine.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.game.economy.concrete.CoinsWallet;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsKBRetrievable;
+import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.engine.interfaces.ICollidableRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.engine.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.game.questions.QuestionManager;
 import io.github.inf1009_p10_9.game.ui.FontManager;
 import io.github.inf1009_p10_9.game.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
 import io.github.inf1009_p10_9.game.ui.TitleElement;
+
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -77,7 +80,8 @@ public class EndScene extends MenuScene {
                     ISceneSwitchable sceneSwitchable,
                     QuestionManager questionManager,
                     FontManager fontManager,
-                    PlayerState playerState) {
+                    PlayerState playerState,
+                    ISettingsKBRetrievable settingsKBRetrievable) {
         super("EndScene",
               entityRegisterable,
               uiDisplayable,
@@ -85,7 +89,8 @@ public class EndScene extends MenuScene {
               renderRegisterable,
               musicPlayable,
               inputKeyCheckable,
-              sceneSwitchable);
+              sceneSwitchable,
+              settingsKBRetrievable);
         this.questionManager = questionManager;
         this.fontManager = fontManager;
         this.playerState = playerState;
@@ -251,8 +256,8 @@ public class EndScene extends MenuScene {
 
     // applies a different feeling to the results screen depending on performance
     private void animateResultState() {
-        float bounceStrength = 6f;
-        float feedbackOffset = 0f;
+        float bounceStrength;
+        float feedbackOffset;
 
         if (resultTier == ResultTier.EXCELLENT) {
             bounceStrength = 10f;
@@ -283,18 +288,22 @@ public class EndScene extends MenuScene {
     protected void handleMenuSelection() {
         String selectedOption = menuOptions[highlightedIndex];
 
-        if (selectedOption.equals("Restart")) {
-            System.out.println("Replaying same question bank...");
-            questionManager.replayCurrentBank();
-            sceneSwitchable.switchScene("GameScene");
+        switch (selectedOption) {
+            case "Restart":
+                System.out.println("Replaying same question bank...");
+                questionManager.replayCurrentBank();
+                sceneSwitchable.switchScene("GameScene");
 
-        } else if (selectedOption.equals("Main Menu")) {
-            System.out.println("Returning to StartScene...");
-            sceneSwitchable.switchScene("StartScene");
+                break;
+            case "Main Menu":
+                System.out.println("Returning to StartScene...");
+                sceneSwitchable.switchScene("StartScene");
 
-        } else if (selectedOption.equals("Quit Game")) {
-            System.out.println("Quitting game...");
-            Gdx.app.exit();
+                break;
+            case "Quit Game":
+                System.out.println("Quitting game...");
+                Gdx.app.exit();
+                break;
         }
     }
 }

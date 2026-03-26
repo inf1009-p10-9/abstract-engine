@@ -89,6 +89,11 @@ public class InputManager implements IManager,
         lastJustPressedKey = -1;
         return key;
     }
+    
+    // clears all held key states — called on scene switch to prevent keys staying stuck
+    public void clearKeyStates() {
+        keyStates.clear();
+    }
 
     // LibGDX InputProcessor callbacks
     @Override

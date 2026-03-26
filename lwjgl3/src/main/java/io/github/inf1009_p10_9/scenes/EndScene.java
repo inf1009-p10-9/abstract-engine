@@ -172,6 +172,7 @@ public class EndScene extends MenuScene {
         super.load();
         titleBounceTimer = 0f;
         resultAnimTimer = 0f;
+        highlightedIndex = 0;
 
         String subject = questionManager.getActiveSubject();
         String difficulty = questionManager.getActiveDifficulty();

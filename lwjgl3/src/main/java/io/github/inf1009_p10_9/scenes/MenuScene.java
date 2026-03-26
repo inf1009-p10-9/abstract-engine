@@ -11,6 +11,7 @@ import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
+import io.github.inf1009_p10_9.managers.SettingsManager;
 import io.github.inf1009_p10_9.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.ui.TextLabel;
 
@@ -64,7 +65,6 @@ public abstract class MenuScene extends Scene {
     public void load() {
         super.load();
         sceneLoadTime = 0f;
-        highlightedIndex = 0;
         upDownPressed = false;
         enterPressed = false;
         escPressed = false;
@@ -73,41 +73,46 @@ public abstract class MenuScene extends Scene {
 
     // shared input logic for up/down menu navigation and enter confirm
     protected void updateMenuNavigation(int optionCount) {
+        SettingsManager settings = SettingsManager.getInstance();
         float delta = Gdx.graphics.getDeltaTime();
         sceneLoadTime += delta;
 
-        // ignore input briefly after loading to avoid accidental presses
         if (sceneLoadTime < 0.2f) {
             return;
         }
 
-        boolean upKeyPressed = inputKeyCheckable.isKeyPressed(Keys.UP) ||
-                               inputKeyCheckable.isKeyPressed(Keys.W);
-        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(Keys.DOWN) ||
-                                 inputKeyCheckable.isKeyPressed(Keys.S);
+        boolean upKeyPressed   = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_UP"));
+        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_DOWN"));
+        
+        if (upKeyPressed || downKeyPressed) {
+            System.out.println("KEY PRESSED: up=" + upKeyPressed + " down=" + downKeyPressed + " upDownPressed=" + upDownPressed + " t=" + sceneLoadTime);
+        }
+
+        // wait for all keys to be fully released before accepting any navigation input
+        if (upDownPressed) {
+            if (!upKeyPressed && !downKeyPressed) {
+                upDownPressed = false;
+            }
+            return;
+        }
 
         if (upKeyPressed || downKeyPressed) {
-            if (!upDownPressed) {
-                upDownPressed = true;
+            upDownPressed = true;
 
-                if (downKeyPressed) {
-                    highlightedIndex++;
-                } else {
-                    highlightedIndex--;
-                }
-
-                // wrap around at the top and bottom
-                if (highlightedIndex < 0) {
-                    highlightedIndex = optionCount - 1;
-                }
-                if (highlightedIndex >= optionCount) {
-                    highlightedIndex = 0;
-                }
-
-                updateHighlight();
+            if (downKeyPressed) {
+                highlightedIndex++;
+            } else {
+                highlightedIndex--;
             }
-        } else {
-            upDownPressed = false;
+
+            if (highlightedIndex < 0) {
+                highlightedIndex = 0;
+            }
+            if (highlightedIndex >= optionCount) {
+                highlightedIndex = optionCount - 1;
+            }
+
+            updateHighlight();
         }
 
         // confirm selection on enter

@@ -150,13 +150,13 @@ public class OutputManager implements IManager,
      // below pause overlay (zIndex < 200)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for (IRenderable r : allRenderables) {
-            if (r.getZIndex() < 100) r.renderShapes(shapeRenderer);
+            if (r.getZIndex() <= 100) r.renderShapes(shapeRenderer);
         }
         shapeRenderer.end();
 
         batch.begin();
         for (IRenderable r : allRenderables) {
-            if (r.getZIndex() < 100) r.render(batch);
+            if (r.getZIndex() <= 100) r.render(batch);
         }
         batch.end();
 
@@ -165,14 +165,14 @@ public class OutputManager implements IManager,
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for (IRenderable r : allRenderables) {
-            if (r.getZIndex() >= 100) r.renderShapes(shapeRenderer);
+            if (r.getZIndex() > 100) r.renderShapes(shapeRenderer);
         }
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         batch.begin();
         for (IRenderable r : allRenderables) {
-            if (r.getZIndex() >= 100) r.render(batch);
+            if (r.getZIndex() > 100) r.render(batch);
         }
         batch.end();
     }

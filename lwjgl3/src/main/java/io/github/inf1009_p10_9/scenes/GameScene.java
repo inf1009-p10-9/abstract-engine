@@ -258,11 +258,11 @@ public class GameScene extends Scene {
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
         
         
-        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move");
+        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move    ESC: pause/resume");
         TextLabel instructionLabel = new TextLabel(
-            "ENTER: select    UP/DOWN: move",
+            "ENTER: select    UP/DOWN: move    ESC: pause/resume",
             centerX - instrLayout.width / 2f,
-            Gdx.graphics.getHeight() * 0.10f,
+            Gdx.graphics.getHeight() * 0.05f,
             fontManager.getSmallFont()
         );
         instructionLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
@@ -300,6 +300,14 @@ public class GameScene extends Scene {
         boolean EscKeyPressed = inputKeyCheckable.isKeyPressed(Keys.ESCAPE);
         if (EscKeyPressed && !escWasPressed) {
             pauseState = !pauseState;
+        }
+        
+        if (pauseState) {
+            boolean qPressed = inputKeyCheckable.isKeyPressed(Keys.Q);
+            if (qPressed) {
+                pauseState = false;
+                sceneSwitchable.switchScene("StartScene");
+            }
         }
 
         escWasPressed = EscKeyPressed; // prevent esc key spam, checks from previous game frame

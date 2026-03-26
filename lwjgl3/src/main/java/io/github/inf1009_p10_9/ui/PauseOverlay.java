@@ -6,51 +6,86 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-
 public class PauseOverlay extends UIElement {
     private final BitmapFont font;
     private final float screenWidth;
     private final float screenHeight;
+
+    // panel dimensions
+    private final float panelWidth  = 400f;
+    private final float panelHeight = 250f;
+
+    // colors
+    private static final Color OVERLAY_COLOR  = new Color(0f,    0f,    0f,    0.75f);
+    private static final Color PANEL_COLOR     = new Color(0.12f, 0.12f, 0.15f, 1f);
+    private static final Color PANEL_BORDER    = new Color(1.0f,  0.55f, 0.0f,  1f);  // vibrant orange
+    private static final Color TITLE_COLOR     = new Color(1.0f,  0.55f, 0.0f,  1f);  // vibrant orange
+    private static final Color HINT_COLOR      = new Color(0.85f, 0.85f, 0.85f, 1f);
+    private static final Color SEPARATOR_COLOR = new Color(1.0f,  0.55f, 0.0f,  0.5f);
 
     public PauseOverlay(float screenWidth, float screenHeight, BitmapFont font) {
         super(0, 0);
         this.screenWidth  = screenWidth;
         this.screenHeight = screenHeight;
         this.font         = font;
-        this.zIndex       = 200; // renders on top of everything
-        this.visible      = false; // hidden by default
+        this.zIndex       = 200;
+        this.visible      = false;
     }
 
     @Override
     public void renderShapes(ShapeRenderer sr) {
         if (!visible) return;
 
+        float panelX = (screenWidth  - panelWidth)  / 2f;
+        float panelY = (screenHeight - panelHeight) / 2f;
 
-        // enable blending for transparency
-
-        // dark semi-transparent overlay - the 0.5f is the opacity
-        sr.setColor(new Color(0f, 0f, 0f, 0.8f));
+        // full screen dark overlay
+        sr.setColor(OVERLAY_COLOR);
         sr.rect(0, 0, screenWidth, screenHeight);
 
-        // disable blending after
+        // panel background
+        sr.setColor(PANEL_COLOR);
+        sr.rect(panelX, panelY, panelWidth, panelHeight);
+
+        // orange border around panel
+        float borderThickness = 3f;
+        sr.setColor(PANEL_BORDER);
+        sr.rectLine(panelX, panelY, panelX + panelWidth, panelY, borderThickness);                               // bottom
+        sr.rectLine(panelX, panelY + panelHeight, panelX + panelWidth, panelY + panelHeight, borderThickness);   // top
+        sr.rectLine(panelX, panelY, panelX, panelY + panelHeight, borderThickness);                              // left
+        sr.rectLine(panelX + panelWidth, panelY, panelX + panelWidth, panelY + panelHeight, borderThickness);    // right
+
+        // separator line below title
+        sr.setColor(SEPARATOR_COLOR);
+        sr.rectLine(panelX + 20f, panelY + panelHeight - 80f, panelX + panelWidth - 20f, panelY + panelHeight - 80f, 1.5f);
     }
 
     @Override
     public void render(SpriteBatch batch) {
         if (!visible) return;
 
-        // PAUSED text centered on screen
-        font.setColor(Color.WHITE);
-        GlyphLayout layout = new GlyphLayout(font, "PAUSED");
-        float textX = (screenWidth - layout.width) / 2;
-        float textY = (screenHeight + layout.height) / 2;
-        font.draw(batch, "PAUSED", textX, textY);
+        float panelX = (screenWidth  - panelWidth)  / 2f;
+        float panelY = (screenHeight - panelHeight) / 2f;
+        float centerX = screenWidth / 2f;
 
-        // hint text
-        font.setColor(new Color(0.8f, 0.8f, 0.8f, 1f));
-        GlyphLayout hintLayout = new GlyphLayout(font, "Press ESC to resume");
-        float hintX = (screenWidth - hintLayout.width) / 2;
-        float hintY = textY - 50f;
-        font.draw(batch, "Press ESC to resume", hintX, hintY);
+        // PAUSED title
+        font.setColor(TITLE_COLOR);
+        GlyphLayout pausedLayout = new GlyphLayout(font, "PAUSED");
+        font.draw(batch, "PAUSED",
+            centerX - pausedLayout.width / 2f,
+            panelY + panelHeight - 30f);
+
+        // separator gap then hints
+        font.setColor(HINT_COLOR);
+
+        GlyphLayout resumeLayout = new GlyphLayout(font, "ESC:  Resume");
+        font.draw(batch, "ESC:  Resume",
+            centerX - resumeLayout.width / 2f,
+            panelY + panelHeight - 110f);
+
+        GlyphLayout quitLayout = new GlyphLayout(font, "Q:  Quit to menu");
+        font.draw(batch, "Q:  Quit to menu",
+            centerX - quitLayout.width / 2f,
+            panelY + panelHeight - 160f);
     }
 }

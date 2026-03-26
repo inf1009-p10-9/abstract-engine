@@ -6,7 +6,7 @@ import io.github.inf1009_p10_9.engine.interfaces.*;
 import io.github.inf1009_p10_9.game.ui.BackgroundElement;
 import io.github.inf1009_p10_9.game.ui.CarElement;
 import io.github.inf1009_p10_9.game.ui.CloudElement;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.SceneryCardElement;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
 import io.github.inf1009_p10_9.game.ui.TitleCarElement;
@@ -65,7 +65,7 @@ public class MapSelectScene extends Scene {
     // dependencies
     private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable   sceneSwitchable;
-    private final FontManager        fontManager;
+    private final FontLoader        fontManager;
     private final IScenerySelect     scenerySelectable;
 
     // constructor
@@ -76,7 +76,7 @@ public class MapSelectScene extends Scene {
                             IMusicPlayable musicPlayable,
                             IInputKeyCheckable inputKeyCheckable,
                             ISceneSwitchable sceneSwitchable,
-                            FontManager fontManager,
+                            FontLoader fontManager,
                             IScenerySelect scenerySelectable) {
         super("LevelSelectScene",
               entityRegisterable,

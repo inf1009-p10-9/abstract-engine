@@ -14,7 +14,7 @@ import io.github.inf1009_p10_9.game.entities.*;
 import io.github.inf1009_p10_9.game.interfaces.IScenerySelect;
 import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.engine.interfaces.*;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.LivesElement;
 import io.github.inf1009_p10_9.game.ui.QuestionDisplay;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
@@ -36,7 +36,7 @@ public class GameScene extends Scene {
     private final ISFXPlayable sfxPlayable;
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
     private final IMovementCalculatable movementCalculatable;
     private final IScenerySelect scenerySelect;
     private final IMovementStrategyRetrievable movementStrategyRetrievable;
@@ -50,7 +50,7 @@ public class GameScene extends Scene {
             ISFXPlayable sfxPlayable,
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
-            FontManager fontManager,
+            FontLoader fontManager,
             IMovementCalculatable movementCalculatable,
             IMovementStrategyRetrievable movementStrategyRetrievable,
             IScenerySelect scenerySelect) {

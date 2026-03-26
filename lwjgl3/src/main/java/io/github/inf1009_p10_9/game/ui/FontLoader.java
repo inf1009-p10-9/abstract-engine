@@ -8,20 +8,20 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import io.github.inf1009_p10_9.engine.interfaces.IManagerMinimal;
 
 // singleton that generates and owns the shared fonts used across all scenes
-public class FontManager implements IManagerMinimal {
+public class FontLoader implements IManagerMinimal {
 
-    private static FontManager instance;
+    private static FontLoader instance;
 
     // three sizes covering the main use cases across the game
     private BitmapFont smallFont;   // instructions and small text
     private BitmapFont mediumFont;  // menu options and gate answers
     private BitmapFont largeFont;   // titles and questions
 
-    protected FontManager() {}
+    protected FontLoader() {}
 
-    public static FontManager getInstance() {
+    public static FontLoader getInstance() {
         if (instance == null) {
-            instance = new FontManager();
+            instance = new FontLoader();
         }
         return instance;
     }

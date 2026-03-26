@@ -13,7 +13,7 @@ import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.game.ui.BackgroundElement;
 import io.github.inf1009_p10_9.game.ui.CarElement;
 import io.github.inf1009_p10_9.game.ui.CloudElement;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
 import io.github.inf1009_p10_9.game.ui.TitleCarElement;
@@ -31,7 +31,7 @@ public class SubjectSelectScene extends Scene {
     private final IInputKeyCheckable inputKeyCheckable;
     private final ISceneSwitchable sceneSwitchable;
     private final QuestionManager questionManager;
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
 
     // background and decoration elements
     private TitleElement titleElement;
@@ -96,7 +96,7 @@ public class SubjectSelectScene extends Scene {
             IInputKeyCheckable inputKeyCheckable,
             ISceneSwitchable sceneSwitchable,
             QuestionManager questionManager,
-            FontManager fontManager) {
+            FontLoader fontManager) {
         super("SubjectSelectScene",
               entityRegisterable,
               uiDisplayable,

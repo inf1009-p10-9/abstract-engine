@@ -13,7 +13,7 @@ import io.github.inf1009_p10_9.engine.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.engine.interfaces.IEntityRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
@@ -69,7 +69,7 @@ public class EndScene extends MenuScene {
 
     // external dependencies injected via constructor
     private final QuestionManager questionManager;
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
 
     public EndScene(IEntityRegisterable entityRegisterable,
                     IUIDisplayable uiDisplayable,
@@ -79,7 +79,7 @@ public class EndScene extends MenuScene {
                     IInputKeyCheckable inputKeyCheckable,
                     ISceneSwitchable sceneSwitchable,
                     QuestionManager questionManager,
-                    FontManager fontManager,
+                    FontLoader fontManager,
                     PlayerState playerState,
                     ISettingsKBRetrievable settingsKBRetrievable) {
         super("EndScene",

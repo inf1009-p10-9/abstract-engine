@@ -14,7 +14,7 @@ import io.github.inf1009_p10_9.engine.movement.UserMovement;
 import io.github.inf1009_p10_9.engine.input.*;
 import io.github.inf1009_p10_9.game.scenes.*;
 import io.github.inf1009_p10_9.engine.collision.*;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 
 
 public class Lwjgl3Launcher {
@@ -39,7 +39,7 @@ public class Lwjgl3Launcher {
 
     static class GameApplication extends GameMaster {
         private final QuestionManager questionManager;
-        private final FontManager fontManager;
+        private final FontLoader fontManager;
         private final PlayerState playerState;
         private final SettingsManager settingsManager;
 
@@ -56,7 +56,7 @@ public class Lwjgl3Launcher {
 
             this.questionManager = QuestionManager.getInstance();
             this.managersMinimal.add(this.questionManager);
-            this.fontManager = FontManager.getInstance();
+            this.fontManager = FontLoader.getInstance();
             this.managersMinimal.add(this.fontManager);
             this.playerState = PlayerState.getInstance();
             this.settingsManager = SettingsManager.getInstance();

@@ -18,7 +18,7 @@ import io.github.inf1009_p10_9.engine.interfaces.IMusicPlayable;
 import io.github.inf1009_p10_9.engine.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.engine.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.engine.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.TitleElement;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
@@ -50,7 +50,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class CustomisationScene extends Scene implements IKeyBindObserves {
     private final ISceneSwitchable sceneSwitchable;
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
     private final PlayerState playerState;
     private IKeyBindObserverTarget keyBindObserverTarget;
 
@@ -84,7 +84,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
                               IMusicPlayable musicPlayable,
                               IKeyBindObserverTarget keyBindObserverTarget,
                               ISceneSwitchable sceneSwitchable,
-                              FontManager fontManager,
+                              FontLoader fontManager,
                               PlayerState playerState) {
 		super(CustomisationScene.class.getSimpleName(),
               entityRegisterable,

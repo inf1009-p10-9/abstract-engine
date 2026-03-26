@@ -3,7 +3,7 @@ package io.github.inf1009_p10_9.game.scenes;
 import io.github.inf1009_p10_9.engine.core.Scene;
 
 import io.github.inf1009_p10_9.engine.interfaces.*;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
@@ -39,7 +39,7 @@ public class StartScene extends MenuScene {
     private static final Color BUTTON_HIGHLIGHT_COLOR = new Color(1f, 0.85f, 0.1f, 0.95f);
 
     // external dependencies injected via constructor
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
 
     public StartScene(IEntityRegisterable entityRegisterable,
                       IUIDisplayable uiDisplayable,
@@ -48,7 +48,7 @@ public class StartScene extends MenuScene {
                       IMusicPlayable musicPlayable,
                       IInputKeyCheckable inputKeyCheckable,
                       ISceneSwitchable sceneSwitchable,
-                      FontManager fontManager,
+                      FontLoader fontManager,
                       ISettingsKBRetrievable settingsKBRetrievable) {
         super("StartScene",
               entityRegisterable,

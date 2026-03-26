@@ -3,7 +3,7 @@ package io.github.inf1009_p10_9.game.scenes;
 import io.github.inf1009_p10_9.engine.core.Scene;
 
 import io.github.inf1009_p10_9.engine.interfaces.*;
-import io.github.inf1009_p10_9.game.ui.FontManager;
+import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.SettingsRow;
 import io.github.inf1009_p10_9.game.ui.TextLabel;
@@ -85,7 +85,7 @@ public class SettingsScene extends Scene {
     private final ISettingsControllable settingsControllable;
     private final IMusicPlayable musicPlayable;
     private final ISFXPlayable sfxPlayable;
-    private final FontManager fontManager;
+    private final FontLoader fontManager;
     private final ISettingsKBRetrievable settingsKBRetrievable;
 
     public SettingsScene(IEntityRegisterable entityRegisterable,
@@ -98,7 +98,7 @@ public class SettingsScene extends Scene {
                          IKeyPressConsumable keyPressConsumable,
                          ISceneSwitchable sceneSwitchable,
                          ISettingsControllable settingsControllable,
-                         FontManager fontManager,
+                         FontLoader fontManager,
                          ISettingsKBRetrievable settingsKBRetrievable) {
         super("SettingsScene",
               entityRegisterable,

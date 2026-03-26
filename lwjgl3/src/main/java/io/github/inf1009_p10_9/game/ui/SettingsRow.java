@@ -27,7 +27,7 @@ public class SettingsRow {
                        Color normalTextColor,
                        Color valueTextColor,
                        Color arrowColor,
-                       FontManager fontManager) {
+                       FontLoader fontManager) {
         this.optionText = optionText;
         this.bindAction = bindAction;
 

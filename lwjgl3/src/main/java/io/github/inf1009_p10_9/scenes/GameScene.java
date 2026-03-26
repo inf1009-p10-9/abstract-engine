@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.entities.*;
@@ -12,6 +13,7 @@ import io.github.inf1009_p10_9.questions.QuestionManager;
 import io.github.inf1009_p10_9.ui.FontManager;
 import io.github.inf1009_p10_9.ui.LivesElement;
 import io.github.inf1009_p10_9.ui.QuestionDisplay;
+import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.ui.PauseOverlay;
 
 
@@ -254,6 +256,17 @@ public class GameScene extends Scene {
         int totalQuestions = questionManager.getTotalQuestions();
         float livesQuestionsRatio = 0.17f;
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
+        
+        
+        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move");
+        TextLabel instructionLabel = new TextLabel(
+            "ENTER: select    UP/DOWN: move",
+            centerX - instrLayout.width / 2f,
+            Gdx.graphics.getHeight() * 0.10f,
+            fontManager.getSmallFont()
+        );
+        instructionLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
+        addUI(instructionLabel);
 
         // player centered horizontally at the bottom
         PlayerState playerState = PlayerState.getInstance();

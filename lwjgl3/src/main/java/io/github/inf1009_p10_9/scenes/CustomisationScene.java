@@ -40,6 +40,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -58,7 +59,6 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 
     // ui elements
     private TitleElement titleElement;
-    private TextLabel titleLabel;
     private TextLabel nameLabel;
     private TextLabel balanceLabel;
     private TextLabel priceLabel;
@@ -174,50 +174,64 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 
         public PlayerSkinResourcePurchased(PlayerSkin skin,
                                            PlayerSkinEntity entity) {
-            super(skin,
-                  entity);
+            super(skin, entity);
             this.skin = skin;
         }
     }
 
-    private class PlayerSkinEntity extends Entity {
-        private Color color = Color.BLUE;
-
-        public PlayerSkinEntity(float x, float y, String texturePath) {
-            super(x, y, playerSkinWidth, playerSkinHeight, 10);
-            loadTexture(texturePath);
-        }
-
-        private void loadTexture(String texturePath) {
-            try {
-                texture = new Texture(Gdx.files.internal(texturePath));
-            } catch (Exception e) {
-                System.err.println("Failed to load player texture: " + e.getMessage());
-            }
-        }
-
-		@Override
-		public void renderShapes(ShapeRenderer shapeRenderer) {
-            if (texture == null) {
-                shapeRenderer.setColor(color);
-                shapeRenderer.rect(position.x, position.y, width, height);
-            }
-        }
-
-		@Override
-		public int getCollisionLayer() {
-            return 0;
-        }
-
-		@Override
-		public void update() {}
-
-        //@Override
-        public void dispose() {
-            if (texture != null)
-                texture.dispose();
-        }
-    }
+	  private class PlayerSkinEntity extends Entity {
+	    private Color color = Color.BLUE;
+	    private Color tint = Color.WHITE;
+	
+	    public PlayerSkinEntity(float x, float y, String texturePath) {
+	        super(x, y, playerSkinWidth, playerSkinHeight, 10);
+	        loadTexture(texturePath);
+	    }
+	
+	    private void loadTexture(String texturePath) {
+	        try {
+	            texture = new Texture(Gdx.files.internal(texturePath));
+	        } catch (Exception e) {
+	            System.err.println("Failed to load player texture: " + e.getMessage());
+	        }
+	    }
+	
+	    public void setTint(Color tint) {
+	        this.tint = tint;
+	    }
+	
+	    
+	    @Override
+	    public void render(SpriteBatch batch) {
+	        System.out.println("rendering with tint: " + tint);
+	        if (texture != null) {
+	            batch.setColor(tint);
+	            batch.draw(texture, position.x, position.y, width, height);
+	            batch.setColor(Color.WHITE);
+	        }
+	    }
+	    
+	    @Override
+	    public void renderShapes(ShapeRenderer shapeRenderer) {
+	        if (texture == null) {
+	            shapeRenderer.setColor(color);
+	            shapeRenderer.rect(position.x, position.y, width, height);
+	        }
+	    }
+	
+	    @Override
+	    public int getCollisionLayer() {
+	        return 0;
+	    }
+	
+	    @Override
+	    public void update() {}
+	
+	    public void dispose() {
+	        if (texture != null)
+	            texture.dispose();
+	    }
+	}
 
     private List<PlayerSkinOffer> loadMarketplace() {
         List<PlayerSkinOffer> playerSkinOffers = new ArrayList<>();
@@ -274,51 +288,51 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         return playerSkinOffers;
     }
 
-  @Override
+    @Override
 	protected void loadEntities() {
 	    float screenWidth = Gdx.graphics.getWidth();
 	    float centerX = screenWidth / 2;
 	    float screenHeight = Gdx.graphics.getHeight();
 	    float centerY = screenHeight / 2;
-
+	
 	    // shared decorative background
 	    backdrop = new SceneBackdrop(true);
 	    backdrop.addToScene(this);
-
+	
 	    // title - top left
 	    titleElement = new TitleElement("SELECT SKIN", fontManager.getLargeFont(), Color.GREEN);
 	    addUI(titleElement);
-
+	
 	    // balance - top right
 	    PlayerState playerState = PlayerState.getInstance();
 	    String balanceText = "Balance: " + playerState.getWalletBag().getWallets(CoinsWallet.class).get(0).getBalance();
 	    balanceLabel = new TextLabel(balanceText, screenWidth - 250, screenHeight - 40, fontManager.getMediumFont());
 	    balanceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(balanceLabel);
-
+	
 	    // car name - centered below cars
 	    nameLabel = new TextLabel("", centerX - 150, centerY - 110, fontManager.getMediumFont());
 	    nameLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(nameLabel);
-
+	
 	    // price or purchased status - below name
 	    priceLabel = new TextLabel("", centerX - 150, centerY - 155, fontManager.getMediumFont());
 	    priceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(priceLabel);
-
-	    // navigation hint - bottom center
-	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select", centerX, 60, fontManager.getSmallFont());
+	
+	    // navigation hints - bottom center
+	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select     ESC to go back", centerX, 60, fontManager.getSmallFont());
 	    hintLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
 	    addUI(hintLabel);
-
+	
 	    List<PlayerSkinOffer> playerSkinOffers = loadMarketplace();
 	    PlayerSkinsWallet playerSkinsWallet = playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0);
-
+	
 	    List<PlayerSkin> playerSkinsPurchased = playerSkinsWallet.getItems();
 	    playerSkinsPurchasedQty = playerSkinsPurchased.size();
 	    int playerSkinsPurchasableQty = playerSkinOffers.size();
 	    int playerSkinsQty = playerSkinsPurchasedQty + playerSkinsPurchasableQty;
-
+	
 	    for (int i = 0; i < playerSkinsPurchasedQty; i++) {
 	        PlayerSkin playerSkin = playerSkinsPurchased.get(i);
 	        String skinPath = playerSkin.getTexturePath();
@@ -329,7 +343,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        renderRegisterable.registerRenderable(playerSkinEntity);
 	        playerSkinResources.add(new PlayerSkinResourcePurchased(playerSkin, playerSkinEntity));
 	    }
-
+	
 	    for (int i = 0; i < playerSkinsPurchasableQty; i++) {
 	        PlayerSkinOffer playerSkinOffer = playerSkinOffers.get(i);
 	        PlayerSkin playerSkinDescriptor = playerSkinOffer.skinDescriptor;
@@ -337,16 +351,16 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(
 	            centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i),
 	            centerY - 16, skinPath);
-            if (playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0).isItemAcceptable(playerSkinDescriptor)) {
-                addEntity(playerSkinEntity);
-                renderRegisterable.registerRenderable(playerSkinEntity);
-                playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
-            }
+	        if (playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0).isItemAcceptable(playerSkinDescriptor)) {
+	            addEntity(playerSkinEntity);
+	            renderRegisterable.registerRenderable(playerSkinEntity);
+	            playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
+	        }
 	    }
-
+	
 	    System.out.println("CustomisationScene loaded");
 	}
-
+    
     @Override
     public void update() {
         handleNavigation();
@@ -359,33 +373,41 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 
     // updates arrow and label colors to show which row is active, and refreshes displayed values
     private void handleDescriptorDisplay() {
-        PlayerSkinResource highlightedSkinResource;
-        try {
-            highlightedSkinResource = playerSkinResources.get(selectionId);
-        } catch (Exception e) {
-            return;
-        }
-
-        // update price or purchased status
-        PlayerSkinResourcePurchasable highlightedSkinResourcePurchasable;
-        String priceLabelText = "";
-        if (highlightedSkinResource instanceof PlayerSkinResourcePurchasable) {
-            highlightedSkinResourcePurchasable = (PlayerSkinResourcePurchasable)highlightedSkinResource;
-            priceLabelText += String.valueOf(highlightedSkinResourcePurchasable.currencyDescriptor.getAmount() *
-                                                   highlightedSkinResourcePurchasable.offerRequest.getQty());
-            if (!highlightedSkinResourcePurchasable.isTransactionViable)
-                priceLabelText +=  " (not enough money)";
-        } else {
-            priceLabelText += "Already purchased.";
-        }
-        priceLabel.setText(priceLabelText);
-
-        nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
-
-        // update balance
-        balanceLabel.setText("Balance: " + playerState.getWalletBag()
-            .getWallets(CoinsWallet.class).get(0).getBalance());
-    }
+	    PlayerSkinResource highlightedSkinResource;
+	    try {
+	        highlightedSkinResource = playerSkinResources.get(selectionId);
+	    } catch (Exception e) {
+	        return;
+	    }
+	
+	    // update name
+	    nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
+	    nameLabel.setColor(ACTIVE_ROW_COLOR);
+	
+	    // update price label with color coding
+	    if (highlightedSkinResource instanceof PlayerSkinResourcePurchasable) {
+	        PlayerSkinResourcePurchasable purchasable = (PlayerSkinResourcePurchasable) highlightedSkinResource;
+	        float price = purchasable.currencyDescriptor.getAmount() * purchasable.offerRequest.getQty();
+	
+	        if (purchasable.isTransactionViable) {
+	            // can afford - show in orange
+	            priceLabel.setText("Price: " + price + " coins");
+	            priceLabel.setColor(ACTIVE_ROW_COLOR);
+	        } else {
+	            // cant afford - show in red
+	            priceLabel.setText("Price: " + price + " coins  (not enough)");
+	            priceLabel.setColor(new Color(0.9f, 0.15f, 0.15f, 1f));
+	        }
+	    } else {
+	        // already owned - show in green
+	        priceLabel.setText("✓ Already purchased");
+	        priceLabel.setColor(new Color(0.3f, 0.9f, 0.3f, 1f));
+	    }
+	
+	    // refresh balance
+	    balanceLabel.setText("Balance: " + playerState.getWalletBag()
+	        .getWallets(CoinsWallet.class).get(0).getBalance());
+	}
 
 	@Override
 	public void registerKeyBindObserverTarget(IKeyBindObserverTarget observerTarget) {
@@ -418,18 +440,44 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         }
 	}
 
-    private void handleRender() {
-        float screenWidth = Gdx.graphics.getWidth();
-        float centerX = screenWidth / 2;
-        float screenHeight = Gdx.graphics.getHeight();
-        float centerY = screenHeight / 2;
-        int playerSkinsQty = playerSkinResources.size();
-        for (int i = 0; i < playerSkinsQty; i++) {
-            PlayerSkinEntity skinEntity = playerSkinResources.get(i).getEntity();
-            Vector2 curPos = skinEntity.getPosition();
-            curPos.set(centerX - (playerSkinHeight + 10) * (selectionId - i) + 16, centerY);
-        }
-    }
+
+	
+	private void handleRender() {
+	    float screenWidth = Gdx.graphics.getWidth();
+	    float centerX = screenWidth / 2;
+	    float screenHeight = Gdx.graphics.getHeight();
+	    float centerY = screenHeight / 2;
+	    int playerSkinsQty = playerSkinResources.size();
+
+	    float spacing = playerSkinHeight + 10f;
+
+	    for (int i = 0; i < playerSkinsQty; i++) {
+	        PlayerSkinResource skinResource = playerSkinResources.get(i);
+	        PlayerSkinEntity skinEntity = skinResource.getEntity();
+	        Vector2 curPos = skinEntity.getPosition();
+
+	        boolean isSelected = (i == selectionId);
+
+	        float scale = isSelected ? 1.3f : 0.85f;
+	        skinEntity.setWidth(playerSkinWidth * scale);
+	        skinEntity.setHeight(playerSkinHeight * scale);
+
+	        float yOffset = isSelected ? 10f : 0f;
+
+	        // selected car is always at centerX, others offset from it
+	        float xPos = centerX + spacing * (i - selectionId) - (playerSkinWidth * scale / 2f);
+	        curPos.set(xPos, centerY + yOffset);
+
+	        // dim unaffordable cars
+	        if (skinResource instanceof PlayerSkinResourcePurchasable) {
+	            PlayerSkinResourcePurchasable purchasable = (PlayerSkinResourcePurchasable) skinResource;
+	            skinEntity.setTint(purchasable.isTransactionViable ? Color.WHITE : new Color(0.4f, 0.4f, 0.4f, 1f));
+	        } else {
+	            skinEntity.setTint(Color.WHITE);
+	        }
+	    }
+	}
+
 
     private void handleNavigation() {
         if (activeKeybindEvent == null)

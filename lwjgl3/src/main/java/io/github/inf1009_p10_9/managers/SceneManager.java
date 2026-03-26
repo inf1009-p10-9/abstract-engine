@@ -57,8 +57,8 @@ public class SceneManager implements IManager, ISceneSwitchable {
         if (currentScene != null) {
             currentScene.unload();
         }
-        
-        InputManager.getInstance().clearKeyStates();
+
+        //InputManager.getInstance().clearKeyStates();
 
         currentScene = newScene;
         currentScene.load();

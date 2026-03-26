@@ -4,14 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
-import io.github.inf1009_p10_9.interfaces.ICollidableRegisterable;
-import io.github.inf1009_p10_9.interfaces.IEntityRegisterable;
-import io.github.inf1009_p10_9.interfaces.IInputKeyCheckable;
-import io.github.inf1009_p10_9.interfaces.IMusicPlayable;
-import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
-import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
-import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
-import io.github.inf1009_p10_9.managers.SettingsManager;
+import io.github.inf1009_p10_9.interfaces.*;
 import io.github.inf1009_p10_9.ui.MenuButtonElement;
 import io.github.inf1009_p10_9.ui.TextLabel;
 
@@ -41,6 +34,7 @@ public abstract class MenuScene extends Scene {
     // shared scene dependencies
     protected final IInputKeyCheckable inputKeyCheckable;
     protected final ISceneSwitchable sceneSwitchable;
+    protected final ISettingsKBRetrievable settingsKBRetrievable;
 
     public MenuScene(String name,
                      IEntityRegisterable entityRegisterable,
@@ -49,7 +43,8 @@ public abstract class MenuScene extends Scene {
                      IRenderRegisterable renderRegisterable,
                      IMusicPlayable musicPlayable,
                      IInputKeyCheckable inputKeyCheckable,
-                     ISceneSwitchable sceneSwitchable) {
+                     ISceneSwitchable sceneSwitchable,
+                     ISettingsKBRetrievable settingsKBRetrievable) {
         super(name,
               entityRegisterable,
               uiDisplayable,
@@ -58,6 +53,7 @@ public abstract class MenuScene extends Scene {
               musicPlayable);
         this.inputKeyCheckable = inputKeyCheckable;
         this.sceneSwitchable = sceneSwitchable;
+        this.settingsKBRetrievable = settingsKBRetrievable;
     }
 
     // resets common menu navigation state each time the scene is opened
@@ -73,17 +69,16 @@ public abstract class MenuScene extends Scene {
 
     // shared input logic for up/down menu navigation and enter confirm
     protected void updateMenuNavigation(int optionCount) {
-        SettingsManager settings = SettingsManager.getInstance();
         float delta = Gdx.graphics.getDeltaTime();
         sceneLoadTime += delta;
 
         if (sceneLoadTime < 0.2f) {
             return;
         }
-        
-        boolean upKeyPressed   = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_UP")) || inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_UP"));
-        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(settings.getKeybind("MENU_DOWN")) || inputKeyCheckable.isKeyPressed(settings.getKeybind("MOVE_DOWN"));
-        
+
+        boolean upKeyPressed   = inputKeyCheckable.isKeyPressed(settingsKBRetrievable.getKeybind("MENU_UP")) || inputKeyCheckable.isKeyPressed(settingsKBRetrievable.getKeybind("MOVE_UP"));
+        boolean downKeyPressed = inputKeyCheckable.isKeyPressed(settingsKBRetrievable.getKeybind("MENU_DOWN")) || inputKeyCheckable.isKeyPressed(settingsKBRetrievable.getKeybind("MOVE_DOWN"));
+
 
         if (upKeyPressed || downKeyPressed) {
             System.out.println("KEY PRESSED: up=" + upKeyPressed + " down=" + downKeyPressed + " upDownPressed=" + upDownPressed + " t=" + sceneLoadTime);

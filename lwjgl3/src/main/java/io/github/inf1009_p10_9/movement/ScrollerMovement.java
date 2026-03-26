@@ -29,7 +29,5 @@ public class ScrollerMovement implements IMovementStrategy, IMovementScrollAdjus
     public void adjustScrollSpeed(float targetSpeed) {
         if (targetSpeed < MAX_SPEED_LIMIT)
             scrollSpeed = targetSpeed;
-        else
-            System.out.println("Max scroll speed reached");
     }
 }

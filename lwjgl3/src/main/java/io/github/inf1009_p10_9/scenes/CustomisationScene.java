@@ -27,7 +27,6 @@ import io.github.inf1009_p10_9.economy.IOfferReadOnly;
 import io.github.inf1009_p10_9.economy.ISourceCurrencyOfferReadOnly;
 import io.github.inf1009_p10_9.economy.ITargetItemOfferReadOnly;
 import io.github.inf1009_p10_9.economy.IWalletBagImmutableOwnership;
-import io.github.inf1009_p10_9.economy.ItemsWallet;
 import io.github.inf1009_p10_9.economy.concrete.CoinsWallet;
 import io.github.inf1009_p10_9.economy.concrete.PlayerSkin;
 import io.github.inf1009_p10_9.economy.concrete.PlayerSkinsMarketplace;
@@ -36,6 +35,7 @@ import io.github.inf1009_p10_9.economy.concrete.PlayerSkinsWallet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -182,12 +182,12 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	  private class PlayerSkinEntity extends Entity {
 	    private Color color = Color.BLUE;
 	    private Color tint = Color.WHITE;
-	
+
 	    public PlayerSkinEntity(float x, float y, String texturePath) {
 	        super(x, y, playerSkinWidth, playerSkinHeight, 10);
 	        loadTexture(texturePath);
 	    }
-	
+
 	    private void loadTexture(String texturePath) {
 	        try {
 	            texture = new Texture(Gdx.files.internal(texturePath));
@@ -195,22 +195,21 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	            System.err.println("Failed to load player texture: " + e.getMessage());
 	        }
 	    }
-	
+
 	    public void setTint(Color tint) {
 	        this.tint = tint;
 	    }
-	
-	    
+
+
 	    @Override
 	    public void render(SpriteBatch batch) {
-	        System.out.println("rendering with tint: " + tint);
 	        if (texture != null) {
 	            batch.setColor(tint);
 	            batch.draw(texture, position.x, position.y, width, height);
 	            batch.setColor(Color.WHITE);
 	        }
 	    }
-	    
+
 	    @Override
 	    public void renderShapes(ShapeRenderer shapeRenderer) {
 	        if (texture == null) {
@@ -218,15 +217,15 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	            shapeRenderer.rect(position.x, position.y, width, height);
 	        }
 	    }
-	
+
 	    @Override
 	    public int getCollisionLayer() {
 	        return 0;
 	    }
-	
+
 	    @Override
 	    public void update() {}
-	
+
 	    public void dispose() {
 	        if (texture != null)
 	            texture.dispose();
@@ -294,62 +293,62 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    float centerX = screenWidth / 2;
 	    float screenHeight = Gdx.graphics.getHeight();
 	    float centerY = screenHeight / 2;
-	
+
 	    // shared decorative background
 	    backdrop = new SceneBackdrop(true);
 	    backdrop.addToScene(this);
-	
+
 	    // title - top left
 	    titleElement = new TitleElement("SELECT SKIN", fontManager.getLargeFont(), Color.GREEN);
 	    addUI(titleElement);
-	
+
 	    // balance - top right
 	    PlayerState playerState = PlayerState.getInstance();
 	    String balanceText = "Balance: " + playerState.getWalletBag().getWallets(CoinsWallet.class).get(0).getBalance();
 	    balanceLabel = new TextLabel(balanceText, screenWidth - 250, screenHeight - 40, fontManager.getMediumFont());
 	    balanceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(balanceLabel);
-	
+
 	    // car name - centered below cars
 	    nameLabel = new TextLabel("", centerX - 150, centerY - 110, fontManager.getMediumFont());
 	    nameLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(nameLabel);
-	
+
 	    // price or purchased status - below name
 	    priceLabel = new TextLabel("", centerX - 150, centerY - 155, fontManager.getMediumFont());
 	    priceLabel.setColor(ACTIVE_ROW_COLOR);
 	    addUI(priceLabel);
-	
+
 	    // navigation hints - bottom center
 	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select     ESC to go back", centerX, 60, fontManager.getSmallFont());
 	    hintLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
 	    addUI(hintLabel);
-	
+
 	    List<PlayerSkinOffer> playerSkinOffers = loadMarketplace();
 	    PlayerSkinsWallet playerSkinsWallet = playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0);
-	
+
 	    List<PlayerSkin> playerSkinsPurchased = playerSkinsWallet.getItems();
 	    playerSkinsPurchasedQty = playerSkinsPurchased.size();
 	    int playerSkinsPurchasableQty = playerSkinOffers.size();
 	    int playerSkinsQty = playerSkinsPurchasedQty + playerSkinsPurchasableQty;
-	
+
 	    for (int i = 0; i < playerSkinsPurchasedQty; i++) {
 	        PlayerSkin playerSkin = playerSkinsPurchased.get(i);
 	        String skinPath = playerSkin.getTexturePath();
 	        PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(
-	            centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i),
+	            centerX - (playerSkinHeight + 10) * ((float) playerSkinsQty / 2 - i),
 	            centerY - 16, skinPath);
 	        addEntity(playerSkinEntity);
 	        renderRegisterable.registerRenderable(playerSkinEntity);
 	        playerSkinResources.add(new PlayerSkinResourcePurchased(playerSkin, playerSkinEntity));
 	    }
-	
+
 	    for (int i = 0; i < playerSkinsPurchasableQty; i++) {
 	        PlayerSkinOffer playerSkinOffer = playerSkinOffers.get(i);
 	        PlayerSkin playerSkinDescriptor = playerSkinOffer.skinDescriptor;
 	        String skinPath = playerSkinDescriptor.getTexturePath();
 	        PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(
-	            centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i),
+	            centerX - (playerSkinHeight + 10) * ((float) playerSkinsQty / 2 - i),
 	            centerY - 16, skinPath);
 	        if (playerState.getWalletBag().getWallets(PlayerSkinsWallet.class).get(0).isItemAcceptable(playerSkinDescriptor)) {
 	            addEntity(playerSkinEntity);
@@ -357,10 +356,10 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	            playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
 	        }
 	    }
-	
+
 	    System.out.println("CustomisationScene loaded");
 	}
-    
+
     @Override
     public void update() {
         handleNavigation();
@@ -379,16 +378,16 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    } catch (Exception e) {
 	        return;
 	    }
-	
+
 	    // update name
 	    nameLabel.setText(highlightedSkinResource.skinDescriptor.getDisplayName());
 	    nameLabel.setColor(ACTIVE_ROW_COLOR);
-	
+
 	    // update price label with color coding
 	    if (highlightedSkinResource instanceof PlayerSkinResourcePurchasable) {
 	        PlayerSkinResourcePurchasable purchasable = (PlayerSkinResourcePurchasable) highlightedSkinResource;
 	        float price = purchasable.currencyDescriptor.getAmount() * purchasable.offerRequest.getQty();
-	
+
 	        if (purchasable.isTransactionViable) {
 	            // can afford - show in orange
 	            priceLabel.setText("Price: " + price + " coins");
@@ -403,7 +402,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        priceLabel.setText("✓ Already purchased");
 	        priceLabel.setColor(new Color(0.3f, 0.9f, 0.3f, 1f));
 	    }
-	
+
 	    // refresh balance
 	    balanceLabel.setText("Balance: " + playerState.getWalletBag()
 	        .getWallets(CoinsWallet.class).get(0).getBalance());
@@ -432,7 +431,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
             inputDebounceFirst = true;
             break;
         case "KEY_UP":
-            if (activeKeybindEvent == keyBindEvent.getKeyBind()) {
+            if (Objects.equals(activeKeybindEvent, keyBindEvent.getKeyBind())) {
                 activeKeybindEvent = null;
                 inputDebounceDelay = 500;
             }
@@ -441,7 +440,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	}
 
 
-	
+
 	private void handleRender() {
 	    float screenWidth = Gdx.graphics.getWidth();
 	    float centerX = screenWidth / 2;

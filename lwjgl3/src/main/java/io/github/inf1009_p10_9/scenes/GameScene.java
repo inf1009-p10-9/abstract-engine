@@ -17,13 +17,13 @@ import io.github.inf1009_p10_9.ui.TextLabel;
 import io.github.inf1009_p10_9.ui.PauseOverlay;
 
 
-// the main gameplay scene, sets up the road, player, gates, and question display
+// the main gameplay scene, sets up the road, player, gates, and question display + flags
 public class GameScene extends Scene {
 	private PauseOverlay pauseOverlay;
     private QuestionDisplay questionDisplay;
     private LivesElement livesElement;
-    private float endDelay = 0f;
-    private boolean endStarted = false;
+    private float endDelay = 0f; // delay before going to endScene
+    private boolean endStarted = false; // to check if going to endScene
     private boolean pauseState = false; // to check if game is set to pause
     private boolean escWasPressed = false; // to prevent spam Escape
 
@@ -116,7 +116,6 @@ public class GameScene extends Scene {
 
             float minBuildingGap = 300f;
             float minTreeGap = 250f;
-
             for (int i = 0; i < 2; i++) {
                 float ly = i * minBuildingGap + (float)(Math.random() * minBuildingGap * 0.5f);
                 Building buildingL = new Building(leftBuildingZone, ly, leftWidths[i], leftHeights[i], leftColors[i]);
@@ -231,17 +230,15 @@ public class GameScene extends Scene {
         addEntity(roadasphalt);
         renderRegisterable.registerRenderable(roadasphalt);
 
-
+        //road dashes
         float dashCycle = 50f;
-
         for (float y = 0; y < screenHeight; y += dashCycle) {
             RoadDashes roaddashes = new RoadDashes(y);
             addEntity(roaddashes);
             renderRegisterable.registerRenderable(roaddashes);
         }
 
-
-
+        // pause overlay
         pauseOverlay = new PauseOverlay(screenWidth, screenHeight, fontManager.getLargeFont());
         addUI(pauseOverlay);
 
@@ -256,8 +253,8 @@ public class GameScene extends Scene {
         int totalQuestions = questionManager.getTotalQuestions();
         float livesQuestionsRatio = 0.17f;
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
-        
-        
+
+
         GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move    ESC: pause/resume");
         TextLabel instructionLabel = new TextLabel(
             "ENTER: select    UP/DOWN: move    ESC: pause/resume",
@@ -297,11 +294,12 @@ public class GameScene extends Scene {
     public void update() {
         super.update();
 
+        // checks pause game input
         boolean EscKeyPressed = inputKeyCheckable.isKeyPressed(Keys.ESCAPE);
         if (EscKeyPressed && !escWasPressed) {
             pauseState = !pauseState;
         }
-        
+
         if (pauseState) {
             boolean qPressed = inputKeyCheckable.isKeyPressed(Keys.Q);
             if (qPressed) {
@@ -340,7 +338,6 @@ public class GameScene extends Scene {
             float targetSpeed = 90f + (currentScore * 10f);
 
             for (IMovementStrategy strategy : movementStrategyRetrievable.getAllStrategies()) {
-            	System.out.println(strategy);
                 if (strategy instanceof IMovementScrollAdjustable) {
                     ((IMovementScrollAdjustable) strategy).adjustScrollSpeed(targetSpeed);
                 }

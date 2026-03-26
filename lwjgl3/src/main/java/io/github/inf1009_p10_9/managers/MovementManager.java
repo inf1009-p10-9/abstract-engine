@@ -37,7 +37,12 @@ public class MovementManager implements IManagerMinimal,
     public <T extends Entity> void registerMovementStrategy(Class<T> entityType, IMovementStrategy strategy) {
         movementStrategies.put(entityType, strategy);
     }
-
+    
+    @Override
+    public Iterable<IMovementStrategy> getAllStrategies() {
+        return movementStrategies.values();
+    }
+    
     @Override
     public IMovementStrategy getMovementStrategy(Class<?> objectClass) {
         return movementStrategies.get(objectClass);

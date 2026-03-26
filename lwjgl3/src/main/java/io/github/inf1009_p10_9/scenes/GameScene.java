@@ -30,6 +30,7 @@ public class GameScene extends Scene {
     private final FontManager fontManager;
     private final IMovementCalculatable movementCalculatable;
     private final IScenerySelect scenerySelect;
+    private final IMovementStrategyRetrievable movementStrategyRetrievable;
 
     public GameScene(IEntityRegisterable entityRegisterable,
             IUIDisplayable uiDisplayable,
@@ -42,6 +43,7 @@ public class GameScene extends Scene {
             QuestionManager questionManager,
             FontManager fontManager,
             IMovementCalculatable movementCalculatable,
+            IMovementStrategyRetrievable movementStrategyRetrievable,
             IScenerySelect scenerySelect) {
 			super("GameScene",
 			     entityRegisterable,
@@ -55,6 +57,7 @@ public class GameScene extends Scene {
 			this.questionManager = questionManager;
 			this.fontManager = fontManager;
             this.movementCalculatable = movementCalculatable;
+            this.movementStrategyRetrievable = movementStrategyRetrievable;
             this.scenerySelect = scenerySelect;
 			}
 
@@ -307,40 +310,20 @@ public class GameScene extends Scene {
 	            }
 	        }
 
-	        Array<Entity> entities = entityRegisterable.getEntities();
+            // adjust scroll movement speed based on correct questions
+            float currentScore = (float) questionManager.getScore();
+            float targetSpeed = 90f + (currentScore * 10f);
+            IMovementStrategy scrollerStrategy = movementStrategyRetrievable.getMovementStrategy(Gate.class);
+            if(scrollerStrategy instanceof IMovementScrollAdjustable) {
+                ((IMovementScrollAdjustable) scrollerStrategy).adjustScrollSpeed(targetSpeed);
+            }
 
-	        //enable movement
+	        //enable movement for non-player entities
+            Array<Entity> entities = entityRegisterable.getEntities();
 	        for (Entity entity : entities) {
-	            if (entity instanceof Gate) {
-	                movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof RoadDashes) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof Cactus) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof Rock) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-	            if (entity instanceof Tree) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof StreetLamp) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof Building) {
-	            	movementCalculatable.move(entity, 0);
-	            }
-
-	            if (entity instanceof Bones) {
-	            	movementCalculatable.move(entity, 0);
-	            }
+                if (!(entity instanceof Player)) {
+                    movementCalculatable.move(entity, 0);
+                }
 	        }
         }
     }

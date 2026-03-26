@@ -154,6 +154,7 @@ public class Lwjgl3Launcher {
                 questionManager,                 // as QuestionManager (#TODO: Create interface)
                 fontManager,
                 movementManager,                // as IMovementCalculatable
+                movementManager,                // as IMovementStrategyRegisterable
                 SettingsManager.getInstance() // TEMPORARY LINE
             ));
 

@@ -7,7 +7,8 @@ import io.github.inf1009_p10_9.interfaces.*;
 // singleton that holds a movement strategy per entity type and applies the right one when move() is called
 public class MovementManager implements IManagerMinimal,
                                         IMovementCalculatable,
-                                        IMovementStrategyRegisterable {
+                                        IMovementStrategyRegisterable,
+                                        IMovementStrategyRetrievable{
     private static MovementManager instance;
 
     // keyed by entity .class types
@@ -42,7 +43,7 @@ public class MovementManager implements IManagerMinimal,
         return movementStrategies.get(objectClass);
     }
 
-    // looks up the strategy by the entity's class name and delegates movement calculation to it
+    // looks up the strategy by the entity's class type and delegates movement calculation to it
     @Override
     public void move(IPositionable object, int moveDirection) {
         Class<?> objectClass = object.getClass();

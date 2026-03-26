@@ -17,7 +17,9 @@ import io.github.inf1009_p10_9.interfaces.IRenderRegisterable;
 import io.github.inf1009_p10_9.interfaces.ISceneSwitchable;
 import io.github.inf1009_p10_9.interfaces.IUIDisplayable;
 import io.github.inf1009_p10_9.ui.FontManager;
+import io.github.inf1009_p10_9.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.ui.TextLabel;
+import io.github.inf1009_p10_9.ui.TitleCarElement;
 import io.github.inf1009_p10_9.PlayerState;
 import io.github.inf1009_p10_9.economy.IItemOfferRequest;
 import io.github.inf1009_p10_9.economy.IOfferCurrencyDescriptor;
@@ -49,7 +51,8 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
     private int selectionId = 0;
     private final PlayerSkinsMarketplace playerSkinsMarketplace = new PlayerSkinsMarketplace();
     private final List<PlayerSkinResource> playerSkinResources = new ArrayList<>();
-    private final float playerSkinSize = 64;
+    private final float playerSkinWidth = 52;
+    private final float playerSkinHeight = 95;
 
     // ui elements
     private TextLabel titleLabel;
@@ -57,6 +60,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
     private TextLabel nameLabel;
     private TextLabel balanceLabel;
     private TextLabel priceLabel;
+    private SceneBackdrop backdrop;
 
     // input state
     private long inputDebounce = 0;
@@ -168,7 +172,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         private Color color = Color.BLUE;
 
         public PlayerSkinEntity(float x, float y, String texturePath) {
-            super(x, y, playerSkinSize, playerSkinSize, 10);
+            super(x, y, playerSkinWidth, playerSkinHeight, 10);
             loadTexture(texturePath);
         }
 
@@ -261,6 +265,13 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         float centerX = screenWidth / 2;
         float screenHeight = Gdx.graphics.getHeight();
         float centerY = screenHeight / 2;
+        
+        
+
+        // shared decorative background
+        backdrop = new SceneBackdrop(true);
+        backdrop.addToScene(this);
+
 
         titleLabel = new TextLabel("SELECT VEHICLE", centerX - 80, 550);
         titleLabel.setColor(Color.GREEN);
@@ -301,7 +312,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         for (int i = 0; i < playerSkinsPurchasedQty; i++) {
             PlayerSkin playerSkin = playerSkinsPurchased.get(i);
             String skinPath = playerSkin.getTexturePath();
-            PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(centerX - (playerSkinSize + 10) * (playerSkinsQty / 2 - i), centerY - 16, skinPath);
+            PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i), centerY - 16, skinPath);
             addEntity(playerSkinEntity);
             renderRegisterable.registerRenderable(playerSkinEntity);
             playerSkinResources.add(new PlayerSkinResourcePurchased(playerSkin, playerSkinEntity));
@@ -311,7 +322,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
             PlayerSkinOffer playerSkinOffer = playerSkinOffers.get(i);
             PlayerSkin playerSkinDescriptor = playerSkinOffer.skinDescriptor;
             String skinPath = playerSkinDescriptor.getTexturePath();
-            PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(centerX - (playerSkinSize + 10) * (playerSkinsQty / 2 - i), centerY - 16, skinPath);
+            PlayerSkinEntity playerSkinEntity = new PlayerSkinEntity(centerX - (playerSkinHeight + 10) * (playerSkinsQty / 2 - i), centerY - 16, skinPath);
             addEntity(playerSkinEntity);
             renderRegisterable.registerRenderable(playerSkinEntity);
             playerSkinResources.add(new PlayerSkinResourcePurchasable(playerSkinOffer, playerSkinEntity));
@@ -325,6 +336,9 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         handleNavigation();
         updateHighlight();
         handleRender();
+        float delta = Gdx.graphics.getDeltaTime();
+        
+        backdrop.update(delta, 1f, 1f);
     }
 
     // updates arrow and label colors to show which row is active, and refreshes displayed values
@@ -387,7 +401,7 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         for (int i = 0; i < playerSkinsQty; i++) {
             PlayerSkinEntity skinEntity = playerSkinResources.get(i).getEntity();
             Vector2 curPos = skinEntity.getPosition();
-            curPos.set(centerX - (playerSkinSize + 10) * (selectionId - i) + 16, centerY);
+            curPos.set(centerX - (playerSkinHeight + 10) * (selectionId - i) + 16, centerY);
         }
     }
 

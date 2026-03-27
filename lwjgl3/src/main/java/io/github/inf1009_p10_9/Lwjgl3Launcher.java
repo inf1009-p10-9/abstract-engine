@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 
 import io.github.inf1009_p10_9.game.entities.*;
+import io.github.inf1009_p10_9.game.input.Keyboard;
 import io.github.inf1009_p10_9.game.managers.QuestionManager;
 import io.github.inf1009_p10_9.game.managers.SettingsManager;
 import io.github.inf1009_p10_9.engine.managers.*;

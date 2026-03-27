@@ -1,6 +1,7 @@
-package io.github.inf1009_p10_9.engine.input;
+package io.github.inf1009_p10_9.game.input;
 
 import io.github.inf1009_p10_9.game.entities.Player;
+import io.github.inf1009_p10_9.engine.input.Input;
 import io.github.inf1009_p10_9.engine.interfaces.IEntityQueryable;
 import io.github.inf1009_p10_9.engine.interfaces.IInputKeyCheckable;
 import io.github.inf1009_p10_9.engine.interfaces.IInputListens;

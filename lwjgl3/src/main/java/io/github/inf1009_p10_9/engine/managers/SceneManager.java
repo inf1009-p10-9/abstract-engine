@@ -16,7 +16,7 @@ public class SceneManager implements IManager, ISceneSwitchable {
 
     private SceneManager() {}
 
-    public synchronized static SceneManager getInstance() {
+    public static SceneManager getInstance() {
         if (instance == null)
             instance = new SceneManager();
         return instance;

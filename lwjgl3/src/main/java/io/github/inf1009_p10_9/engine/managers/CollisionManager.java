@@ -28,7 +28,7 @@ public class CollisionManager implements IManager,
         if (resB != null) resB.onCollision(a);
     }
 
-    public static synchronized CollisionManager getInstance() {
+    public static CollisionManager getInstance() {
         if (instance == null)
             instance = new CollisionManager();
         return instance;

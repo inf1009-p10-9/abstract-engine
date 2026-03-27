@@ -16,7 +16,7 @@ public class MovementManager implements IManagerMinimal,
 
     private MovementManager() {}
 
-    public static synchronized MovementManager getInstance() {
+    public static MovementManager getInstance() {
         if (instance == null)
             instance = new MovementManager();
         return instance;

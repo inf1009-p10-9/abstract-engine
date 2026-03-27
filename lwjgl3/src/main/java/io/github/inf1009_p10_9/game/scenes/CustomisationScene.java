@@ -403,8 +403,8 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	        }
 	    } else {
 	        // already owned - show in green
-	        priceLabel.setText("✓ Already purchased");
-	        priceLabel.setColor(new Color(0.3f, 0.9f, 0.3f, 1f));
+	        priceLabel.setText("Already purchased");
+	        priceLabel.setColor(new Color(0.0f, 0.85f, 0.45f, 1f));
 	    }
 
 	    // refresh balance

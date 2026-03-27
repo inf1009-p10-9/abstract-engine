@@ -197,12 +197,6 @@
           "answer": "A"
         },
         {
-          "text": "6 x 7 = ?",
-          "optionA": "42",
-          "optionB": "48",
-          "answer": "A"
-        },
-        {
           "text": "81 / 9 = ?",
           "optionA": "8",
           "optionB": "9",
@@ -237,12 +231,6 @@
           "optionA": "57",
           "optionB": "67",
           "answer": "A"
-        },
-        {
-          "text": "8 x 9 = ?",
-          "optionA": "63",
-          "optionB": "72",
-          "answer": "B"
         },
         {
           "text": "121 / 11 = ?",
@@ -311,12 +299,6 @@
           "answer": "A"
         },
         {
-          "text": "9 x 12 = ?",
-          "optionA": "108",
-          "optionB": "98",
-          "answer": "A"
-        },
-        {
           "text": "256 / 16 = ?",
           "optionA": "16",
           "optionB": "14",
@@ -369,7 +351,734 @@
           "optionA": "18",
           "optionB": "16",
           "answer": "A"
+        },
+        {
+          "text": "2 x 2 = ?",
+          "optionA": "4",
+          "optionB": "5",
+          "answer": "A"
+        },
+        {
+          "text": "2 x 3 = ?",
+          "optionA": "7",
+          "optionB": "6",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 4 = ?",
+          "optionA": "8",
+          "optionB": "9",
+          "answer": "A"
+        },
+        {
+          "text": "2 x 5 = ?",
+          "optionA": "11",
+          "optionB": "10",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 6 = ?",
+          "optionA": "12",
+          "optionB": "13",
+          "answer": "A"
+        },
+        {
+          "text": "2 x 7 = ?",
+          "optionA": "15",
+          "optionB": "14",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 8 = ?",
+          "optionA": "16",
+          "optionB": "17",
+          "answer": "A"
+        },
+        {
+          "text": "2 x 9 = ?",
+          "optionA": "19",
+          "optionB": "18",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 10 = ?",
+          "optionA": "20",
+          "optionB": "21",
+          "answer": "A"
+        },
+        {
+          "text": "2 x 11 = ?",
+          "optionA": "23",
+          "optionB": "22",
+          "answer": "B"
+        },
+        {
+          "text": "2 x 12 = ?",
+          "optionA": "24",
+          "optionB": "25",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 2 = ?",
+          "optionA": "6",
+          "optionB": "7",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 3 = ?",
+          "optionA": "10",
+          "optionB": "9",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 4 = ?",
+          "optionA": "12",
+          "optionB": "13",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 5 = ?",
+          "optionA": "16",
+          "optionB": "15",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 6 = ?",
+          "optionA": "18",
+          "optionB": "19",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 7 = ?",
+          "optionA": "22",
+          "optionB": "21",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 8 = ?",
+          "optionA": "24",
+          "optionB": "25",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 9 = ?",
+          "optionA": "28",
+          "optionB": "27",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 10 = ?",
+          "optionA": "30",
+          "optionB": "31",
+          "answer": "A"
+        },
+        {
+          "text": "3 x 11 = ?",
+          "optionA": "34",
+          "optionB": "33",
+          "answer": "B"
+        },
+        {
+          "text": "3 x 12 = ?",
+          "optionA": "36",
+          "optionB": "37",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 2 = ?",
+          "optionA": "8",
+          "optionB": "9",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 3 = ?",
+          "optionA": "13",
+          "optionB": "12",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 4 = ?",
+          "optionA": "16",
+          "optionB": "17",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 5 = ?",
+          "optionA": "21",
+          "optionB": "20",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 6 = ?",
+          "optionA": "24",
+          "optionB": "25",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 7 = ?",
+          "optionA": "29",
+          "optionB": "28",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 8 = ?",
+          "optionA": "32",
+          "optionB": "33",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 9 = ?",
+          "optionA": "37",
+          "optionB": "36",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 10 = ?",
+          "optionA": "40",
+          "optionB": "41",
+          "answer": "A"
+        },
+        {
+          "text": "4 x 11 = ?",
+          "optionA": "45",
+          "optionB": "44",
+          "answer": "B"
+        },
+        {
+          "text": "4 x 12 = ?",
+          "optionA": "48",
+          "optionB": "49",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 2 = ?",
+          "optionA": "11",
+          "optionB": "10",
+          "answer": "B"
+        },
+        {
+          "text": "5 x 3 = ?",
+          "optionA": "15",
+          "optionB": "16",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 4 = ?",
+          "optionA": "21",
+          "optionB": "20",
+          "answer": "B"
+        },
+        {
+          "text": "5 x 5 = ?",
+          "optionA": "25",
+          "optionB": "26",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 6 = ?",
+          "optionA": "31",
+          "optionB": "30",
+          "answer": "B"
+        },
+        {
+          "text": "5 x 7 = ?",
+          "optionA": "35",
+          "optionB": "36",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 8 = ?",
+          "optionA": "41",
+          "optionB": "40",
+          "answer": "B"
+        },
+        {
+          "text": "5 x 9 = ?",
+          "optionA": "45",
+          "optionB": "46",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 10 = ?",
+          "optionA": "51",
+          "optionB": "50",
+          "answer": "B"
+        },
+        {
+          "text": "5 x 11 = ?",
+          "optionA": "55",
+          "optionB": "56",
+          "answer": "A"
+        },
+        {
+          "text": "5 x 12 = ?",
+          "optionA": "61",
+          "optionB": "60",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 2 = ?",
+          "optionA": "13",
+          "optionB": "12",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 3 = ?",
+          "optionA": "18",
+          "optionB": "19",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 4 = ?",
+          "optionA": "25",
+          "optionB": "24",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 5 = ?",
+          "optionA": "30",
+          "optionB": "31",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 6 = ?",
+          "optionA": "37",
+          "optionB": "36",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 7 = ?",
+          "optionA": "42",
+          "optionB": "43",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 8 = ?",
+          "optionA": "49",
+          "optionB": "48",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 9 = ?",
+          "optionA": "54",
+          "optionB": "55",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 10 = ?",
+          "optionA": "61",
+          "optionB": "60",
+          "answer": "B"
+        },
+        {
+          "text": "6 x 11 = ?",
+          "optionA": "66",
+          "optionB": "67",
+          "answer": "A"
+        },
+        {
+          "text": "6 x 12 = ?",
+          "optionA": "73",
+          "optionB": "72",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 2 = ?",
+          "optionA": "15",
+          "optionB": "14",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 3 = ?",
+          "optionA": "21",
+          "optionB": "22",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 4 = ?",
+          "optionA": "29",
+          "optionB": "28",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 5 = ?",
+          "optionA": "35",
+          "optionB": "36",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 6 = ?",
+          "optionA": "43",
+          "optionB": "42",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 7 = ?",
+          "optionA": "49",
+          "optionB": "50",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 8 = ?",
+          "optionA": "57",
+          "optionB": "56",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 9 = ?",
+          "optionA": "63",
+          "optionB": "64",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 10 = ?",
+          "optionA": "71",
+          "optionB": "70",
+          "answer": "B"
+        },
+        {
+          "text": "7 x 11 = ?",
+          "optionA": "77",
+          "optionB": "78",
+          "answer": "A"
+        },
+        {
+          "text": "7 x 12 = ?",
+          "optionA": "85",
+          "optionB": "84",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 2 = ?",
+          "optionA": "16",
+          "optionB": "17",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 3 = ?",
+          "optionA": "25",
+          "optionB": "24",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 4 = ?",
+          "optionA": "32",
+          "optionB": "33",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 5 = ?",
+          "optionA": "41",
+          "optionB": "40",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 6 = ?",
+          "optionA": "48",
+          "optionB": "49",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 7 = ?",
+          "optionA": "57",
+          "optionB": "56",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 8 = ?",
+          "optionA": "64",
+          "optionB": "65",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 9 = ?",
+          "optionA": "73",
+          "optionB": "72",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 10 = ?",
+          "optionA": "80",
+          "optionB": "81",
+          "answer": "A"
+        },
+        {
+          "text": "8 x 11 = ?",
+          "optionA": "89",
+          "optionB": "88",
+          "answer": "B"
+        },
+        {
+          "text": "8 x 12 = ?",
+          "optionA": "96",
+          "optionB": "97",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 2 = ?",
+          "optionA": "19",
+          "optionB": "18",
+          "answer": "B"
+        },
+        {
+          "text": "9 x 3 = ?",
+          "optionA": "27",
+          "optionB": "28",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 4 = ?",
+          "optionA": "37",
+          "optionB": "36",
+          "answer": "B"
+        },
+        {
+          "text": "9 x 5 = ?",
+          "optionA": "45",
+          "optionB": "46",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 6 = ?",
+          "optionA": "55",
+          "optionB": "54",
+          "answer": "B"
+        },
+        {
+          "text": "9 x 7 = ?",
+          "optionA": "63",
+          "optionB": "64",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 8 = ?",
+          "optionA": "73",
+          "optionB": "72",
+          "answer": "B"
+        },
+        {
+          "text": "9 x 9 = ?",
+          "optionA": "81",
+          "optionB": "82",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 10 = ?",
+          "optionA": "91",
+          "optionB": "90",
+          "answer": "B"
+        },
+        {
+          "text": "9 x 11 = ?",
+          "optionA": "99",
+          "optionB": "100",
+          "answer": "A"
+        },
+        {
+          "text": "9 x 12 = ?",
+          "optionA": "109",
+          "optionB": "108",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 2 = ?",
+          "optionA": "20",
+          "optionB": "21",
+          "answer": "A"
+        },
+        {
+          "text": "10 x 3 = ?",
+          "optionA": "31",
+          "optionB": "30",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 4 = ?",
+          "optionA": "40",
+          "optionB": "41",
+          "answer": "A"
+        },
+        {
+          "text": "10 x 5 = ?",
+          "optionA": "51",
+          "optionB": "50",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 6 = ?",
+          "optionA": "60",
+          "optionB": "61",
+          "answer": "A"
+        },
+        {
+          "text": "10 x 7 = ?",
+          "optionA": "71",
+          "optionB": "70",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 8 = ?",
+          "optionA": "80",
+          "optionB": "81",
+          "answer": "A"
+        },
+        {
+          "text": "10 x 9 = ?",
+          "optionA": "91",
+          "optionB": "90",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 10 = ?",
+          "optionA": "100",
+          "optionB": "101",
+          "answer": "A"
+        },
+        {
+          "text": "10 x 11 = ?",
+          "optionA": "111",
+          "optionB": "110",
+          "answer": "B"
+        },
+        {
+          "text": "10 x 12 = ?",
+          "optionA": "120",
+          "optionB": "121",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 2 = ?",
+          "optionA": "23",
+          "optionB": "22",
+          "answer": "B"
+        },
+        {
+          "text": "11 x 3 = ?",
+          "optionA": "33",
+          "optionB": "34",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 4 = ?",
+          "optionA": "45",
+          "optionB": "44",
+          "answer": "B"
+        },
+        {
+          "text": "11 x 5 = ?",
+          "optionA": "55",
+          "optionB": "56",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 6 = ?",
+          "optionA": "67",
+          "optionB": "66",
+          "answer": "B"
+        },
+        {
+          "text": "11 x 7 = ?",
+          "optionA": "77",
+          "optionB": "78",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 8 = ?",
+          "optionA": "89",
+          "optionB": "88",
+          "answer": "B"
+        },
+        {
+          "text": "11 x 9 = ?",
+          "optionA": "99",
+          "optionB": "100",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 10 = ?",
+          "optionA": "111",
+          "optionB": "110",
+          "answer": "B"
+        },
+        {
+          "text": "11 x 11 = ?",
+          "optionA": "121",
+          "optionB": "122",
+          "answer": "A"
+        },
+        {
+          "text": "11 x 12 = ?",
+          "optionA": "133",
+          "optionB": "132",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 2 = ?",
+          "optionA": "24",
+          "optionB": "25",
+          "answer": "A"
+        },
+        {
+          "text": "12 x 3 = ?",
+          "optionA": "37",
+          "optionB": "36",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 4 = ?",
+          "optionA": "48",
+          "optionB": "49",
+          "answer": "A"
+        },
+        {
+          "text": "12 x 5 = ?",
+          "optionA": "61",
+          "optionB": "60",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 6 = ?",
+          "optionA": "72",
+          "optionB": "73",
+          "answer": "A"
+        },
+        {
+          "text": "12 x 7 = ?",
+          "optionA": "85",
+          "optionB": "84",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 8 = ?",
+          "optionA": "96",
+          "optionB": "97",
+          "answer": "A"
+        },
+        {
+          "text": "12 x 9 = ?",
+          "optionA": "109",
+          "optionB": "108",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 10 = ?",
+          "optionA": "120",
+          "optionB": "121",
+          "answer": "A"
+        },
+        {
+          "text": "12 x 11 = ?",
+          "optionA": "133",
+          "optionB": "132",
+          "answer": "B"
+        },
+        {
+          "text": "12 x 12 = ?",
+          "optionA": "144",
+          "optionB": "145",
+          "answer": "A"
         }
+
       ]
     },
     {

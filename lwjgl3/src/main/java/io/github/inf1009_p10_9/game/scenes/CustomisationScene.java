@@ -44,6 +44,7 @@ import java.util.Objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -324,7 +325,8 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    addUI(priceLabel);
 
 	    // navigation hints - bottom center
-	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select     ESC to go back", centerX, 60, fontManager.getSmallFont());
+	    GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "< > to browse     ENTER to select     ESC to go back");
+	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select     ESC to go back", centerX - instrLayout.width / 2f, 60, fontManager.getSmallFont());
 	    hintLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
 	    addUI(hintLabel);
 

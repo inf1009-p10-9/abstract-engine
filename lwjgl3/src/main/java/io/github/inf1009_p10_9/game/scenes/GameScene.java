@@ -259,9 +259,9 @@ public class GameScene extends Scene {
         livesElement.setLivesCounter((int)(livesQuestionsRatio * totalQuestions));
 
 
-        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ENTER: select    UP/DOWN: move    ESC: pause/resume");
+        GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "ESC: pause/resume");
         TextLabel instructionLabel = new TextLabel(
-            "ENTER: select    UP/DOWN: move    ESC: pause/resume",
+            "ESC: pause/resume",
             centerX - instrLayout.width / 2f,
             Gdx.graphics.getHeight() * 0.05f,
             fontManager.getSmallFont()

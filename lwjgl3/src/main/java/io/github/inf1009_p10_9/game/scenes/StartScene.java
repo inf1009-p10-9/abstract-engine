@@ -139,7 +139,7 @@ public class StartScene extends MenuScene {
     public void load() {
         super.load();
         titleBounceTimer = 0;
-        musicPlayable.playMusic("music/Super Mario Bros. medley.mp3");
+        musicPlayable.playMusic("music/gamemusic.mp3");
     }
 
     @Override

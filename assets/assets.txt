@@ -10,7 +10,7 @@ cars/cars.png
 fonts/Fredoka.ttf
 gameScene/heart.png
 libgdx.png
-music/Super Mario Bros. medley.mp3
+music/gamemusic.mp3
 questions/questions.json
 scenery/scenery_city.png
 scenery/scenery_desert.png

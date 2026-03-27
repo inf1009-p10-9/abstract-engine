@@ -3,6 +3,7 @@ package io.github.inf1009_p10_9.game.scenes;
 import io.github.inf1009_p10_9.engine.core.Scene;
 
 import io.github.inf1009_p10_9.engine.interfaces.*;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsControllable;
 import io.github.inf1009_p10_9.game.ui.FontLoader;
 import io.github.inf1009_p10_9.game.ui.SceneBackdrop;
 import io.github.inf1009_p10_9.game.ui.SettingsRow;

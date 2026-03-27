@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.ObjectMap;
-import io.github.inf1009_p10_9.engine.interfaces.ISettingsControllable;
+import io.github.inf1009_p10_9.game.interfaces.ISettingsControllable;
 import io.github.inf1009_p10_9.game.interfaces.IScenerySelect;
 import io.github.inf1009_p10_9.game.interfaces.ISettingsKBRetrievable;
 

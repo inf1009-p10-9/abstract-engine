@@ -6,7 +6,11 @@ public interface ICollidableDetectable {
     Rectangle getBounds();   // get collision rectangle bounds
     int getCollisionLayer(); // objects only collide with others on the same layer
 
-    default ICollidableResolvable asResolvable() { //returns ICollidableResolvable if available, otherwise return null (to be overriden by entity)
+    /**
+       @returns ICollidableResolvable if available, otherwise return null (to
+                be overriden by entity).
+     */
+    default ICollidableResolvable asResolvable() {
         return null;
     }
 }

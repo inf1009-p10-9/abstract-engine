@@ -5,18 +5,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.util.UUID;
-
 import io.github.inf1009_p10_9.engine.interfaces.ICollidableDetectable;
 import io.github.inf1009_p10_9.engine.interfaces.IPositionable;
 import io.github.inf1009_p10_9.engine.interfaces.IRenderable;
 
-// base class for all game entities, handles position, bounds, texture, and z-ordering
+/**
+   Base class for all game entities, handles position, bounds, texture, and
+   z-ordering.
+*/
 public abstract class Entity implements IPositionable,
                                         IRenderable,
                                         ICollidableDetectable {
-
-    protected String id;
     protected Vector2 position;
     protected boolean active;
 
@@ -40,7 +39,6 @@ public abstract class Entity implements IPositionable,
     }
 
     public Entity(float x, float y, float width, float height, int zIndex) {
-        this.id = UUID.randomUUID().toString();
         this.position = new Vector2(x, y);
         this.active = true;
         this.texture = null;
@@ -52,7 +50,10 @@ public abstract class Entity implements IPositionable,
 
     public abstract void update();
 
-    // draws the texture if one is set, otherwise subclasses handle drawing in renderShapes()
+    /**
+       Draws the texture if one is set, otherwise subclasses handle drawing in
+       {@link Entity#renderShapes(com.badlogic.gdx.graphics.glutils.ShapeRenderer)}.
+    */
     @Override
     public void render(SpriteBatch spriteBatch) {
         if (texture != null) {
@@ -61,18 +62,23 @@ public abstract class Entity implements IPositionable,
     }
 
     // getters and setters
+    @Override
+    public int getZIndex() {
+        return zIndex;
+    }
+
+    // getters and setters
+    @Override
     public Vector2 getPosition() {
         return position;
     }
 
+    @Override
     public void setPosition(Vector2 position) {
         this.position.set(position);
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
+    @Override
     public Rectangle getBounds() {
         return bounds;
     }
@@ -82,23 +88,23 @@ public abstract class Entity implements IPositionable,
         return 0; //default collision layer 0
     }
 
-    public int getZIndex() {
-        return zIndex;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
+    public boolean isActive() {
+        return active;
     }
 
     public float getWidth() {
         return width;
     }
 
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
     public float getHeight() {
         return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 }

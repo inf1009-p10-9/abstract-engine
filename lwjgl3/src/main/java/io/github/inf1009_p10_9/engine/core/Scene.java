@@ -3,17 +3,20 @@ package io.github.inf1009_p10_9.engine.core;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 
-import io.github.inf1009_p10_9.engine.core.UIElement;
 import io.github.inf1009_p10_9.engine.interfaces.*;
 
-// base class for all scenes, handles loading, unloading, and the lifecycle hooks LibGDX expects
+/**
+   Base class for all scenes, handles loading, unloading, and the lifecycle
+   hooks LibGDX expects.
+*/
 public abstract class Scene implements Screen, IUICollector {
     private String name;
     private Array<Entity> entities = new Array<>();
     private Array<UIElement> uiElements = new Array<>();
     private boolean loaded = false;
 
-    // interface dependencies passed in from outside, never tied to concrete implementations
+    // interface dependencies passed in from outside, never tied to concrete
+    // implementations.
     protected final IEntityRegisterable entityRegisterable;
     protected final IUIDisplayable uiDisplayable;
     protected final ICollidableRegisterable collidableRegisterable;

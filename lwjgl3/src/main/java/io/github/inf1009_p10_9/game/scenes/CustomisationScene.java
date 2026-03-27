@@ -1,8 +1,3 @@
-
-// Modify PlaeyrSkinOffer and PlayerSkinReesource to bubble up OfferRequest qqqqty
-// 1. Check if instanceof ITargetItemOfferReadOnly,
-// 2. Call getQty and store result.
-
 package io.github.inf1009_p10_9.game.scenes;
 
 import io.github.inf1009_p10_9.engine.core.Scene;
@@ -30,7 +25,6 @@ import io.github.inf1009_p10_9.game.economy.IOfferReadOnly;
 import io.github.inf1009_p10_9.game.economy.ISourceCurrencyOfferReadOnly;
 import io.github.inf1009_p10_9.game.economy.ITargetItemOfferReadOnly;
 import io.github.inf1009_p10_9.game.economy.IWalletBagImmutableOwnership;
-import io.github.inf1009_p10_9.game.economy.ItemsWallet;
 import io.github.inf1009_p10_9.game.economy.concrete.CoinsWallet;
 import io.github.inf1009_p10_9.game.economy.concrete.PlayerSkin;
 import io.github.inf1009_p10_9.game.economy.concrete.PlayerSkinsMarketplace;
@@ -49,6 +43,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+   A frontend to the user's {@link PlayerSkinsWallet} and {@link CoinsWallet},
+   and {@link PlayerSkinsMarketplace}.
+
+   This scene presents the users with the state of their supported wallets, and
+   faciliates execution of {@link IItemOfferRequest}s with the marketplace.
+ */
 public class CustomisationScene extends Scene implements IKeyBindObserves {
     private final ISceneSwitchable sceneSwitchable;
     private final FontLoader fontManager;
@@ -127,6 +128,14 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         playerSkinResources.clear();
     }
 
+    /**
+       A type-safe POJO with downcasted types to contain data straight from the
+       {@link PlayerSkinsMarketplace} via
+       {@link CustomisationScene#loadMarketplace()}.
+
+       This cannot be used by itself to display the descriptor to the user.
+       Create a {@link PlayerSkinResourcePurchasable} based on this.
+     */
     private class PlayerSkinOffer {
         private final IItemOfferRequest<?> offerRequest;
         private final IOfferCurrencyDescriptor currencyDescriptor;
@@ -159,6 +168,10 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         }
     }
 
+    /**
+       Type-safe POJO which is created from a {@link PlayerSkinOffer}, with the
+       addition of a PlayerSkinEntity for preparation to display to the user.
+    */
     private class PlayerSkinResourcePurchasable extends PlayerSkinResource {
         protected final IOfferCurrencyDescriptor currencyDescriptor;
         private final IItemOfferRequest<?> offerRequest;
@@ -184,7 +197,11 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
         }
     }
 
-	  private class PlayerSkinEntity extends Entity {
+
+    /**
+       For displaying the player skins on the user interface.
+     */
+    private class PlayerSkinEntity extends Entity {
 	    private Color color = Color.BLUE;
 	    private Color tint = Color.WHITE;
 
@@ -237,11 +254,15 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    }
 	}
 
+    /**
+       Extracts offers from {@link PlayerSkinsMarketplace} and filters them
+       to only include those that can be displayed by
+       {@link CustomisationScene#handleRender()}.
+    */
     private List<PlayerSkinOffer> loadMarketplace() {
         List<PlayerSkinOffer> playerSkinOffers = new ArrayList<>();
         System.out.println("[CustomisationScene] Loading marketplace...");
 
-        // #TODO(RIFA): FIXME - Refactor into constructor injection
         IWalletBagImmutableOwnership wallets = playerState.getWalletBag();
 
         List<IOfferReadOnly> offers = playerSkinsMarketplace.getOffers();

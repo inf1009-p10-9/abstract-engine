@@ -1,18 +1,35 @@
 package io.github.inf1009_p10_9.game.economy;
 
+/**
+   Default implementation of {@link IOfferCurrencyDescriptor}.
+
+   @see IOfferCurrencyDescriptor
+ */
 class OfferCurrencyDescriptor implements IOfferCurrencyDescriptor {
     private Class<? extends ICurrencyWallet> walletType;
     private float amount;
 
-    public OfferCurrencyDescriptor(Class<? extends ICurrencyWallet> walletType, float amount) {
+    /**
+       @param walletType Wallet class to accept.
+       @param float Transaction amount.
+     */
+    public OfferCurrencyDescriptor(Class<? extends ICurrencyWallet> walletType,
+                                   float amount) {
         this.walletType = walletType;
         this.amount = amount;
     }
 
+    /**
+       @see IOfferCurrencyDescriptor#getWalletType()
+    */
 	@Override
 	public Class<? extends ICurrencyWallet> getWalletType() {
         return walletType;
 	}
+
+    /**
+       @see IOfferCurrencyDescriptor#getAmount()
+    */
 	@Override
 	public float getAmount() {
         return amount;
@@ -28,6 +45,16 @@ abstract class Offer<SWT extends IWallet,
 /**
    An offer which trades debit from a {@link ICurrencyWallet} for an
    object which is accepted by a {@link IItemsWallet}.
+
+   Duplication of types in the generics and constructors is necessary to provide
+   compile-time type safety and runtime {@link Object#isInstance} checks
+   respectively.
+
+   @param <IT> Target item type to be traded for.
+   @param <DT> Descriptor type to represent target item.
+   @param <SWT> Source currency wallet type.
+   @param <TWT> Target item wallet type.
+   @param <OT> Offer type.
  */
 abstract class CurrencyToItemOffer<IT extends Object,
                                    DT extends Object,
@@ -42,6 +69,16 @@ abstract class CurrencyToItemOffer<IT extends Object,
     protected final Integer maxQty;
     private final DT targetDescriptor;
 
+    /**
+       @param sourceWalletType Source currency wallet class.
+       @param sourcePrice Unit price of trade.
+       @param targetWalletType Target item wallet class.
+       @param targetDescriptor Instance of descriptor to represent item
+              pre-purchase.
+       @param minQty Minimum quantity of target item to trade. Nullable.
+       @param maxQty Maximum quantity of target item to trade. Nullable.
+       @throws IllegalArgumentException `minQty <= maxQty` is not satisfied.
+     */
     public CurrencyToItemOffer(Class<SWT> sourceWalletType,
                                float sourcePrice,
                                Class<TWT> targetWalletType,
@@ -53,9 +90,11 @@ abstract class CurrencyToItemOffer<IT extends Object,
         this.targetWalletType = targetWalletType;
         this.targetDescriptor = targetDescriptor;
 
+        // Check if minQty or maxQty is less than 0
         if ((minQty != null && minQty < 0) || (maxQty != null && maxQty < 0))
             throw new IllegalArgumentException();
 
+        // Check if maxQty < minQty
         if (minQty != null && maxQty != null && maxQty < minQty)
             throw new IllegalArgumentException();
 
@@ -73,7 +112,15 @@ abstract class CurrencyToItemOffer<IT extends Object,
 
     abstract protected IT createTargetItem() throws Exception;
 
-    protected SWT getSourceWalletFromBag(IWalletBagImmutableOwnership wallets, float totalPrice) {
+    /**
+       Returns the first source {@link ICurrencyWallet} which claims the
+       transaction is viable.
+
+       @param wallets The wallet bag to check against.
+       @param totalPrice Total price of the transaction to check viabiliy for.
+     */
+    protected SWT getSourceWalletFromBag(IWalletBagImmutableOwnership wallets,
+                                         float totalPrice) {
         return
             wallets
             .getWallets(sourceWalletType)
@@ -88,7 +135,15 @@ abstract class CurrencyToItemOffer<IT extends Object,
             .orElse(null);
     }
 
-    protected TWT getTargetWalletFromBag(IWalletBagImmutableOwnership wallets, IT targetItem) {
+    /**
+       Returns the first target {@link IItemsWallet} which claims the
+       transaction is viable.
+
+       @param wallets The wallet bag to check against.
+       @param targetItem Target item to check viability against.
+     */
+    protected TWT getTargetWalletFromBag(IWalletBagImmutableOwnership wallets,
+                                         IT targetItem) {
         return
             wallets
             .getWallets(targetWalletType)
@@ -105,15 +160,17 @@ abstract class CurrencyToItemOffer<IT extends Object,
 
     @Override
     public ItemOfferRequest<OT> createOfferRequest(int qty) {
-        // Casting needed due Java's `this` not playing nice with the circular types.
-        // This is OK as we are literally inserting the class itself as the Offer into the OfferRequest.
+        // Casting needed due Java's `this` not playing nice with the circular
+        // types.
+        // This is OK as we are literally inserting the class itself as the
+        // Offer into the OfferRequest.
         // Safe to say we know what's inside.
         return new ItemOfferRequest<OT>((OT)this, qty);
     }
 
     @Override
     public <T extends IOfferRequest<?>> boolean isTransactionViable(IWalletBagImmutableOwnership wallets,
-                                       T request) {
+                                                                    T request) {
         // Safety check: Don't allow OfferRequest for other Offer to be used.
         System.out.println("[isTransactionViable] Checking request against wallets...");
         if (request.getOffer() != this)
@@ -154,9 +211,10 @@ abstract class CurrencyToItemOffer<IT extends Object,
         return true;
     }
 
+
 	@Override
 	public <T extends IOfferRequest<?>> boolean initiateTransaction(IWalletBagImmutableOwnership wallets,
-                                        T request) {
+                                                                    T request) {
         if (!isTransactionViable(wallets, request))
             return false;
 

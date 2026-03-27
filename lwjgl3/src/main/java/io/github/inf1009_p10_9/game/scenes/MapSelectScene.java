@@ -161,7 +161,7 @@ public class MapSelectScene extends Scene {
         addUI(selectionIndicator);
 
         //  instruction hint
-        String instrText = "LEFT / RIGHT: choose    ENTER: confirm    ESC: back";
+        String instrText = "LEFT/RIGHT: choose    ENTER: confirm    ESC: back";
         layout.setText(fontManager.getSmallFont(), instrText);
         instructionLabel = new TextLabel(
             instrText,

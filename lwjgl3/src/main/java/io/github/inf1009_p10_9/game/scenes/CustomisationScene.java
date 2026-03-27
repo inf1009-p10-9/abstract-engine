@@ -325,8 +325,8 @@ public class CustomisationScene extends Scene implements IKeyBindObserves {
 	    addUI(priceLabel);
 
 	    // navigation hints - bottom center
-	    GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "< > to browse     ENTER to select     ESC to go back");
-	    TextLabel hintLabel = new TextLabel("< > to browse     ENTER to select     ESC to go back", centerX - instrLayout.width / 2f, 60, fontManager.getSmallFont());
+	    GlyphLayout instrLayout = new GlyphLayout(fontManager.getSmallFont(), "LEFT/RIGHT: browse     ENTER: select     ESC: back");
+	    TextLabel hintLabel = new TextLabel("LEFT/RIGHT: browse     ENTER: select     ESC: back", centerX - instrLayout.width / 2f, 60, fontManager.getSmallFont());
 	    hintLabel.setColor(new Color(1f, 1f, 0.6f, 1f));
 	    addUI(hintLabel);
 
